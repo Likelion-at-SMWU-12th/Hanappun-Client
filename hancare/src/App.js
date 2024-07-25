@@ -10,11 +10,10 @@ const Wrapper = styled.div`
   height: 100vh;
   min-height: 844px;
   margin: 0 auto;
-  display: flex;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3),
     0 8px 10px -6px rgba(0, 0, 0, 0.3);
-  display: flex;
-  justify-content: center;
+  /* display: flex;
+  justify-content: center; */
 `;
 
 function App() {
