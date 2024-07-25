@@ -20,6 +20,7 @@ const Infobox = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 50px;
+  margin-bottom: 30px;
 `;
 
 const Label = styled.label`
@@ -67,6 +68,29 @@ const Signup = () => {
             value={values.nickname}
             onChange={handleChange}
             placeholder="닉네임을 입력하세요"
+            required
+          />
+        </Infobox>
+        <Infobox>
+          <Label for="id">아이디</Label>
+          <Inputbox
+            type="text"
+            name="id"
+            value={values.id}
+            onChange={handleChange}
+            placeholder="아이디를 입력하세요"
+            required
+          />
+        </Infobox>
+        <Infobox>
+          <Label for="password">비밀번호</Label>
+          <Inputbox
+            type="text"
+            name="password"
+            value={values.password}
+            onChange={handleChange}
+            placeholder="비밀번호를 입력하세요"
+            required
           />
         </Infobox>
       </form>
