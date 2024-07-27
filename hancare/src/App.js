@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Startpage from "./pages/account/Startpage";
 import Signup from "./pages/account/Signup";
 import Login from "./pages/account/Login";
+import Mainpage from "./pages/Mainpage";
 
 const Wrapper = styled.div`
   width: 400px;
@@ -22,6 +23,7 @@ function App() {
         <Route path="/" element={<Startpage />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/mypage/" element={<Mainpage />} />
       </Routes>
     </Wrapper>
   );

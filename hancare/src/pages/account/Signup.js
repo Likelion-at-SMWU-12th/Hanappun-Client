@@ -40,7 +40,7 @@ const Inputbox = styled.input`
 
 const SignupBtn = styled.button`
   display: block;
-  margin-top: 50px;
+  margin-top: 60px;
   margin-left: auto;
   margin-right: auto;
   padding: 12px;
@@ -75,6 +75,10 @@ const Signup = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (values.password !== values.repassword) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
     navigate("/login");
   };
 
@@ -91,7 +95,7 @@ const Signup = () => {
             name="nickname"
             value={values.nickname}
             onChange={handleChange}
-            placeholder="닉네임을 입력하세요"
+            placeholder="닉네임을 입력해주세요"
             required
           />
         </Infobox>
@@ -102,7 +106,7 @@ const Signup = () => {
             name="id"
             value={values.id}
             onChange={handleChange}
-            placeholder="아이디를 입력하세요"
+            placeholder="아이디를 입력해주세요"
             required
           />
         </Infobox>
@@ -113,7 +117,7 @@ const Signup = () => {
             name="password"
             value={values.password}
             onChange={handleChange}
-            placeholder="비밀번호를 입력하세요"
+            placeholder="비밀번호를 입력해주세요"
             required
           />
         </Infobox>
@@ -124,7 +128,7 @@ const Signup = () => {
             name="repassword"
             value={values.repasswordpassword}
             onChange={handleChange}
-            placeholder="비밀번호를 재입력하세요"
+            placeholder="비밀번호를 재입력해주세요"
             required
           />
         </Infobox>
@@ -135,3 +139,4 @@ const Signup = () => {
 };
 
 export default Signup;
+export { Container, Title, Infobox, Inputbox, Label, SignupBtn };
