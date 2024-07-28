@@ -5,6 +5,9 @@ import Startpage from "./pages/account/Startpage";
 import Signup from "./pages/account/Signup";
 import Login from "./pages/account/Login";
 import Mainpage from "./pages/Mainpage";
+import ColumnMain from "./pages/Columns/ColumnMain";
+import Profile from "./pages/mypage/Profile";
+import Cancel from "./pages/mypage/Cancel";
 
 const Wrapper = styled.div`
   width: 400px;
@@ -24,6 +27,9 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/mypage/" element={<Mainpage />} />
+        <Route path="/column" element={<ColumnMain />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/cancel" element={<Cancel />} />
       </Routes>
     </Wrapper>
   );
