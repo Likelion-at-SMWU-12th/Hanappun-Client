@@ -4,15 +4,16 @@ import styled from "styled-components";
 
 const Container = styled.div`
   display: flex;
-  align-items: center;
   flex-direction: column;
+  align-items: center;
 `;
+
 const Title = styled.div`
   h2 {
     font-size: 17px;
     margin-top: 120px;
     text-align: center;
-    font-weight: bolder; /* bolder 대신 구체적인 값 사용 */
+    font-weight: 900 !important; /* bolder 대신 구체적인 값 사용 */
   }
 
   img {
@@ -27,7 +28,7 @@ const Title = styled.div`
     font-size: 35px;
     margin-top: 35px;
     text-align: center;
-    font-weight: bolder;
+    font-weight: 900 !important;
     margin-bottom: 50px;
   }
 `;
@@ -39,6 +40,7 @@ const ButtonBox = styled.button`
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 20px;
+  text-align: center;
   border-radius: 30px;
   font-size: 15px;
   font-weight: bolder;
@@ -69,3 +71,4 @@ const Startpage = () => {
 };
 
 export default Startpage;
+export { Container };

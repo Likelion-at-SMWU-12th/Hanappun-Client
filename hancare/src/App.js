@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Startpage from "./pages/account/Startpage";
 import Signup from "./pages/account/Signup";
 import Login from "./pages/account/Login";
+import Mainpage from "./pages/Mainpage";
 import ColumnMain from "./pages/Columns/ColumnMain";
 import Profile from "./pages/mypage/Profile";
 import Cancel from "./pages/mypage/Cancel";
@@ -15,8 +16,6 @@ const Wrapper = styled.div`
   margin: 0 auto;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3),
     0 8px 10px -6px rgba(0, 0, 0, 0.3);
-  /*display: flex;
-  justify-content: center;*/
 `;
 
 function App() {
@@ -27,6 +26,7 @@ function App() {
         <Route path="/" element={<Startpage />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/mypage/" element={<Mainpage />} />
         <Route path="/column" element={<ColumnMain />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/cancel" element={<Cancel />} />
