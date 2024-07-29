@@ -1,0 +1,145 @@
+/* 전체 설정 */
+.background {
+  background-color: black;
+  width: 100%;
+  height: 100%;
+}
+
+.blackHeader {
+  padding-top: 30px;
+  display: flex;
+}
+
+/* 이전페이지로 가기 버튼 */
+.blackHeader img {
+  width: 13px;
+  margin: auto 30px;
+}
+
+.blackHeader h2 {
+  margin-left: calc(40% - 45px);
+  color: white;
+}
+
+/* main */
+.blackMain {
+  margin: 30px auto;
+  background-color: #f7f7f7;
+  width: 90%;
+  height: 70vh;
+  border-radius: 10px;
+}
+
+.blackMain hr {
+  width: 88%;
+  opacity: 30%;
+}
+
+/* 프로필 기본 정보 */
+.profile img {
+  position: absolute;
+  height: 200px;
+  margin-top: 40px;
+  margin-left: 30px;
+}
+
+.profileText {
+  padding-top: 40px;
+  padding-left: 160px;
+  margin-bottom: 110px;
+}
+
+.profileText h3 {
+  margin-left: 5px;
+  margin-bottom: 30px;
+  color: #7350ff;
+}
+
+.profileText p {
+  font-weight: 550;
+  font-size: 12px;
+  padding-bottom: 5px;
+}
+
+.profileText span {
+  margin-top: 60px;
+  padding: 5px 15px;
+  border: none;
+  border-radius: 20px;
+  background-color: #7350ff;
+  color: white;
+}
+
+/* 체질을 잘못 선택했나요? */
+.constitution {
+  margin-top: 20px;
+  margin-bottom: 70px;
+}
+.constitution img {
+  position: absolute;
+  margin-left: 30px;
+  width: 40px;
+}
+
+.purple {
+  position: relative;
+  top: 5px;
+  color: #7350ff;
+  margin-left: 80px;
+  font-weight: 600;
+  font-size: 13pt;
+}
+
+.constitution p {
+  margin-top: 10px;
+  margin-left: 80px;
+  font-size: 9pt;
+  width: 240px;
+}
+
+.constitution button {
+  margin-top: 15px;
+  background-color: #f7f7f7;
+  border: none;
+  color: #7350ff;
+  font-size: 9pt;
+  font-weight: 600;
+  float: right;
+  margin-right: 10px;
+}
+
+/* 회원 정보 */
+.userInfo {
+  margin-top: 20px;
+}
+.userInfo img {
+  position: absolute;
+  margin-top: 5px;
+  margin-left: 35px;
+  width: 30px;
+}
+.userInfo p {
+  margin-left: 80px;
+  font-size: 9pt;
+}
+
+.idPw {
+  padding-top: 15px;
+}
+
+.idPw p {
+  margin-top: 0;
+  padding-bottom: 3px;
+  margin-bottom: 0;
+}
+
+.userInfo button {
+  margin-top: 10px;
+  background-color: #f7f7f7;
+  border: none;
+  color: #7350ff;
+  font-size: 9pt;
+  font-weight: 600;
+  float: right;
+  margin-right: 10px;
+}

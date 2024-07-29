@@ -1,0 +1,41 @@
+/* 전체 설정 */
+.background {
+  background-color: black;
+  width: 100%;
+  height: 100%;
+}
+
+.blackHeader {
+  padding-top: 30px;
+  display: flex;
+}
+
+/* 이전페이지로 가기 버튼 */
+.blackHeader img {
+  width: 13px;
+  margin: auto 30px;
+}
+
+#cancelH2 {
+  margin-left: calc(40% - 75px);
+  color: white;
+}
+
+/* main */
+.blackMain {
+  margin: 30px auto;
+  background-color: #f7f7f7;
+  width: 90%;
+  height: 70vh;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.blackMain h3 {
+  padding-top: 80px;
+  color: #7350ff;
+}
+
+.blackMain img {
+  width: 170px;
+}
