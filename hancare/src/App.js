@@ -19,6 +19,10 @@ const Wrapper = styled.div`
   margin: 0 auto;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3),
     0 8px 10px -6px rgba(0, 0, 0, 0.3);
+
+  & -webkit-scrollbar {
+    display: none;
+  }
 `;
 
 function App() {
