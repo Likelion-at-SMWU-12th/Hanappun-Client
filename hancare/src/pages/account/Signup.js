@@ -51,6 +51,7 @@ const SignupBtn = styled.button`
   color: white;
   font-size: 17px;
   font-weight: 600;
+  cursor: pointer;
 `;
 
 const Signup = () => {
