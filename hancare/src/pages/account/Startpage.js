@@ -47,6 +47,7 @@ const ButtonBox = styled.button`
   color: white;
   border: none;
   background-color: ${(props) => (props.bgColor ? props.bgColor : "black")};
+  cursor: pointer;
 `;
 
 const Startpage = () => {
