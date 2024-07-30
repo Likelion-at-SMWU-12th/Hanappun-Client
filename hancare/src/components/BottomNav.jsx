@@ -18,19 +18,20 @@ const BottomNav = () => {
   const locationNow = useLocation();
 
   if (
-    locationNow.pathname === "/" ||
-    locationNow.pathname === "/column" ||
-    locationNow.pathname === "/mypage" ||
-    locationNow.pathname === "/profile" ||
-    locationNow.pathname === "/map" ||
-    locationNow.pathname === "/cancel"
-    //navbar를 표시할 url 작성
+    locationNow.pathname !== "/" &&
+    locationNow.pathname !== "/signup" &&
+    locationNow.pathname !== "/login"
+    //navbar를 표시하지 않을 url 작성
   ) {
     return (
       <nav className="wrapper">
         {/*하단 네비게이션 최상위 태그*/}
         {/* 나의 케어 */}
-        <Link to="/" className="nav-link" onClick={() => setActiveNav(1)}>
+        <Link
+          to="/mainpage"
+          className="nav-link"
+          onClick={() => setActiveNav(1)}
+        >
           <div>
             <FontAwesomeIcon
               icon={faShieldHeart}
@@ -41,7 +42,11 @@ const BottomNav = () => {
         </Link>
         {/* 우리 케어 */}
 
-        <Link to="/login" className="nav-link" onClick={() => setActiveNav(2)}>
+        <Link
+          to="/ourcare"
+          className="nav-link"
+          onClick={() => setActiveNav(2)}
+        >
           <div>
             <FontAwesomeIcon
               icon={faHandHoldingHeart}

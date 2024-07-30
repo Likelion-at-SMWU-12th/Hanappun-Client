@@ -34,9 +34,6 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/mainpage/" element={<Mainpage />} />
-        <Route path="/column" element={<ColumnMain />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/cancel" element={<Cancel />} />
         <Route path="/mypage/calendar" element={<CalendarMain />} />
         <Route path="/map" element={<MapMain />} />
         <Route path="/ourcare/" element={<OurCareStart />} />
