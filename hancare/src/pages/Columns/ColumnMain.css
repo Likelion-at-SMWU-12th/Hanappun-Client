@@ -1,0 +1,152 @@
+/*스크롤바 보이지 않게*/
+::-webkit-scrollbar {
+  display: none;
+}
+
+.CMContent {
+  max-width: 400px;
+  height: 120vh;
+  background-color: #f5f5f5;
+  z-index: 1;
+}
+
+/* CMheader */
+.CMheader {
+  position: relative;
+  z-index: 2;
+}
+.CMheader img {
+  width: 100%;
+}
+
+.CMheader h4 {
+  position: relative;
+  margin-top: -280px;
+  padding-top: 30px;
+  padding-left: 40px;
+  color: white;
+  font-weight: 600;
+}
+
+.CMheader h2 {
+  padding-top: 50px;
+  padding-left: 40px;
+  margin-bottom: 10px;
+  color: white;
+}
+
+.CMheader p {
+  margin-top: 0;
+  padding-left: 40px;
+  color: white;
+  font-size: 10pt;
+  font-weight: 800;
+}
+
+/* CMmain */
+.CMmain {
+  margin-top: 130px;
+}
+
+/* 한의학에 대해 알아볼까요? CM_moreKM */
+.CM_moreKM h3 {
+  color: #7350ff;
+  text-align: center;
+  font-weight: 800;
+}
+
+.row_moreKM {
+  display: flex;
+  overflow-y: hidden;
+  overflow-x: scroll;
+  margin-left: 30px;
+  margin-right: 30px;
+}
+
+.one_moreKM {
+  margin: 0 5px;
+  text-decoration: none;
+  color: black;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.one_moreKM :hover {
+  transform: scale(1.01);
+}
+
+.one_moreKM img {
+  margin-top: 15px;
+  width: 250px;
+  transition: transfrom 450ms;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.one_moreKM figcaption {
+  margin-left: 5px;
+  margin-top: 5px;
+  font-size: 11pt;
+  font-weight: 700;
+}
+
+/* 체질별 설명을 알고 싶다면? CM_moreCON */
+.CM_moreCON h3 {
+  margin-top: 70px;
+  color: #7350ff;
+  text-align: center;
+  font-weight: 800;
+}
+
+.CM_moreCON_btn {
+  margin-top: 40px;
+}
+
+.CM_leftBtn {
+  background-color: black;
+  border: none;
+  color: white;
+  font-size: 10pt;
+  font-weight: 500;
+  padding: 15px 50px;
+  border-radius: 15px 0 0 15px;
+  width: 150px;
+  margin-left: 50px;
+  margin-right: 0;
+}
+
+.CM_rightBtn {
+  background-color: black;
+  border: none;
+  color: white;
+  font-size: 10pt;
+  font-weight: 500;
+  padding: 15px 50px;
+  border-radius: 0 15px 15px 0;
+  width: 150px;
+  margin-left: 0;
+  margin-right: 50px;
+  margin-bottom: 10px;
+}
+
+.CM_moreCON_images {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -240px;
+  gap: 12px;
+}
+
+.CM_moreCON_images img {
+  width: 50px;
+}
+
+.CM_moreCON_conGold {
+  margin-top: 10px;
+  margin-left: 15px;
+}
+
+.CM_moreCON_conGround {
+  margin-top: 10px;
+}
