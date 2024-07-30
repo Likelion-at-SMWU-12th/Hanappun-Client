@@ -57,14 +57,14 @@ const OurCareStart = () => {
   );
 };
 
-const Container = styled.div`
+export const Container = styled.div`
   background-color: black;
   height: 100vh;
   width: 100%;
   white-space: pre-line;
 `;
 
-const Title = styled.div`
+export const Title = styled.div`
   display: flex;
   padding-top: 30px;
   justify-content: center;

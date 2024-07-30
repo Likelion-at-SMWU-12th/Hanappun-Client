@@ -18,14 +18,9 @@ const BottomNav = () => {
   const locationNow = useLocation();
 
   if (
-    locationNow.pathname === "/" ||
-    locationNow.pathname === "/column" ||
-    locationNow.pathname === "/mypage" ||
-    locationNow.pathname === "/profile" ||
-    locationNow.pathname === "/map" ||
-    locationNow.pathname === "/cancel" ||
-    locationNow.pathname === "/mainpage/"
-    //navbar를 표시할 url 작성
+    locationNow.pathname !== "/" &&
+    locationNow.pathname !== "/signup" &&
+    locationNow.pathname !== "/login"
   ) {
     return (
       <nav className="wrapper">
