@@ -23,7 +23,8 @@ const BottomNav = () => {
     locationNow.pathname === "/mypage" ||
     locationNow.pathname === "/profile" ||
     locationNow.pathname === "/map" ||
-    locationNow.pathname === "/cancel"
+    locationNow.pathname === "/cancel" ||
+    locationNow.pathname === "/mainpage/"
     //navbar를 표시할 url 작성
   ) {
     return (
