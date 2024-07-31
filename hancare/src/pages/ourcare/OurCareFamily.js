@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Container, Title } from "./OurCareStart";
@@ -9,9 +9,9 @@ const OurCareFamily = () => {
   const [isModalOpen, setISModalOpen] = useState(false);
   const [currentProfileId, setCurrentProfileId] = useState(null);
   const [profiles, setProfiles] = useState([
-    { id: 1, type: null, name: null },
-    { id: 2, type: null, name: null },
-    { id: 3, type: null, name: null },
+    { id: 1, image: null },
+    { id: 2, image: null },
+    { id: 3, image: null },
   ]);
 
   const openModal = (profileId) => {
@@ -21,10 +21,12 @@ const OurCareFamily = () => {
 
   const closeModal = () => setISModalOpen(false);
 
-  const handleAddProfile = (type, name) => {
+  const handleAddProfile = (name) => {
     setProfiles((prevProfiles) =>
       prevProfiles.map((profile) =>
-        profile.id === currentProfileId ? { ...profile, type, name } : profile
+        profile.id === currentProfileId
+          ? { ...profile, name, image: getRandomImage(profile.image) }
+          : profile
       )
     );
   };
@@ -42,7 +44,8 @@ const OurCareFamily = () => {
     "/images/profile6.png",
   ];
 
-  const getRandomImage = () => {
+  const getRandomImage = (currentImage) => {
+    if (currentImage) return currentImage;
     const randomIndex = Math.floor(Math.random() * profileImages.length);
     return profileImages[randomIndex];
   };
@@ -56,17 +59,23 @@ const OurCareFamily = () => {
       <ProfileContainer>
         <ProfileWrapper>
           <Profilebox>
-            <img src={getRandomImage()} alt="profile" />
+            <img src={getRandomImage("/images/profile1.png")} alt="profile" />
           </Profilebox>
           <h2>나</h2>
         </ProfileWrapper>
         {profiles.map((profile) =>
-          profile.type ? (
+          profile.name ? (
             <ProfileWrapper key={profile.id}>
-              <Profilebox>
-                <img src={getRandomImage()} alt="profile" />
+              <Profilebox
+                onClick={() => {
+                  navigate(`/ourcare/family/${profile.id}`, {
+                    state: { image: profile.image, type: "이름" },
+                  });
+                }}
+              >
+                <img src={profile.image} alt="profile" />
               </Profilebox>
-              <h2>{profile.type}</h2>
+              <h2>이름</h2>
             </ProfileWrapper>
           ) : (
             <Emptybox key={profile.id} onClick={() => openModal(profile.id)}>
@@ -110,7 +119,7 @@ const Emptybox = styled.div`
   }
 `;
 
-const Profilebox = styled.div`
+export const Profilebox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -124,7 +133,7 @@ const Profilebox = styled.div`
   }
 `;
 
-const ProfileWrapper = styled.div`
+export const ProfileWrapper = styled.div`
   h2 {
     color: white;
     margin-top: 10px;
