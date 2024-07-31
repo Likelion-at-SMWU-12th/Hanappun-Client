@@ -11,6 +11,10 @@ import Cancel from "./pages/mypage/Cancel";
 import CalendarMain from "./pages/calendar/CalendarMain";
 import MapMain from "./pages/hospital/MapMain";
 import OurCareStart from "./pages/ourcare/OurCareStart";
+import ColumnPancreotonia from "./pages/Columns/ColumnPancreotonia";
+import ColumnMoreKM1 from "./pages/Columns/ColumnMoreKM1";
+import MyCON from "./pages/myCON/MyCON";
+import SelfTest2 from "./pages/myCON/SelfTest2";
 import OurCareFamily from "./pages/ourcare/OurCareFamily";
 import OurCareProfile from "./pages/ourcare/OurCareProfile";
 
@@ -39,6 +43,17 @@ function App() {
         <Route path="/mypage/calendar" element={<CalendarMain />} />
         <Route path="/map" element={<MapMain />} />
         <Route path="/ourcare/" element={<OurCareStart />} />
+        {/*마이페이지*/}
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/cancel" element={<Cancel />} />
+        {/*칼럼 -- 더 추가 예정 ... */}
+        <Route path="/column" element={<ColumnMain />} />
+        <Route path="/column/Pancreotonia" element={<ColumnPancreotonia />} />
+        <Route path="/column/moreKM1" element={<ColumnMoreKM1 />} />
+        {/*나의 체질*/}
+        <Route path="/myCON" element={<MyCON />} />
+        <Route path="/myCON/selfTest2" element={<SelfTest2 />} />
+          
         <Route path="/ourcare/family/" element={<OurCareFamily />} />
         <Route path="/ourcare/family/:id" element={<OurCareProfile />} />
       </Routes>
