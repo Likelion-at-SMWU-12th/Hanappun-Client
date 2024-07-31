@@ -2,7 +2,7 @@
 .background {
   background-color: black;
   width: 100%;
-  height: 100%;
+  height: 100vh;
 }
 
 .blackHeader {
@@ -16,8 +16,8 @@
   margin: auto 30px;
 }
 
-#cancelH2 {
-  margin-left: calc(40% - 75px);
+.blackHeader h2 {
+  margin-left: calc(30% - 30px);
   color: white;
 }
 
@@ -28,14 +28,9 @@
   width: 90%;
   height: 70vh;
   border-radius: 10px;
-  text-align: center;
 }
 
-.blackMain h3 {
-  padding-top: 80px;
-  color: #7350ff;
-}
-
-.blackMain img {
-  width: 170px;
+.blackMain hr {
+  width: 88%;
+  opacity: 30%;
 }
