@@ -15,6 +15,8 @@ import ColumnPancreotonia from "./pages/Columns/ColumnPancreotonia";
 import ColumnMoreKM1 from "./pages/Columns/ColumnMoreKM1";
 import MyCON from "./pages/myCON/MyCON";
 import SelfTest2 from "./pages/myCON/SelfTest2";
+import OurCareFamily from "./pages/ourcare/OurCareFamily";
+import OurCareProfile from "./pages/ourcare/OurCareProfile";
 
 const Wrapper = styled.div`
   width: 400px;
@@ -51,6 +53,8 @@ function App() {
         {/*나의 체질*/}
         <Route path="/myCON" element={<MyCON />} />
         <Route path="/myCON/selfTest2" element={<SelfTest2 />} />
+        <Route path="/ourcare/family/" element={<OurCareFamily />} />
+        <Route path="/ourcare/family/:id" element={<OurCareProfile />} />
       </Routes>
     </Wrapper>
   );
