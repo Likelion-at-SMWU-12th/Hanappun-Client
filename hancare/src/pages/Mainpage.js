@@ -160,7 +160,7 @@ const Box1Wrapper = styled.div`
   margin-right: 40px;
   gap: 20px;
 `;
-const Box1 = styled.div`
+export const Box1 = styled.div`
   display: flex;
   background-color: white;
   padding: 13px;
@@ -170,12 +170,12 @@ const Box1 = styled.div`
   border-radius: 12px;
   flex: 1;
 `;
-const List = styled.ul`
+export const List = styled.ul`
   list-style: none;
   padding: 0;
   margin: 0;
 `;
-const ListItem = styled.li`
+export const ListItem = styled.li`
   display: flex;
   align-items: center;
   margin-bottom: 8px;
@@ -183,12 +183,12 @@ const ListItem = styled.li`
     margin-bottom: 0;
   }
 `;
-const Box1Img = styled.img`
+export const Box1Img = styled.img`
   width: 14px;
   margin-right: 10px;
   cursor: pointer;
 `;
-const Box1Text = styled.span`
+export const Box1Text = styled.span`
   font-size: 10px;
   color: #7350ff;
   font-weight: 500;
