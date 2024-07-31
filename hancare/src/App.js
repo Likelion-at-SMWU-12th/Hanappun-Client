@@ -11,6 +11,8 @@ import Cancel from "./pages/mypage/Cancel";
 import CalendarMain from "./pages/calendar/CalendarMain";
 import MapMain from "./pages/hospital/MapMain";
 import OurCareStart from "./pages/ourcare/OurCareStart";
+import OurCareFamily from "./pages/ourcare/OurCareFamily";
+import OurCareProfile from "./pages/ourcare/OurCareProfile";
 
 const Wrapper = styled.div`
   width: 400px;
@@ -37,6 +39,8 @@ function App() {
         <Route path="/mypage/calendar" element={<CalendarMain />} />
         <Route path="/map" element={<MapMain />} />
         <Route path="/ourcare/" element={<OurCareStart />} />
+        <Route path="/ourcare/family/" element={<OurCareFamily />} />
+        <Route path="/ourcare/family/:id" element={<OurCareProfile />} />
       </Routes>
     </Wrapper>
   );
