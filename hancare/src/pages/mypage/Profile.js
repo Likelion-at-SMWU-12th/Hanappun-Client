@@ -36,7 +36,7 @@ useEffect(() => {
     <div className="background">
       <header className="blackHeader">
         <img alt="back" onClick={BackButton} src="/images/back.png" />
-        <h2>MY</h2>
+        <h2 className="Ph2">MY</h2>
       </header>
       <main className="blackMain">
         <div className="profile">
