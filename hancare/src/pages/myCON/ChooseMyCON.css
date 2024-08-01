@@ -1,0 +1,126 @@
+/* 전체 설정 */
+.MCbackground {
+  background-color: black;
+  width: 100%;
+  height: 100vh;
+}
+
+.blackHeader {
+  padding-top: 30px;
+  display: flex;
+}
+
+/* 이전페이지로 가기 버튼 */
+.blackHeader img {
+  width: 13px;
+  margin: auto 30px;
+  cursor: pointer;
+}
+
+.STh2 {
+  margin-left: calc(30% - 36px);
+  color: white;
+}
+
+/* main */
+.MCmain {
+  color: white;
+  text-align: center;
+}
+
+/* MCtext */
+.MCtext {
+  margin-top: 20px;
+  color: white;
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.MCtext p {
+  margin-left: auto;
+  margin-left: auto;
+  font-weight: 500;
+  width: 390px;
+  margin-bottom: 5px;
+}
+.MCtext span {
+  font-weight: 300;
+  margin-bottom: 30px;
+}
+
+/* MCchoices_btn */
+.MCchoices_btn {
+  margin-top: 40px;
+  margin-bottom: 100px;
+}
+
+.MCchoices_btn button {
+  background-color: white;
+  border: none;
+  color: black;
+  font-size: 11pt;
+  font-weight: 600;
+  padding: 30px 50px;
+  width: 150px;
+  margin-bottom: 40px;
+  cursor: pointer;
+}
+
+.MCchoices_btn button:hover {
+  background-color: #7350ff;
+  color: white;
+  transition: 0.5s ease-in-out;
+}
+
+.MCchoices_btn button.selected {
+  background-color: #7350ff;
+  color: white;
+}
+
+.MC_leftBtn {
+  border-radius: 50px 0 0 50px;
+  margin-left: 50px;
+  margin-right: 0;
+}
+
+.MC_rightBtn {
+  border-radius: 0 50px 50px 0;
+  margin-left: 0;
+  margin-right: 50px;
+  margin-bottom: 10px;
+}
+
+.MCchoices_images {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -580px;
+  gap: 57px;
+}
+
+.MCchoices_images img {
+  width: 65px;
+}
+
+.MC_moreCON_conGold {
+  margin-top: 18px;
+  margin-left: 20px;
+}
+
+.MC_moreCON_conGround {
+  margin-top: 15px;
+}
+
+.CMCsubmitBtn {
+  margin-top: 70px;
+  background-color: #7350ff;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 20px;
+  font-size: 11pt;
+  font-weight: 500;
+  width: 150px;
+  cursor: pointer;
+}
