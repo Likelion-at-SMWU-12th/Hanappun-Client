@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const HospitalItem = ({ item }) => {
+  const navigate = useNavigate();
+  const [selectedButton, setSelectedButton] = useState("소개");
+
+  const handleClick = () => {
+    navigate(`/map/${item.id}`, { state: { item } });
+  };
+
   return (
-    <Container>
+    <Container onClick={handleClick}>
       <Firstbox>
         <HospitalName>{item.name}</HospitalName>
         <HospitalHashtag>{item.hashtag1}</HospitalHashtag>
@@ -31,6 +39,7 @@ const Container = styled.div`
   box-shadow: 0 0 8px #cecece;
   border-radius: 20px;
   width: 90%;
+  cursor: pointer;
 `;
 const Firstbox = styled.div`
   display: flex;

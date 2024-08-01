@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import HospitalItem from "../../components/HospitalItem";
 
 const MapMain = () => {
+  const navigate = useNavigate();
   const [hospital, setHospital] = useState([]);
   const [keyword, setKeyword] = useState("");
   const [filteredHospital, setFilteredHospital] = useState([]);
@@ -153,7 +155,8 @@ const HospitalList = styled.div`
   height: 100vh;
   padding: 10px;
   background-color: white;
-  border-radius: 20px;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
   overflow-y: auto;
 `;
 

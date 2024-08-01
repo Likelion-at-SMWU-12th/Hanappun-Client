@@ -17,6 +17,7 @@ import MyCON from "./pages/myCON/MyCON";
 import SelfTest2 from "./pages/myCON/SelfTest2";
 import OurCareFamily from "./pages/ourcare/OurCareFamily";
 import OurCareProfile from "./pages/ourcare/OurCareProfile";
+import HospitalHome from "./pages/hospital/HospitalHome";
 
 const Wrapper = styled.div`
   width: 400px;
@@ -40,8 +41,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/mainpage/" element={<Mainpage />} />
-        <Route path="/mypage/calendar" element={<CalendarMain />} />
-        <Route path="/map" element={<MapMain />} />
+        <Route path="/calendar" element={<CalendarMain />} />
         <Route path="/ourcare/" element={<OurCareStart />} />
         {/*마이페이지*/}
         <Route path="/profile" element={<Profile />} />
@@ -53,9 +53,13 @@ function App() {
         {/*나의 체질*/}
         <Route path="/myCON" element={<MyCON />} />
         <Route path="/myCON/selfTest2" element={<SelfTest2 />} />
-          
+
         <Route path="/ourcare/family/" element={<OurCareFamily />} />
         <Route path="/ourcare/family/:id" element={<OurCareProfile />} />
+
+        {/* 한의원 */}
+        <Route path="/map" element={<MapMain />} />
+        <Route path="/map/:id" element={<HospitalHome />} />
       </Routes>
     </Wrapper>
   );
