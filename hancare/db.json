@@ -1,0 +1,48 @@
+{
+  "hospital": [
+    {
+      "id": 1,
+      "name": "숙명 한의원",
+      "hashtag1": "건강 관리",
+      "hashtag2": "8체질",
+      "hashtag3": "한약 처방",
+      "address": "서울특별시 용산구 청파로 47길 100",
+      "call": "02-xxxx-xxxx",
+      "reviewnum": 165,
+      "reviewtext": "의료진, 직원이 친절해요"
+    },
+    {
+      "id": 2,
+      "name": "광고 한의원",
+      "hashtag1": "건강 관리",
+      "hashtag2": "8체질",
+      "hashtag3": "광고",
+      "address": "서울특별시 용산구 청파로 47길 100",
+      "call": "02-xxxx-xxxx",
+      "reviewnum": 165,
+      "reviewtext": "의료진, 직원이 친절해요"
+    },
+    {
+      "id": 3,
+      "name": "한빛 한의원",
+      "hashtag1": "교통사고",
+      "hashtag2": "사상의학",
+      "hashtag3": "한약 처방",
+      "address": "서울특별시 용산구 @@로 @@길 xxx",
+      "call": "02-xxxx-xxxx",
+      "reviewnum": 132,
+      "reviewtext": "시설이 쾌적해요"
+    },
+    {
+      "id": 4,
+      "name": "한빛 한의원",
+      "hashtag1": "교통사고",
+      "hashtag2": "사상의학",
+      "hashtag3": "한약 처방",
+      "address": "서울특별시 용산구 @@로 @@길 xxx",
+      "call": "02-xxxx-xxxx",
+      "reviewnum": 132,
+      "reviewtext": "시설이 쾌적해요"
+    }
+  ]
+}
