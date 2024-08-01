@@ -1,12 +1,33 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
+import SetMyModal from "../../components/SetMyModal";
+import ReservateModal from "../../components/ReservateModal";
 
 const HospitalHome = () => {
   const location = useLocation();
   const { item } = location.state;
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("소개");
+
+  // 나의 한의원 모달창 관련
+  const [isMyModalOpen, setISMyModalOpen] = useState(false);
+  const [isSetmy, setIsmy] = useState(false);
+  const openModal = () => {
+    setISMyModalOpen(true);
+  };
+  const closeModal = () => setISMyModalOpen(false);
+  const handleSetMy = () => {
+    setIsmy(true);
+    closeModal();
+  };
+
+  // 예약 모달 창 관련
+  const [ReservateOpen, setReservateOpen] = useState(false);
+  const openReservateModal = () => {
+    setReservateOpen(true);
+  };
+  const closeReservateModal = () => setReservateOpen(false);
 
   const BackButton = () => {
     navigate(-1);
@@ -27,7 +48,9 @@ const HospitalHome = () => {
         <Hashtag>{item.hashtag1}</Hashtag>
         <Hashtag>{item.hashtag2}</Hashtag>
         <Hashtag>{item.hashtag3}</Hashtag>
-        <MyHospital>나의 한의원</MyHospital>
+        <MyHospital onClick={openModal}>
+          {isSetmy ? "V 나의 한의원" : "나의 한의원"}
+        </MyHospital>
       </Wrapper>
       <Info>
         <Bold>위치</Bold>
@@ -37,7 +60,7 @@ const HospitalHome = () => {
         <Bold>전화번호</Bold>
         {item.call}
       </Info>
-      <ReservateBtn>예약</ReservateBtn>
+      <ReservateBtn onClick={openReservateModal}>예약</ReservateBtn>
       <Detail>
         <DetailMenu>
           <TabButton
@@ -94,6 +117,19 @@ const HospitalHome = () => {
           <h2>후기</h2>
         )}
       </Detail>
+      {isMyModalOpen && (
+        <SetMyModal
+          isOpen={isMyModalOpen}
+          closeModal={closeModal}
+          handleSetMy={handleSetMy}
+        />
+      )}
+      {ReservateOpen && (
+        <ReservateModal
+          isReservateOpen={setReservateOpen}
+          closeReesrvateModal={closeReservateModal}
+        />
+      )}
     </Container>
   );
 };
