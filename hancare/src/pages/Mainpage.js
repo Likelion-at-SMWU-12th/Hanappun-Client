@@ -1,4 +1,5 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -10,6 +11,22 @@ const Mainpage = () => {
   const formattedDate = `${
     today.getMonth() + 1
   }월 ${today.getDate()}일 ${dayOfWeek}요일`;
+  const [user, setUser] = useState([]);
+
+  const getInfo = () => {
+    axios
+      .get("http://localhost:8002/users")
+      .then((response) => {
+        setUser(response.data[0]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    getInfo();
+  }, []);
 
   return (
     <Container>
@@ -19,7 +36,7 @@ const Mainpage = () => {
           alt="calendar"
           onClick={() => navigate("/claendar")}
         ></CalendarImg>
-        <Name>숙멋사 님</Name>
+        <Name>{user.name} 님</Name>
         <Message>오늘 하루도 힘차게 시작해봐요!</Message>
       </Guest>
       <Box1Wrapper>
@@ -27,7 +44,11 @@ const Mainpage = () => {
           <List>
             <ListItem onClick={() => navigate("/map")}>
               <Box1Img src="/images/hospital.png" alt="map"></Box1Img>
-              <Box1Text>한의원을 알아볼까요?</Box1Text>
+              {user.hospital ? (
+                <Box1Text>{user.hospital}</Box1Text>
+              ) : (
+                <Box1Text>한의원을 알아볼까요?</Box1Text>
+              )}
             </ListItem>
             <ListItem>
               <Box1Img
@@ -42,9 +63,13 @@ const Mainpage = () => {
           <List>
             <ListItem>
               <Box1Img src="/images/test.png" alt="test"></Box1Img>
-              <Box1Text>나의 체질은?</Box1Text>
+              {user.body ? (
+                <Box1Text>{user.body}</Box1Text>
+              ) : (
+                <Box1Text>나의 체질은?</Box1Text>
+              )}
             </ListItem>
-            <ListItem>
+            <ListItem onClick={() => navigate("/column")}>
               <Box1Img src="/images/info.png" alt="info"></Box1Img>
               <Box1Text>체질별 주의사항</Box1Text>
             </ListItem>
@@ -55,27 +80,55 @@ const Mainpage = () => {
         <When>{formattedDate}</When>
         <Box1Wrapper>
           <Box2>
-            <FaceImg src="/images/thinking.png" alt="face"></FaceImg>
-            <List>
-              <ListItem>
-                <DetailText>오늘 식사 점수를 알아봐요</DetailText>
-              </ListItem>
-              <ListItem>
-                <TitleText>맞춤형 분석</TitleText>
-              </ListItem>
-              <ListItem>
-                <PlusImg src="/images/plus.png"></PlusImg>
-                <EatBtn>아침</EatBtn>
-              </ListItem>
-              <ListItem>
-                <PlusImg src="/images/plus.png"></PlusImg>
-                <EatBtn>점심</EatBtn>
-              </ListItem>
-              <ListItem>
-                <PlusImg src="/images/plus.png"></PlusImg>
-                <EatBtn>저녁</EatBtn>
-              </ListItem>
-            </List>
+            {user.breakfast || user.lunch || user.dinner ? (
+              <>
+                <FaceImg src="/images/happy.png" alt="face"></FaceImg>
+                <List>
+                  <ListItem>
+                    <DetailText>오늘의 식단 분석을 알려드려요</DetailText>
+                  </ListItem>
+                  <ListItem>
+                    <TitleText>'대체로 좋아요'</TitleText>
+                  </ListItem>
+                  <ListItem>
+                    <PlusImg src="/images/check.png"></PlusImg>
+                    <EatBtn>아침</EatBtn>
+                  </ListItem>
+                  <ListItem>
+                    <PlusImg src="/images/check.png"></PlusImg>
+                    <EatBtn>점심</EatBtn>
+                  </ListItem>
+                  <ListItem>
+                    <PlusImg src="/images/check.png"></PlusImg>
+                    <EatBtn>저녁</EatBtn>
+                  </ListItem>
+                </List>
+              </>
+            ) : (
+              <>
+                <FaceImg src="/images/thinking.png" alt="face"></FaceImg>
+                <List>
+                  <ListItem>
+                    <DetailText>오늘 식사 점수를 알아봐요</DetailText>
+                  </ListItem>
+                  <ListItem>
+                    <TitleText>맞춤형 분석</TitleText>
+                  </ListItem>
+                  <ListItem>
+                    <PlusImg src="/images/plus.png"></PlusImg>
+                    <NoEatBtn>아침</NoEatBtn>
+                  </ListItem>
+                  <ListItem>
+                    <PlusImg src="/images/plus.png"></PlusImg>
+                    <NoEatBtn>점심</NoEatBtn>
+                  </ListItem>
+                  <ListItem>
+                    <PlusImg src="/images/plus.png"></PlusImg>
+                    <NoEatBtn>저녁</NoEatBtn>
+                  </ListItem>
+                </List>
+              </>
+            )}
           </Box2>
           <Box2>
             <FaceImg src="/images/family.png" alt="family"></FaceImg>
@@ -86,9 +139,21 @@ const Mainpage = () => {
               <ListItem>
                 <TitleText>우리 케어</TitleText>
               </ListItem>
-              <OurCareStart onClick={() => navigate("/ourcare/")}>
-                시작하기
-              </OurCareStart>
+              {user.friend ? (
+                <>
+                  {user.friend.map((item, index) => (
+                    <Friend key={index}>
+                      <p>{item}</p>
+                    </Friend>
+                  ))}
+                </>
+              ) : (
+                <>
+                  <OurCareStart onClick={() => navigate("/ourcare/")}>
+                    시작하기
+                  </OurCareStart>
+                </>
+              )}
             </List>
           </Box2>
         </Box1Wrapper>
@@ -98,9 +163,63 @@ const Mainpage = () => {
             <LeftboxBar src="/images/bar.png"></LeftboxBar>
           </Leftbox>
           <RightBox>
-            <RightBoxTxt>오늘의 식사를 기록해요</RightBoxTxt>
-            <RightBoxImg src="/images/potato.png" alt="potato"></RightBoxImg>
-            <WriteBtn>기록하기</WriteBtn>
+            {user.breakfast || user.lunch || user.dinner ? (
+              <>
+                <EatRecordWrapper>
+                  <h3>아침</h3>
+                  <FoodListWrapper>
+                    {user.breakfast.slice(0, 2).map((food, index) => (
+                      <div key={index}>
+                        <p>{food}</p>
+                      </div>
+                    ))}
+                    {user.breakfast.length > 2 && <p>..</p>}
+                  </FoodListWrapper>
+                </EatRecordWrapper>
+                <EatRecordWrapper>
+                  <h3>점심</h3>
+                  <FoodListWrapper>
+                    {user.lunch.slice(0, 2).map((food, index) => (
+                      <div key={index}>
+                        <p>{food}</p>
+                      </div>
+                    ))}
+                    {user.lunch.length > 2 && <p>..</p>}
+                  </FoodListWrapper>
+                </EatRecordWrapper>
+                <EatRecordWrapper>
+                  <h3>저녁</h3>
+                  <FoodListWrapper>
+                    {user.dinner.slice(0, 2).map((food, index) => (
+                      <div key={index}>
+                        <p>{food}</p>
+                      </div>
+                    ))}
+                    {user.dinner.length > 2 && <p>..</p>}
+                  </FoodListWrapper>
+                </EatRecordWrapper>
+                <EatRecordWrapper>
+                  <h3>간식</h3>
+                  <FoodListWrapper>
+                    {user.snack.slice(0, 2).map((food, index) => (
+                      <div key={index}>
+                        <p>{food}</p>
+                      </div>
+                    ))}
+                    {user.snack.length > 2 && <p>..</p>}
+                  </FoodListWrapper>
+                </EatRecordWrapper>
+              </>
+            ) : (
+              <>
+                <RightBoxTxt>오늘의 식사를 기록해요</RightBoxTxt>
+                <RightBoxImg
+                  src="/images/potato.png"
+                  alt="potato"
+                ></RightBoxImg>
+                <WriteBtn>기록하기</WriteBtn>
+              </>
+            )}
           </RightBox>
         </Box3>
         <Box3>
@@ -109,12 +228,47 @@ const Mainpage = () => {
             <LeftboxBar src="/images/bar.png"></LeftboxBar>
           </Leftbox>
           <RightBox>
-            <RightBoxTxt>몸 상태와 기분은 어때요?</RightBoxTxt>
-            <RightBoxImg
-              src="/images/condition.png"
-              alt="condition"
-            ></RightBoxImg>
-            <WriteBtn>기록하기</WriteBtn>
+            {user.bodycondition || user.feeling || user.memo ? (
+              <>
+                <EatRecordWrapper>
+                  <h3>몸상태</h3>
+                  <FoodListWrapper>
+                    {user.bodycondition.slice(0, 2).map((food, index) => (
+                      <div key={index}>
+                        <p>{food}</p>
+                      </div>
+                    ))}
+                    {user.bodycondition.length > 2 && <p>..</p>}
+                  </FoodListWrapper>
+                </EatRecordWrapper>
+                <EatRecordWrapper>
+                  <h3>기분</h3>
+                  <FoodListWrapper>
+                    {user.feeling.slice(0, 2).map((food, index) => (
+                      <div key={index}>
+                        <p>{food}</p>
+                      </div>
+                    ))}
+                    {user.feeling.length > 2 && <p>..</p>}
+                  </FoodListWrapper>
+                </EatRecordWrapper>
+                <EatRecordWrapper>
+                  <h3>메모</h3>
+                  <FoodListWrapper>
+                    <p>자세히 보기</p>
+                  </FoodListWrapper>
+                </EatRecordWrapper>
+              </>
+            ) : (
+              <>
+                <RightBoxTxt>몸 상태와 기분은 어때요?</RightBoxTxt>
+                <RightBoxImg
+                  src="/images/condition.png"
+                  alt="condition"
+                ></RightBoxImg>
+                <WriteBtn>기록하기</WriteBtn>
+              </>
+            )}
           </RightBox>
         </Box3>
       </RoundedBox>
@@ -201,6 +355,8 @@ const RoundedBox = styled.div`
   border-top-right-radius: 25px;
   margin-top: 18px;
   height: 100vh;
+  padding-bottom: 50px;
+  overflow-y: auto;
 `;
 const When = styled.div`
   text-align: center;
@@ -239,12 +395,24 @@ const PlusImg = styled.img`
   width: 8px;
   cursor: pointer;
 `;
-const EatBtn = styled.button`
+const NoEatBtn = styled.button`
   color: #9f9f9f;
   font-size: 10px;
   margin-left: 5px;
   border: 1px solid #9f9f9f;
   background-color: white;
+  padding: 2px;
+  width: 35px;
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+`;
+const EatBtn = styled.button`
+  color: white;
+  font-size: 10px;
+  margin-left: 5px;
+  border: 1px solid black;
+  background-color: black;
   padding: 2px;
   width: 35px;
   border-radius: 10px;
@@ -270,6 +438,20 @@ const OurCareStart = styled.button`
   text-align: center;
   cursor: pointer;
 `;
+const Friend = styled.div`
+  display: flex;
+  flex-direction: column;
+  p {
+    margin: 2px;
+    background-color: #7350ff;
+    font-size: 10px;
+    color: white;
+    padding: 2px;
+    border-radius: 10px;
+    width: 35px;
+    text-align: center;
+  }
+`;
 
 const Box3 = styled.div`
   background-color: white;
@@ -281,7 +463,6 @@ const Box3 = styled.div`
   margin-right: 40px;
   margin-top: 20px;
   border-radius: 12px;
-  position: relative;
 `;
 const Leftbox = styled.div`
   background-color: black;
@@ -295,6 +476,7 @@ const Leftbox = styled.div`
   justify-content: center;
   text-align: center;
   padding: 47px 13px 47px 13px;
+  resize: none;
 `;
 const LeftboxTxt = styled.span`
   color: white;
@@ -306,7 +488,9 @@ const LeftboxBar = styled.img`
   margin-top: 7px;
 `;
 const RightBox = styled.div`
+  position: relative;
   margin-left: 13px;
+  flex: 1;
 `;
 const RightBoxTxt = styled.div`
   font-size: 11px;
@@ -318,7 +502,7 @@ const RightBoxImg = styled.img`
   position: absolute;
   width: 85px;
   top: 45px;
-  left: 235px;
+  right: 0px;
 `;
 const WriteBtn = styled.button`
   color: #9f9f9f;
@@ -332,6 +516,35 @@ const WriteBtn = styled.button`
   border-radius: 10px;
   text-align: center;
   cursor: pointer;
+`;
+const EatRecordWrapper = styled.div`
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin-top: -1px;
+  &:first-child {
+    margin-top: 15px;
+  }
+
+  h3 {
+    margin-top: auto;
+    font-size: 13px;
+    color: #737373;
+    margin-right: 8px;
+  }
+`;
+const FoodListWrapper = styled.div`
+  display: flex;
+
+  p {
+    font-size: 10px;
+    margin-right: 5px;
+    margin-top: auto;
+    border: 1px solid #9f9f9f;
+    border-radius: 10px;
+    padding: 1px 2px;
+    color: #9f9f9f;
+  }
 `;
 
 export default Mainpage;
