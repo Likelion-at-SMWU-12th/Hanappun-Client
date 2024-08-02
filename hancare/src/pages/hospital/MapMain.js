@@ -12,6 +12,8 @@ const MapMain = () => {
   const [keyword, setKeyword] = useState("");
   const [filteredHospital, setFilteredHospital] = useState([]);
   const [isSearched, setIsSearched] = useState(false);
+  const [selectedHospital, setSelectedHospital] = useState(null);
+  const mapcontainer = useRef(null);
 
   // 검색 기능
   useEffect(() => {
@@ -52,15 +54,46 @@ const MapMain = () => {
     setIsSearched(true);
   };
 
+  const handleEnter = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      onButtonClick();
+    }
+  };
+
   // 지도 기능
   useEffect(() => {
-    const mapcontainer = document.getElementById("map");
-    const options = {
-      center: new kakao.maps.LatLng(37.54445537179708, 126.9712695039339),
-      level: 3,
-    };
-    const map = new kakao.maps.Map(mapcontainer, options);
-  }, []);
+    if (mapcontainer.current) {
+      const options = {
+        center: new kakao.maps.LatLng(37.54445537179708, 126.9712695039339),
+        level: 3,
+      };
+      const kakaomap = new kakao.maps.Map(mapcontainer.current, options);
+
+      var imageSrc = "/images/marker.png";
+      var imageSize = new kakao.maps.Size(24, 35);
+      var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
+      const markers = hospital.map((item) => {
+        const marker = new kakao.maps.Marker({
+          map: kakaomap,
+          position: new kakao.maps.LatLng(item.Lat, item.Lng),
+          title: item.name,
+          image: markerImage,
+        });
+
+        kakao.maps.event.addListener(marker, "click", () => {
+          setSelectedHospital(item);
+        });
+
+        return marker;
+      });
+
+      return () => {
+        markers.forEach((marker) => marker.setMap(null));
+      };
+    }
+  }, [hospital]);
 
   return (
     <Container>
@@ -72,6 +105,7 @@ const MapMain = () => {
           name="keyword"
           ref={myKeywordInput}
           placeholder="진료 분야, 병원명으로 검색"
+          onKeyDown={handleEnter}
         />
         <button type="button" onClick={onButtonClick}>
           검색
@@ -83,17 +117,28 @@ const MapMain = () => {
             <h2>나의 한의원</h2>
             <MyHospital>아직 없어요!</MyHospital>
           </MyHospitalBox>
-          {filteredHospital.length > 0 && (
+          {filteredHospital.length > 0 ? (
             <HospitalList>
               {filteredHospital.map((item) => (
                 <HospitalItem key={item.id} item={item}></HospitalItem>
               ))}
             </HospitalList>
+          ) : (
+            <>
+              <HospitalList>
+                <NoResult>검색 결과가 없습니다</NoResult>
+              </HospitalList>
+            </>
           )}
         </>
       ) : (
         <>
-          <MapBox id="map"></MapBox>
+          <MapBox ref={mapcontainer}></MapBox>
+          {selectedHospital && (
+            <SelectedHospitalBox>
+              <HospitalItem item={selectedHospital} />
+            </SelectedHospitalBox>
+          )}
         </>
       )}
     </Container>
@@ -105,6 +150,7 @@ const Container = styled.div`
   flex-direction: column;
   background-color: black;
   height: 100vh;
+  position: relative;
 `;
 const Title = styled.h2`
   color: white;
@@ -180,6 +226,9 @@ const HospitalList = styled.div`
   border-top-right-radius: 25px;
   overflow-y: auto;
 `;
+const NoResult = styled.p`
+  text-align: center;
+`;
 
 const MapBox = styled.div`
   width: 100%;
@@ -187,6 +236,19 @@ const MapBox = styled.div`
   height: 70vh;
   width: 100%;
   border-radius: 25px;
+`;
+
+const SelectedHospitalBox = styled.div`
+  position: absolute;
+  background-color: white;
+  bottom: 40px;
+  left: 0;
+  right: 0;
+  border-radius: 25px;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  overflow-y: auto;
+  flex: 1;
 `;
 
 export default MapMain;

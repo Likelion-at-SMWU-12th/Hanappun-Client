@@ -395,22 +395,23 @@ const Name = styled.h2`
 `;
 const Wrapper = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
   margin: 0 50px;
   margin-bottom: 10px;
+  position: relative;
 `;
 const Hashtag = styled.p`
   background-color: #57595f;
   color: white;
-  margin: -5px 7px;
-  padding: 6px;
+  margin: 0 5px;
+  padding: 1px 7px;
   display: inline;
   border-radius: 20px;
   font-size: 12px;
 `;
 const MyHospital = styled.button`
   margin: 0 auto;
+  margin-left: 40px;
   background-color: #7350ff;
   color: white;
   border: none;
@@ -419,6 +420,10 @@ const MyHospital = styled.button`
   font-size: 12px;
   font-weight: bolder;
   cursor: pointer;
+  display: block;
+  position: absolute;
+  top: 0px;
+  right: 5px;
 `;
 const Info = styled.p`
   color: white;
@@ -433,7 +438,7 @@ const Bold = styled.span`
 const ReservateBtn = styled.button`
   position: absolute;
   top: 192px;
-  right: 65px;
+  right: 55px;
   background-color: white;
   color: black;
   border: none;
