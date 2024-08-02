@@ -158,9 +158,20 @@ const OurCareProfile = () => {
         </ProfileWrapper>
         <BarImg src="/images/ourcarebar.png"></BarImg>
         <Body>
-          <h2>아직 체질이 기록되지 않았어요!</h2>
-          <img src="/images/ourcareyet.png"></img>
-          <ShareBtn>자가진단 링크 공유하기</ShareBtn>
+          {friendInfo.body ? (
+            <>
+              <BodyInfoimg
+                src={`/images/${friendInfo.body}.png`}
+                alt="body"
+              ></BodyInfoimg>
+            </>
+          ) : (
+            <>
+              <h2>아직 체질이 기록되지 않았어요!</h2>
+              <img src="/images/ourcareyet.png"></img>
+              <ShareBtn>자가진단 링크 공유하기</ShareBtn>
+            </>
+          )}
         </Body>
       </Container>
     </div>
@@ -246,4 +257,9 @@ const Body = styled.div`
     margin-top: 10px;
   }
 `;
+
+const BodyInfoimg = styled.img`
+  width: 100% !important;
+`;
+
 export default OurCareProfile;

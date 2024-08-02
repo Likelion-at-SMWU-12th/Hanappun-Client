@@ -64,7 +64,7 @@ const Mainpage = () => {
             <ListItem>
               <Box1Img src="/images/test.png" alt="test"></Box1Img>
               {user.body ? (
-                <Box1Text>{user.body}</Box1Text>
+                <Box1Text>{user.body}체질</Box1Text>
               ) : (
                 <Box1Text>나의 체질은?</Box1Text>
               )}
