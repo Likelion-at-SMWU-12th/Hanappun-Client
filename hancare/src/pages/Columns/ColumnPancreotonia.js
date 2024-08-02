@@ -15,7 +15,7 @@ const ColumnPancreotonia = () => {
         <p>2024년 7월 14일 명순헌 원장</p>
       </header>
       <main className="ColumnMain">
-        <img alt="" src="/images/column_Pulmotonia.png" />
+        <img alt="" src="/images/moreCON_Pulmotonia.png" />
         <div className="ColumnContent">
           <p className="ColumnPurple">
             토양체질은 췌장과 위장은 강하지만 신장과 방광이 약해요

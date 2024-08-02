@@ -14,7 +14,10 @@ import OurCareStart from "./pages/ourcare/OurCareStart";
 import ColumnPancreotonia from "./pages/Columns/ColumnPancreotonia";
 import ColumnMoreKM1 from "./pages/Columns/ColumnMoreKM1";
 import MyCON from "./pages/myCON/MyCON";
-import SelfTest2 from "./pages/myCON/SelfTest2";
+import ChooseMyCON from "./pages/myCON/ChooseMyCON";
+import SelfTest from "./pages/myCON/SelfTest";
+import SelfTestResult from "./pages/myCON/SelfTestResult";
+import EditMyCON from "./pages/myCON/EditMyCON";
 import OurCareFamily from "./pages/ourcare/OurCareFamily";
 import OurCareProfile from "./pages/ourcare/OurCareProfile";
 
@@ -52,7 +55,10 @@ function App() {
         <Route path="/column/moreKM1" element={<ColumnMoreKM1 />} />
         {/*나의 체질*/}
         <Route path="/myCON" element={<MyCON />} />
-        <Route path="/myCON/selfTest2" element={<SelfTest2 />} />
+        <Route path="/myCON/selfTest" element={<SelfTest />} />
+        <Route path="/myCON/selfTestResult" element={<SelfTestResult />} />
+        <Route path="/myCON/ChooseMyCON" element={<ChooseMyCON />} />
+        <Route path="/myCON/editMyCON" element={<EditMyCON />} />
         <Route path="/ourcare/family/" element={<OurCareFamily />} />
         <Route path="/ourcare/family/:id" element={<OurCareProfile />} />
       </Routes>

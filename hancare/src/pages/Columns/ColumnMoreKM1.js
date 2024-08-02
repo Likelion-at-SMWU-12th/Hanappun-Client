@@ -15,7 +15,7 @@ const ColumnMoreKM1 = () => {
         <p>2024년 5월 25일 김수련 원장</p>
       </header>
       <main className="ColumnMain">
-        <img alt="" src="/images/column_eight_consitutions.png" />
+        <img alt="" src="/images/eight_consitutions.png" />
         <div className="ColumnContent">
           <p className="ColumnQ">Q. 8체질에서 '음양'은 무엇이 다른가요?</p>
           <p>
