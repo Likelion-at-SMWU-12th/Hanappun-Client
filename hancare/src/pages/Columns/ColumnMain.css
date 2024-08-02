@@ -69,15 +69,16 @@
   color: black;
   font-weight: 500;
   margin-bottom: 20px;
+  cursor: pointer;
 }
 
-.one_moreKM :hover {
+.one_moreKM img:hover {
   transform: scale(1.01);
 }
 
 .one_moreKM img {
   margin-top: 15px;
-  width: 250px;
+  width: 280px;
   transition: transfrom 450ms;
   border-radius: 10px;
   overflow: hidden;
@@ -113,6 +114,7 @@
   width: 150px;
   margin-left: 50px;
   margin-right: 0;
+  cursor: pointer;
 }
 
 .CM_rightBtn {
@@ -127,6 +129,7 @@
   margin-left: 0;
   margin-right: 50px;
   margin-bottom: 10px;
+  cursor: pointer;
 }
 
 .CM_moreCON_images {

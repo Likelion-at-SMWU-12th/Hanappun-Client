@@ -20,9 +20,6 @@ import SelfTestResult from "./pages/myCON/SelfTestResult";
 import EditMyCON from "./pages/myCON/EditMyCON";
 import OurCareFamily from "./pages/ourcare/OurCareFamily";
 import OurCareProfile from "./pages/ourcare/OurCareProfile";
-import SelfTest2 from "./pages/myCON/SelfTest2";
-import OurCareFamily from "./pages/ourcare/OurCareFamily";
-import OurCareProfile from "./pages/ourcare/OurCareProfile";
 import HospitalHome from "./pages/hospital/HospitalHome";
 
 const Wrapper = styled.div`
