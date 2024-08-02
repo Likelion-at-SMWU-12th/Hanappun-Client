@@ -7,7 +7,7 @@ const HospitalItem = ({ item }) => {
   const [selectedButton, setSelectedButton] = useState("소개");
 
   const handleClick = () => {
-    navigate(`/map/${item.id}`, { state: { item } });
+    navigate(`/map/${item.id}`);
   };
 
   return (
