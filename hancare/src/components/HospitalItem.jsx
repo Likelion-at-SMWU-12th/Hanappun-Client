@@ -56,7 +56,7 @@ const HospitalHashtag = styled.p`
   background-color: #57595f;
   color: white;
   padding: 1px 7px;
-  font-size: 13px;
+  font-size: 11px;
   border-radius: 20px;
 `;
 
