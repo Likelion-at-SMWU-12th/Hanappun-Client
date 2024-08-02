@@ -1,0 +1,64 @@
+/* 전체 설정 */
+.MCbackground {
+  background-color: black;
+  width: 100%;
+  height: auto;
+}
+
+.blackHeader {
+  padding-top: 30px;
+  display: flex;
+}
+
+/* 이전페이지로 가기 버튼 */
+.blackHeader img {
+  width: 13px;
+  margin: auto 30px;
+}
+
+.STh2 {
+  margin-left: calc(30% - 36px);
+  color: white;
+}
+
+/* main */
+.MCmain {
+  color: white;
+  text-align: center;
+  margin-bottom: 100px;
+}
+
+.MCinfo {
+  font-size: 14pt;
+  font-weight: 500;
+  margin-bottom: 30px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* MCbtns */
+.MCbtns {
+  margin-bottom: 100px;
+}
+.MCbtns button {
+  padding: 10px;
+  border: none;
+  border-radius: 20px;
+  font-size: 11pt;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 50px;
+}
+
+.MCwhiteBtn {
+  background-color: white;
+  color: black;
+  width: 150px;
+  margin-right: 15px;
+}
+
+.MCpurpleBtn {
+  background-color: #7350ff;
+  color: white;
+  width: 150px;
+}

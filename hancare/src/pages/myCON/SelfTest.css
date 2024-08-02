@@ -2,7 +2,7 @@
 .background {
   background-color: black;
   width: 100%;
-  height: 100vh;
+  height: auto;
 }
 
 .blackHeader {
@@ -16,21 +16,144 @@
   margin: auto 30px;
 }
 
-.blackHeader h2 {
-  margin-left: calc(30% - 30px);
+.STh2 {
+  margin-left: calc(30% - 36px);
   color: white;
 }
 
 /* main */
-.blackMain {
-  margin: 30px auto;
-  background-color: #f7f7f7;
-  width: 90%;
-  height: 70vh;
-  border-radius: 10px;
+.STmain {
+  color: white;
 }
 
-.blackMain hr {
-  width: 88%;
-  opacity: 30%;
+/* Q n A */
+.STfieldset {
+  border: none;
+  text-align: center;
+}
+
+.STlegend {
+  visibility: hidden;
+}
+
+.STq {
+  font-size: 11pt;
+  font-weight: 700;
+}
+
+/* 답변하는 공간 */
+.STa {
+  margin-top: 10px;
+  display: flex;
+  padding-left: 1.5%;
+}
+
+/* 왼쪽 disagree, 오른쪽 agree 이미지 */
+.STdisagree {
+  width: 13px;
+  height: 13px;
+  padding: 10px;
+}
+
+.STagree {
+  width: 13px;
+  height: 13px;
+  padding: 10px;
+  rotate: 180deg;
+}
+
+/* radio 버튼들 */
+.radios {
+  background-color: #7350ff;
+  border: none;
+  border-radius: 30px;
+  display: inline;
+  width: 300px;
+  margin: 0;
+}
+
+/* radio 버튼 */
+[type="radio"] {
+  -webkit-appearance: none; /* 웹킷 브라우저에서 기본 스타일 제거*/
+  -moz-appearance: none; /* 모질라 브라우저에서 기본 스타일 제거*/
+  appearance: none; /*기본 브라우저에서 기본 스타일 제거*/
+
+  vertical-align: middle;
+  appearance: none;
+  border: 4px solid #7350ff;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  background-color: #b29eff;
+  transition: 0.5s ease-in-out;
+}
+
+[type="radio"]:checked {
+  background-color: white;
+  width: 15px;
+  height: 15px;
+  border: none;
+}
+
+[type="radio"]:hover {
+  background-color: white;
+  width: 15px;
+  border: none;
+  cursor: pointer;
+}
+
+/* 진행상황 */
+.progressBack {
+  position: fixed;
+  top: 0;
+  margin-top: 0;
+  background-color: black;
+  padding: 20px 50px 20px 50px;
+  z-index: 5;
+}
+
+.progress-bar {
+  width: 300px;
+  background-color: #e0e0e0;
+  height: 10px;
+  border-radius: 5px;
+}
+
+.progress {
+  background-color: #7350ff;
+  height: 100%;
+  border-radius: 5px;
+  transition: width 0.3s ease;
+}
+
+/* 다음 버튼 */
+.STbtns button {
+  margin-top: 50px;
+  padding: 10px;
+  border: none;
+  border-radius: 20px;
+  font-size: 11pt;
+  font-weight: 500;
+  cursor: pointer;
+}
+.STnextBtn {
+  background-color: #7350ff;
+  color: white;
+  margin-left: 25%;
+  width: 200px;
+  padding: 10px;
+}
+
+.STpreBtn {
+  background-color: white;
+  color: black;
+  margin-left: 10%;
+  width: 150px;
+}
+
+.STresultBtn {
+  background-color: #7350ff;
+  color: white;
+  margin-left: 5%;
+  width: 150px;
 }

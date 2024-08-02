@@ -16,7 +16,7 @@
   margin: auto 30px;
 }
 
-.blackHeader h2 {
+.Ph2 {
   margin-left: calc(40% - 45px);
   color: white;
 }
@@ -106,6 +106,7 @@
   font-weight: 600;
   float: right;
   margin-right: 10px;
+  cursor: pointer;
 }
 
 /* 회원 정보 */
@@ -142,4 +143,5 @@
   font-weight: 600;
   float: right;
   margin-right: 10px;
+  cursor: pointer;
 }

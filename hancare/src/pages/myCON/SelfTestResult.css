@@ -1,0 +1,111 @@
+/* 전체 설정 */
+.STRbackground {
+  background-color: black;
+  width: 100%;
+  height: auto;
+}
+
+.blackHeader {
+  padding-top: 30px;
+  display: flex;
+}
+
+/* 이전페이지로 가기 버튼 */
+.blackHeader img {
+  width: 13px;
+  margin: auto 30px;
+}
+
+.STh2 {
+  margin-left: calc(30% - 36px);
+  color: white;
+}
+
+/* main */
+.STRmain {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  color: white;
+}
+
+/* STRresult */
+.STRresult {
+  color: white;
+  text-align: center;
+  margin-bottom: 70px;
+}
+
+.STRresult p {
+  font-weight: 500;
+  margin-bottom: 30px;
+  width: 390px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.STRpurple {
+  color: #7350ff;
+  font-weight: 700;
+}
+
+.STRresult img {
+  width: 300px;
+  margin-bottom: 5px;
+}
+
+/* STRinfo */
+.STRinfo {
+  width: 350px;
+  height: 250px;
+  background-color: white;
+  border-radius: 30px;
+  display: flex;
+  margin-bottom: 80px;
+}
+
+.STRinfo img {
+  height: 200px;
+  margin-left: 30px;
+  margin-top: 30px;
+}
+
+.STRinfo p {
+  color: black;
+  font-size: 11pt;
+  font-weight: 500;
+  margin-top: 70px;
+  margin-left: 5px;
+  width: 170px;
+}
+
+/* STRbtns */
+.STRbtns {
+  margin-bottom: 100px;
+}
+.STRbtns button {
+  padding: 10px;
+  border: none;
+  border-radius: 20px;
+  font-size: 11pt;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.STRwhiteBtn {
+  background-color: white;
+  color: black;
+  width: 150px;
+  margin-right: 15px;
+}
+
+.STRpurpleBtn {
+  background-color: #7350ff;
+  color: white;
+  width: 150px;
+}
+
+.result-item {
+  margin: 20px 0;
+}
