@@ -1,13 +1,21 @@
 import React from "react";
 import styled from "styled-components";
 
-function SetMyModal({ isOpen, closeModal, handleSetMy }) {
+function SetMyModal({ isOpen, closeModal, handleSetMy, isSetmy }) {
   return (
     <div>
       <ModalOverlay style={{ display: isOpen ? "flex" : "none" }}>
         <Container>
           <Purple>
-            <h2>나의 한의원으로 설정할까요?</h2>
+            {isSetmy ? (
+              <>
+                <h2>나의 한의원을 취소하시겠어요?</h2>
+              </>
+            ) : (
+              <>
+                <h2>나의 한의원으로 설정할까요?</h2>
+              </>
+            )}
           </Purple>
           <img src="/images/setmyhospital.png" alt="file"></img>
           <p>
@@ -17,7 +25,9 @@ function SetMyModal({ isOpen, closeModal, handleSetMy }) {
           </p>
           <BtnWrapper>
             <CloseButton onClick={closeModal}>뒤로가기</CloseButton>
-            <SetButton onClick={handleSetMy}>설정하기</SetButton>
+            <SetButton onClick={handleSetMy}>
+              {isSetmy ? <>취소하기</> : <>설정하기</>}
+            </SetButton>
           </BtnWrapper>
         </Container>
       </ModalOverlay>
