@@ -17,7 +17,7 @@ const Mainpage = () => {
         <CalendarImg
           src="/images/calendar.png"
           alt="calendar"
-          onClick={() => navigate("/mainpage/claendar")}
+          onClick={() => navigate("/claendar")}
         ></CalendarImg>
         <Name>숙멋사 님</Name>
         <Message>오늘 하루도 힘차게 시작해봐요!</Message>
@@ -26,7 +26,7 @@ const Mainpage = () => {
         <Box1>
           <List>
             <ListItem onClick={() => navigate("/map")}>
-              <Box1Img src="/images/hospital.png" alt="hospital"></Box1Img>
+              <Box1Img src="/images/hospital.png" alt="map"></Box1Img>
               <Box1Text>한의원을 알아볼까요?</Box1Text>
             </ListItem>
             <ListItem>
