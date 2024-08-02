@@ -20,6 +20,51 @@ const OurCareProfile = () => {
     navigate(-1);
   };
 
+  // 카카오톡 공유 기능
+  // const reservationShare = () => {
+  //   if (window.Kakao){
+  //     const kakao=window.Kakao
+
+  //     if (!kakao.isInitialized()){
+  //       kakao.init('60c004dfae745dd8f45c124a54557159')
+  //     }
+
+  //     kakao.Share.sendDefault({
+  //       objectType: 'feed',
+  //       content:{
+  //         title: "한의원 예약 정보",
+  //         description: "한의원 예약 정보를 지금 확인해보세요!",
+  //         imageUrl:"/images/logo.png",
+  //         link:{
+  //         },
+  //       },
+  //       buttons: [{title:"지금 바로 보기", link:{webUrl:,},},],
+  //     });
+  //   }
+  // }
+
+  // const testShare = () => {
+  //   if (window.Kakao){
+  //     const kakao=window.Kakao
+
+  //     if (!kakao.isInitialized()){
+  //       kakao.init('60c004dfae745dd8f45c124a54557159')
+  //     }
+
+  //     kakao.Share.sendDefault({
+  //       objectType: 'feed',
+  //       content:{
+  //         title: "나의 체질 검사하기",
+  //         description: "8체질 중 나의 체질은? 지금 바로 검사해요",
+  //         imageUrl:"/images/logo.png",
+  //         link:{
+  //         },
+  //       },
+  //       buttons: [{title:"지금 바로 검사하기", link:{webUrl:,},},],
+  //     });
+  //   }
+  // }
+
   return (
     <div>
       <Container>
