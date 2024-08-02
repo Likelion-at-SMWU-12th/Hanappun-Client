@@ -4,6 +4,8 @@ import axios from "axios";
 import styled from "styled-components";
 import HospitalItem from "../../components/HospitalItem";
 
+const { kakao } = window;
+
 const MapMain = () => {
   const navigate = useNavigate();
   const [hospital, setHospital] = useState([]);
@@ -11,6 +13,7 @@ const MapMain = () => {
   const [filteredHospital, setFilteredHospital] = useState([]);
   const [isSearched, setIsSearched] = useState(false);
 
+  // 검색 기능
   useEffect(() => {
     const getHospital = async () => {
       try {
@@ -49,6 +52,16 @@ const MapMain = () => {
     setIsSearched(true);
   };
 
+  // 지도 기능
+  useEffect(() => {
+    const mapcontainer = document.getElementById("map");
+    const options = {
+      center: new kakao.maps.LatLng(37.54445537179708, 126.9712695039339),
+      level: 3,
+    };
+    const map = new kakao.maps.Map(mapcontainer, options);
+  }, []);
+
   return (
     <Container>
       <Title>한의원</Title>
@@ -64,16 +77,24 @@ const MapMain = () => {
           검색
         </button>
       </Form>
-      <MyHospitalBox>
-        <h2>나의 한의원</h2>
-        <MyHospital>아직 없어요!</MyHospital>
-      </MyHospitalBox>
-      {filteredHospital.length > 0 && (
-        <HospitalList>
-          {filteredHospital.map((item) => (
-            <HospitalItem key={item.id} item={item}></HospitalItem>
-          ))}
-        </HospitalList>
+      {isSearched ? (
+        <>
+          <MyHospitalBox>
+            <h2>나의 한의원</h2>
+            <MyHospital>아직 없어요!</MyHospital>
+          </MyHospitalBox>
+          {filteredHospital.length > 0 && (
+            <HospitalList>
+              {filteredHospital.map((item) => (
+                <HospitalItem key={item.id} item={item}></HospitalItem>
+              ))}
+            </HospitalList>
+          )}
+        </>
+      ) : (
+        <>
+          <MapBox id="map"></MapBox>
+        </>
       )}
     </Container>
   );
@@ -158,6 +179,14 @@ const HospitalList = styled.div`
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
   overflow-y: auto;
+`;
+
+const MapBox = styled.div`
+  width: 100%;
+  margin-top: 40px;
+  height: 70vh;
+  width: 100%;
+  border-radius: 25px;
 `;
 
 export default MapMain;
