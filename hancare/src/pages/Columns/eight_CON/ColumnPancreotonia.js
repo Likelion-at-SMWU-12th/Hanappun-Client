@@ -1,9 +1,14 @@
-import React from "react";
+/* 토양체질 칼럼 */
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Column.css";
+import "../Column.css";
 
 const ColumnPancreotonia = () => {
   const navigate = useNavigate();
+  // 페이지 로드 시 맨 위로 스크롤
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="Column">
@@ -15,27 +20,31 @@ const ColumnPancreotonia = () => {
         <p>2024년 7월 14일 명순헌 원장</p>
       </header>
       <main className="ColumnMain">
-        <img alt="" src="/images/moreCON_Pulmotonia.png" />
+        <img alt="" src="/images/moreCON_red.png" />
         <div className="ColumnContent">
           <p className="ColumnPurple">
-            토양체질은 췌장과 위장은 강하지만 신장과 방광이 약해요
+            토음체질은 췌장과 위장은 강하지만 신장과 방광이 약해요
           </p>
           <p> 더 자세히 알려드릴게요</p>
           <p>
-            췌장, 위장을 지원하는 음식에는 대표적으로{" "}
+            <span className="ColumnBold">췌장, 위장</span>을 지원하는 음식에는
+            대표적으로{" "}
             <span className="ColumnBold">
               닭고기와 사과, 인삼, 오렌지, 꿀, 매운 향신료
             </span>
-            등이 있어요. 이러한 음식으로 강장기인 췌장과 위장은 기능적으로
-            과하게 흥분하게 되는데, 과해진 췌장과 위장은{" "}
+            등이 있어요. 이러한 음식으로{" "}
+            <span className="ColumnBold">강장기인 췌장과 위장</span>은
+            기능적으로 과하게 흥분하게 되는데, 과해진 췌장과 위장은{" "}
             <span className="ColumnPurple">
               그 견제 대상(antagonist)이자 약장기인 신장과 방광을 더 억제
             </span>
             하게 돼요.
           </p>
           <p>
-            본래 약하게 타고난 신장과 방광의 기력이 더욱 약화되면서, 강장기인
-            췌장-위장과 약장기인 신장-방광의 격차가 더욱 심화되는{" "}
+            본래 약하게 타고난 <span className="ColumnBold">신장과 방광</span>의
+            기력이 더욱 약화되면서, 강장기인
+            <span className="ColumnBold">췌장-위장</span>과 약장기인{" "}
+            <span className="ColumnBold">신장-방광</span>의 격차가 더욱 심화되는{" "}
             <span className="ColumnBold">'과불균형 상태'</span>가 형성됩니다.
             결과적으로 모든 장기들 간의 상호 교류와 협력의 부정적 변화가
             일어나고 <span className="ColumnBold">'적불균형 상태'</span>에
@@ -43,11 +52,22 @@ const ColumnPancreotonia = () => {
             그에 해당하는 병적 증상들을 유발하게 됩니다.
           </p>
           <p>
-            그 예로, 강한 췌장과 위장의 기능이 과하여 지면, 지방간, 관절염,
-            세균- 바이러스감염, 알러지성 피부염, 위궤양, 통풍, 고혈압, 우울증
+            그 예로, 강한 <span className="ColumnBold">췌장과 위장</span>의
+            기능이 과해지면,{" "}
+            <span className="ColumnBold">
+              지방간, 관절염, 세균- 바이러스감염, 알러지성 피부염, 위궤양, 통풍,
+              고혈압, 우울증{" "}
+            </span>
             등의 증상이 나타나게 돼요. 체질 특성상 불건강의 상태가 지속될 경우,
-            당뇨병과 그에 관련된 합병증, 심혈관계질환 공황장애 등으로 발전될
-            수도 있어요
+            <span className="ColumnBold">
+              당뇨병과 그에 관련된 합병증, 심혈관계질환 공황장애{" "}
+            </span>
+            등으로 발전될 수도 있어요
+          </p>
+          <p>
+            토양체질의 경우, 평소에 식욕이 과해지거나 조급한 마음이 드는 것은
+            강한 췌장과 위장의 열과 관계 되어요. 따라서 체질에 맞지 않는 매운
+            음식이나 닭고기, 사과, 오렌지 등은 삼가기를 권해요.
           </p>
           <p className="ColumnBold">
             우리 몸을 위해 매운 음식을 줄여보면 어떨까요?
@@ -67,27 +87,21 @@ const ColumnPancreotonia = () => {
         </div>
         <div className="ColumnMore">
           <h3>다른 체질도 알아봐요</h3>
-          <button onClick={() => navigate("/column/Renotonia")}>
-            시원함이 필요해요 <br />
-            <span className="Column11pt">수양체질</span>
-          </button>
-          <button onClick={() => navigate("/column/Cholecystonia")}>
-            몸을 따뜻하게 해주세요
-            <br />
-            <span className="Column11pt">목음체질</span>
-          </button>
-          <button onClick={() => navigate("/column/Colonotonia")}>
-            육류보다는 생선!
-            <br />
-            <span className="Column11pt">금음체질</span>
-          </button>
-          <div className="ColumnMore_img">
-            <img alt="수양" src="/images/conWater.png" />
-            <img alt="목음" src="/images/conTree.png" />
+          <div className="ColumnMore_images">
             <img
-              className="ColumnMore_img_Gold"
+              alt="수양"
+              src="/images/c_Renotonia.png"
+              onClick={() => navigate("/column/Renotonia")}
+            />
+            <img
+              alt="목음"
+              src="/images/c_Cholecystonia.png"
+              onClick={() => navigate("/column/Cholecystonia")}
+            />
+            <img
               alt="금음"
-              src="/images/conGold.png"
+              src="/images/c_Colonotonia.png"
+              onClick={() => navigate("/column/Colonotonia")}
             />
           </div>
         </div>

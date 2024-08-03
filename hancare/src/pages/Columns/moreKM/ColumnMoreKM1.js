@@ -1,14 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Column.css";
+import "../Column.css";
 
 const ColumnMoreKM1 = () => {
   const navigate = useNavigate();
+  // 페이지 로드 시 맨 위로 스크롤
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="Column">
       <header className="ColumnHeader">
-        <h4>한의학 초심자를 위한 가이드북 (1)</h4>
+        <h4>한의학 초심자를 위한 가이드북</h4>
         <h2>
           한의사가 알려주는 <br /> 8체질 Q&A
         </h2>
@@ -62,27 +66,30 @@ const ColumnMoreKM1 = () => {
           <img alt="작성자(한의원장)사진" src="/images/columnWriter.png" />
           <p>
             <span className="ColumnBold">김수련 숙명 한의원 새힘실 원장</span>
-            <br /> '나의 체질에 대해 알고 싶으신가요?
+            <br />
+            '쉽게 한의학을 알려드려요'
           </p>
-          <button onClick={() => navigate("/map")}>
+          <button onClick={() => navigate("/map/4")}>
             숙명 한의원 바로가기
           </button>{" "}
           {/*숙명한의원 링크*/}
         </div>
-        <div className="ColumnMore">
+        <div className="KMColumnMore">
           <h3>다른 칼럼도 있어요</h3>
-          <button onClick={() => navigate("/column/moreKM2")}>
+          <button onClick={() => navigate("/column/moreKM4")}>
             <span className="Column11pt">지금까지의 한의학</span>
             <br />
             명순헌 원장
           </button>
-          <button onClick={() => navigate("/column/moreKM3")}>
+          <button onClick={() => navigate("/column/moreKM2")}>
             <span className="Column11pt">방금 먹은 점심이 중요한 이유</span>
             <br />
             김수련 원장
           </button>
-          <button onClick={() => navigate("/column/moreKM4")}>
-            <span className="Column11pt">고기라고 모두 힘이 나진 않아요</span>
+          <button onClick={() => navigate("/column/moreKM3")}>
+            <span className="Column11pt">
+              보양식이라고 모두 힘이 나진 않아요
+            </span>
             <br />
             송진리 원장
           </button>
