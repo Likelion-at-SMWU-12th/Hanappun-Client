@@ -57,7 +57,7 @@ function App() {
         <Route path="/calendar" element={<CalendarMain />} />
         <Route path="/ourcare/" element={<OurCareStart />} />
         {/*마이페이지*/}
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/:username" element={<Profile />} />
         <Route path="/cancel/:username" element={<Cancel />} />
         {/*칼럼 -- 더 추가 예정 ... */}
         <Route path="/column" element={<ColumnMain />} />
@@ -80,8 +80,14 @@ function App() {
         <Route path="/myCON/selfTestResult" element={<SelfTestResult />} />
         <Route path="/myCON/ChooseMyCON" element={<ChooseMyCON />} />
         <Route path="/myCON/editMyCON" element={<EditMyCON />} />
-        <Route path="/ourcare/family/" element={<OurCareFamily />} />
-        <Route path="/ourcare/family/:id" element={<OurCareProfile />} />
+        <Route
+          path="/ourcare/family/list/:username"
+          element={<OurCareFamily />}
+        />
+        <Route
+          path="/ourcare/family/profile/:id"
+          element={<OurCareProfile />}
+        />
         {/* 한의원 */}
         <Route path="/map" element={<MapMain />} />
         <Route path="/map/:id" element={<HospitalHome />} />

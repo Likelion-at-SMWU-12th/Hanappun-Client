@@ -1,10 +1,15 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
+import { setUsername } from "../redux/action";
 
 const Mainpage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const params = useParams();
+
   const today = new Date();
   const week = ["일", "월", "화", "수", "목", "금", "토"];
   let dayOfWeek = week[today.getDay()];
@@ -26,6 +31,8 @@ const Mainpage = () => {
 
   useEffect(() => {
     getInfo();
+    const username = params.username;
+    dispatch(setUsername(username));
   }, []);
 
   return (

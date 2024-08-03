@@ -10,7 +10,12 @@ import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { faFileLines } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 
+import { useSelector } from "react-redux";
+
 const BottomNav = () => {
+  // state username을 선택
+  const username = useSelector((state) => state.username);
+
   //현재 선택된 아이콘을 관리하는 state
   const [activeNav, setActiveNav] = useState(1);
 
@@ -29,7 +34,7 @@ const BottomNav = () => {
         {/*하단 네비게이션 최상위 태그*/}
         {/* 나의 케어 */}
         <Link
-          to="/mainpage"
+          to={`/mainpage/${username}`}
           className="nav-link"
           onClick={() => setActiveNav(1)}
         >
@@ -44,7 +49,7 @@ const BottomNav = () => {
         {/* 우리 케어 */}
 
         <Link
-          to="/ourcare"
+          to={`/ourcare/family/list/${username}`}
           className="nav-link"
           onClick={() => setActiveNav(2)}
         >
@@ -78,7 +83,7 @@ const BottomNav = () => {
         </Link>
         {/* MY */}
         <Link
-          to="/profile"
+          to={`/profile/${username}`}
           className="nav-link"
           onClick={() => setActiveNav(5)}
         >
