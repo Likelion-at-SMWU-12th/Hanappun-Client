@@ -53,7 +53,7 @@ function App() {
         <Route path="/" element={<Startpage />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/mainpage/" element={<Mainpage />} />
+        <Route path="/mainpage/:username" element={<Mainpage />} />
         <Route path="/calendar" element={<CalendarMain />} />
         <Route path="/ourcare/" element={<OurCareStart />} />
         {/*마이페이지*/}
