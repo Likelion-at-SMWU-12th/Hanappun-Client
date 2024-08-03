@@ -2,36 +2,36 @@ import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import styled from "styled-components";
 import Startpage from "./pages/account/Startpage";
-// import Signup from "./pages/account/Signup";
-// import Login from "./pages/account/Login";
-// import Mainpage from "./pages/Mainpage";
-// import ColumnMain from "./pages/Columns/ColumnMain";
-// import Profile from "./pages/mypage/Profile";
-// import Cancel from "./pages/mypage/Cancel";
-// import CalendarMain from "./pages/calendar/CalendarMain";
-// import MapMain from "./pages/hospital/MapMain";
-// import OurCareStart from "./pages/ourcare/OurCareStart";
-// import ColumnPancreotonia from "./pages/Columns/eight_CON/ColumnPancreotonia";
-// import ColumnHepatonia from "./pages/Columns/eight_CON/ColumnHepatonia";
-// import ColumnCholecystonia from "./pages/Columns/eight_CON/ColumnCholecystonia";
-// import ColumnGastrotonia from "./pages/Columns/eight_CON/ColumnGastrotonia";
-// import ColumnPulmotonia from "./pages/Columns/eight_CON/ColumnPulmotonia";
-// import ColumnColonotonia from "./pages/Columns/eight_CON/ColumnColonotonia";
-// import ColumnRenotonia from "./pages/Columns/eight_CON/ColumnRenotonia";
-// import ColumnVesicotonia from "./pages/Columns/eight_CON/ColumnVesicotonia";
-// import ColumnMoreKM1 from "./pages/Columns/moreKM/ColumnMoreKM1";
-// import ColumnMoreKM2 from "./pages/Columns/moreKM/ColumnMoreKM2";
-// import ColumnMoreKM3 from "./pages/Columns/moreKM/ColumnMoreKM3";
-// import ColumnMoreKM4 from "./pages/Columns/moreKM/ColumnMoreKM4";
-// import QmyCON from "./pages/myCON/QmyCON";
-// import MyCON from "./pages/myCON/MyCON";
-// import ChooseMyCON from "./pages/myCON/ChooseMyCON";
-// import SelfTest from "./pages/myCON/SelfTest";
-// import SelfTestResult from "./pages/myCON/SelfTestResult";
-// import EditMyCON from "./pages/myCON/EditMyCON";
-// import OurCareFamily from "./pages/ourcare/OurCareFamily";
-// import OurCareProfile from "./pages/ourcare/OurCareProfile";
-// import HospitalHome from "./pages/hospital/HospitalHome";
+import Signup from "./pages/account/Signup";
+import Login from "./pages/account/Login";
+import Mainpage from "./pages/Mainpage";
+import ColumnMain from "./pages/Columns/ColumnMain";
+import Profile from "./pages/mypage/Profile";
+import Cancel from "./pages/mypage/Cancel";
+import CalendarMain from "./pages/calendar/CalendarMain";
+import MapMain from "./pages/hospital/MapMain";
+import OurCareStart from "./pages/ourcare/OurCareStart";
+import ColumnPancreotonia from "./pages/Columns/eight_CON/ColumnPancreotonia";
+import ColumnHepatonia from "./pages/Columns/eight_CON/ColumnHepatonia";
+import ColumnCholecystonia from "./pages/Columns/eight_CON/ColumnCholecystonia";
+import ColumnGastrotonia from "./pages/Columns/eight_CON/ColumnGastrotonia";
+import ColumnPulmotonia from "./pages/Columns/eight_CON/ColumnPulmotonia";
+import ColumnColonotonia from "./pages/Columns/eight_CON/ColumnColonotonia";
+import ColumnRenotonia from "./pages/Columns/eight_CON/ColumnRenotonia";
+import ColumnVesicotonia from "./pages/Columns/eight_CON/ColumnVesicotonia";
+import ColumnMoreKM1 from "./pages/Columns/moreKM/ColumnMoreKM1";
+import ColumnMoreKM2 from "./pages/Columns/moreKM/ColumnMoreKM2";
+import ColumnMoreKM3 from "./pages/Columns/moreKM/ColumnMoreKM3";
+import ColumnMoreKM4 from "./pages/Columns/moreKM/ColumnMoreKM4";
+import QmyCON from "./pages/myCON/QmyCON";
+import MyCON from "./pages/myCON/MyCON";
+import ChooseMyCON from "./pages/myCON/ChooseMyCON";
+import SelfTest from "./pages/myCON/SelfTest";
+import SelfTestResult from "./pages/myCON/SelfTestResult";
+import EditMyCON from "./pages/myCON/EditMyCON";
+import OurCareFamily from "./pages/ourcare/OurCareFamily";
+import OurCareProfile from "./pages/ourcare/OurCareProfile";
+import HospitalHome from "./pages/hospital/HospitalHome";
 
 const Wrapper = styled.div`
   width: 400px;
@@ -73,9 +73,9 @@ function App() {
         <Route path="/column/moreKM1" element={<ColumnMoreKM1 />} />
         <Route path="/column/moreKM2" element={<ColumnMoreKM2 />} />
         <Route path="/column/moreKM3" element={<ColumnMoreKM3 />} />
-        <Route path="/column/moreKM4" element={<ColumnMoreKM4 />} /> */}
+        <Route path="/column/moreKM4" element={<ColumnMoreKM4 />} />
         {/*나의 체질*/}
-        {/* <Route path="/q_myCON" element={<QmyCON />} />
+        <Route path="/q_myCON" element={<QmyCON />} />
         <Route path="/myCON" element={<MyCON />} />
         <Route path="/myCON/selfTest" element={<SelfTest />} />
         <Route path="/myCON/selfTestResult" element={<SelfTestResult />} />

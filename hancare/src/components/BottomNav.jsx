@@ -20,7 +20,8 @@ const BottomNav = () => {
   if (
     locationNow.pathname !== "/" &&
     locationNow.pathname !== "/signup" &&
-    locationNow.pathname !== "/login"
+    locationNow.pathname !== "/login" &&
+    locationNow.pathname !== "/myCON/selfTest"
     //navbar를 표시하지 않을 url 작성
   ) {
     return (

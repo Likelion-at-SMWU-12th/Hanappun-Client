@@ -5,8 +5,10 @@
 
 .Column {
   max-width: 400px;
-  height: 210vh;
   background-color: white;
+  height: 100vh;
+  overflow-y: scroll;
+  padding-bottom: 100px;
 }
 
 /* ColumnHeader */

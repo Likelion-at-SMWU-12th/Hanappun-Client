@@ -1,5 +1,5 @@
 /* 전체 설정 */
-.background {
+.STbackground {
   background-color: black;
   width: 100%;
   height: auto;
@@ -39,6 +39,9 @@
 .STq {
   font-size: 11pt;
   font-weight: 700;
+  width: 250px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* 답변하는 공간 */
@@ -135,6 +138,7 @@
   font-size: 11pt;
   font-weight: 500;
   cursor: pointer;
+  margin-bottom: 100px;
 }
 .STnextBtn {
   background-color: #7350ff;
