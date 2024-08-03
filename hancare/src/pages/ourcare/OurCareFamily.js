@@ -1,19 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Container, Title } from "./OurCareStart";
 import OurCareModal from "../../components/OurCareModal";
+import axios from "axios";
 
 const OurCareFamily = () => {
   const navigate = useNavigate();
   const [isModalOpen, setISModalOpen] = useState(false);
   const [currentProfileId, setCurrentProfileId] = useState(null);
-  const [profiles, setProfiles] = useState([
-    { id: 1, image: null },
-    { id: 2, image: null },
-    { id: 3, image: null },
-  ]);
+  const [friend, setFriend] = useState([]);
 
+  const maxProfiles = 3; // 최대 프로필 수
+
+  // 모달 창 관련..
   const openModal = (profileId) => {
     setCurrentProfileId(profileId);
     setISModalOpen(true);
@@ -21,18 +21,36 @@ const OurCareFamily = () => {
 
   const closeModal = () => setISModalOpen(false);
 
-  const handleAddProfile = (name) => {
-    setProfiles((prevProfiles) =>
-      prevProfiles.map((profile) =>
-        profile.id === currentProfileId
-          ? { ...profile, name, image: getRandomImage(profile.image) }
-          : profile
-      )
-    );
-  };
-
   const BackButton = () => {
     navigate(-1);
+  };
+
+  // 사용자 정보 불러오기
+  const getInfo = () => {
+    axios
+      .get("http://localhost:8003/friends")
+      .then((response) => {
+        setFriend(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    getInfo();
+  }, []);
+
+  const handleAddProfile = async (id, name) => {
+    try {
+      await axios.post("http://localhost:8003/friends", {
+        id,
+        name,
+      });
+      getInfo();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const profileImages = [
@@ -44,8 +62,7 @@ const OurCareFamily = () => {
     "/images/profile6.png",
   ];
 
-  const getRandomImage = (currentImage) => {
-    if (currentImage) return currentImage;
+  const getRandomImage = () => {
     const randomIndex = Math.floor(Math.random() * profileImages.length);
     return profileImages[randomIndex];
   };
@@ -58,31 +75,34 @@ const OurCareFamily = () => {
       </Title>
       <ProfileContainer>
         <ProfileWrapper>
-          <Profilebox>
-            <img src={getRandomImage("/images/profile1.png")} alt="profile" />
+          <Profilebox onClick={() => navigate("/profile")}>
+            <img src={getRandomImage()} alt="profile" />
           </Profilebox>
           <h2>나</h2>
         </ProfileWrapper>
-        {profiles.map((profile) =>
-          profile.name ? (
-            <ProfileWrapper key={profile.id}>
+        {friend &&
+          friend.map((otheruser) => (
+            <ProfileWrapper key={otheruser.id}>
               <Profilebox
                 onClick={() => {
-                  navigate(`/ourcare/family/${profile.id}`, {
-                    state: { image: profile.image, type: "이름" },
+                  navigate(`/ourcare/family/${otheruser.id}`, {
+                    state: { image: getRandomImage() },
                   });
                 }}
               >
-                <img src={profile.image} alt="profile" />
+                <img src={getRandomImage()} alt="profile" />
               </Profilebox>
-              <h2>이름</h2>
+              <h2>{otheruser.name}</h2>
             </ProfileWrapper>
-          ) : (
-            <Emptybox key={profile.id} onClick={() => openModal(profile.id)}>
-              <img src="/images/grayplus.png" alt="grayplus" />
-            </Emptybox>
-          )
-        )}
+          ))}
+        {[...Array(maxProfiles - (friend?.length || 0))].map((_, index) => (
+          <Emptybox
+            key={index}
+            onClick={() => openModal(friend?.length + index + 1 || index + 1)}
+          >
+            <img src="/images/grayplus.png" alt="grayplus" />
+          </Emptybox>
+        ))}
       </ProfileContainer>
       {isModalOpen && (
         <OurCareModal
@@ -131,6 +151,7 @@ export const Profilebox = styled.div`
   img {
     width: 100%;
   }
+  cursor: pointer;
 `;
 
 export const ProfileWrapper = styled.div`

@@ -1,14 +1,59 @@
-import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
 import SetMyModal from "../../components/SetMyModal";
 import ReservateModal from "../../components/ReservateModal";
+import axios from "axios";
 
 const HospitalHome = () => {
   const location = useLocation();
-  const { item } = location.state;
+  const { id } = useParams();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("소개");
+  const [pickhospital, setPickhospital] = useState([]);
+  const [user, setUser] = useState([]);
+
+  const getInfo = () => {
+    axios
+      .get(`http://localhost:8000/hospital/${id}`)
+      .then((response) => {
+        setPickhospital(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    getInfo();
+  }, []);
+
+  const getmyInfo = () => {
+    axios
+      .get(`http://localhost:8000/users`)
+      .then((response) => {
+        setUser(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    getmyInfo();
+  }, []);
+
+  const Addhospital = () => {
+    axios
+      .post("http://localhost:8002/users", {
+        hospital: pickhospital.name,
+      })
+      .then((response) => {
+        console.log(response);
+        setIsmy(true);
+        closeModal();
+      });
+  };
 
   // 나의 한의원 모달창 관련
   const [isMyModalOpen, setISMyModalOpen] = useState(false);
@@ -18,7 +63,7 @@ const HospitalHome = () => {
   };
   const closeModal = () => setISMyModalOpen(false);
   const handleSetMy = () => {
-    setIsmy(true);
+    setIsmy(!isSetmy);
     closeModal();
   };
 
@@ -73,22 +118,22 @@ const HospitalHome = () => {
         <img src="/images/back.png" alt="back" onClick={BackButton}></img>
         <h2>나의 한의원</h2>
       </Title>
-      <Name>{item.name}</Name>
+      <Name>{pickhospital.name}</Name>
       <Wrapper>
-        <Hashtag>{item.hashtag1}</Hashtag>
-        <Hashtag>{item.hashtag2}</Hashtag>
-        <Hashtag>{item.hashtag3}</Hashtag>
+        <Hashtag>{pickhospital.hashtag1}</Hashtag>
+        <Hashtag>{pickhospital.hashtag2}</Hashtag>
+        <Hashtag>{pickhospital.hashtag3}</Hashtag>
         <MyHospital onClick={openModal}>
           {isSetmy ? "V 나의 한의원" : "나의 한의원"}
         </MyHospital>
       </Wrapper>
       <Info>
         <Bold>위치</Bold>
-        {item.address}
+        {pickhospital.address}
       </Info>
       <Info>
         <Bold>전화번호</Bold>
-        {item.call}
+        {pickhospital.call}
       </Info>
       <ReservateBtn onClick={openReservateModal}>예약</ReservateBtn>
       <Detail>
@@ -108,12 +153,12 @@ const HospitalHome = () => {
         </DetailMenu>
         {activeTab === "소개" ? (
           <>
-            <SubTitle>{item.name}</SubTitle>
+            <SubTitle>{pickhospital.name}</SubTitle>
             <Information>
-              {item.name}은 슈바이처를 본받고자 했던 김명숙 원장에 의해
+              {pickhospital.name}은 슈바이처를 본받고자 했던 김명숙 원장에 의해
               설립되었습니다. 1966년 5월 17일 개원하여 1979년 5월 현 위치로 옮겨
-              진료를 하고 있습니다. {item.name}은 권OO박사의 8체질 의학에
-              근거해서 진료합니다.
+              진료를 하고 있습니다. {pickhospital.name}은 권OO박사의 8체질
+              의학에 근거해서 진료합니다.
             </Information>
             <SubTitle>의료진</SubTitle>
             <DoctorWrapper>
@@ -137,7 +182,7 @@ const HospitalHome = () => {
                   전 숙명여대 한의학융합연구정보센터 연구원
                   <br />
                   현 대한학의학회 정회원
-                  <br />현 {item.name} 새힘관실 원장
+                  <br />현 {pickhospital.name} 새힘관실 원장
                 </p>
               </DoctorBox>
             </DoctorWrapper>
@@ -151,10 +196,10 @@ const HospitalHome = () => {
                 <ReviewWrapper>
                   <ReviewOption>
                     <img src="/images/review_nice.png"></img>
-                    <p>{item.reviewtext}</p>
+                    <p>{pickhospital.reviewtext}</p>
                   </ReviewOption>
                   <Reviewnum>
-                    <p>{item.reviewnum}</p>
+                    <p>{pickhospital.reviewnum}</p>
                     <img src="/images/reviewnumimg.png" alt="num"></img>
                   </Reviewnum>
                 </ReviewWrapper>
@@ -342,6 +387,7 @@ const HospitalHome = () => {
           isOpen={isMyModalOpen}
           closeModal={closeModal}
           handleSetMy={handleSetMy}
+          isSetmy={isSetmy}
         />
       )}
       {ReservateOpen && (
