@@ -52,16 +52,16 @@ function App() {
     <Wrapper>
       <Routes>
         <Route path="/" element={<Startpage />} />
-        {/* <Route path="/signup" element={<Signup />} />
+        <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/mainpage/" element={<Mainpage />} />
         <Route path="/calendar" element={<CalendarMain />} />
-        <Route path="/ourcare/" element={<OurCareStart />} /> */}
+        <Route path="/ourcare/" element={<OurCareStart />} />
         {/*마이페이지*/}
-        {/* <Route path="/profile" element={<Profile />} />
-        <Route path="/cancel" element={<Cancel />} /> */}
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/cancel" element={<Cancel />} />
         {/*칼럼 -- 더 추가 예정 ... */}
-        {/* <Route path="/column" element={<ColumnMain />} />
+        <Route path="/column" element={<ColumnMain />} />
         <Route path="/column/Pancreotonia" element={<ColumnPancreotonia />} />
         <Route path="/column/Hepatonia" element={<ColumnHepatonia />} />
         <Route path="/column/Cholecystonia" element={<ColumnCholecystonia />} />
@@ -81,13 +81,11 @@ function App() {
         <Route path="/myCON/selfTestResult" element={<SelfTestResult />} />
         <Route path="/myCON/ChooseMyCON" element={<ChooseMyCON />} />
         <Route path="/myCON/editMyCON" element={<EditMyCON />} />
-
         <Route path="/ourcare/family/" element={<OurCareFamily />} />
-        <Route path="/ourcare/family/:id" element={<OurCareProfile />} /> */}
-
+        <Route path="/ourcare/family/:id" element={<OurCareProfile />} />
         {/* 한의원 */}
-        {/* <Route path="/map" element={<MapMain />} />
-        <Route path="/map/:id" element={<HospitalHome />} /> */}
+        <Route path="/map" element={<MapMain />} />
+        <Route path="/map/:id" element={<HospitalHome />} />
       </Routes>
     </Wrapper>
   );
