@@ -58,7 +58,7 @@ function App() {
         <Route path="/ourcare/" element={<OurCareStart />} />
         {/*마이페이지*/}
         <Route path="/profile" element={<Profile />} />
-        <Route path="/cancel" element={<Cancel />} />
+        <Route path="/cancel/:username" element={<Cancel />} />
         {/*칼럼 -- 더 추가 예정 ... */}
         <Route path="/column" element={<ColumnMain />} />
         <Route path="/column/Pancreotonia" element={<ColumnPancreotonia />} />

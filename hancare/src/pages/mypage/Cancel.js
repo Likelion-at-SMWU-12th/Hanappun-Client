@@ -1,10 +1,7 @@
-/* 백엔드 연동
-import axios from "axios";
-import React, {useEffect, useState} from "react"; */
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-//import "./Cancel.css";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
+import { quit } from "../../api/users/quit";
 
 const Background = styled.div`
   background-color: black;
@@ -96,41 +93,12 @@ const Cancel = () => {
   });
 
   const navigate = useNavigate();
-
-  /* 백엔드 연동 코드
-const [name, setName] = useState([]);
-const getName = () => {
-  axios
-  .get("http://127.0.0.1: 8000/?")
-  .then((response) => {
-    console.log(response);
-    setName(response.data);
-  })
-  .catch((error) => {
-    console.log(error);
-  })
-};
-
-useEffect(() => {
-  getName();
-}, []);
-*/
+  const params = useParams();
 
   // 이전 페이지도 이동 버튼
   const BackButton = () => {
     navigate(-1);
   };
-
-  /* 백엔드 연동 후 
-  // 회원 탈퇴(onRemove) 함수
-  const onRemove = (id) => {
-    axios.delete(`http://127.0.0.1:8000/?/$(id)/`).then((response) => {
-      console.log(response);
-      alert("탈퇴되었습니다. 한케어는 고객님과 함께해서 행복했어요 ☘️");
-      navigate("/"); //삭제 후 Startpage로 가게 하기
-    });
-  };
-  */
 
   const handleChange = (e) => {
     setValues((prevValues) => {
@@ -142,16 +110,25 @@ useEffect(() => {
     });
   };
 
-  const handleSubmit = (e) => {
+  // 회원 탈퇴
+  const handleQuitSubmit = async (e) => {
     e.preventDefault();
-    if (values.password !== values.repassword) {
-      alert("비밀번호가 일치하지 않습니다.");
-      return;
-    }
-    if (window.confirm("확인 버튼을 누르면 회원 탈퇴가 진행됩니다.") === 1) {
-      // 백엔드 연동 후
-      // onRemove(id);
-      navigate("/");
+    if (window.confirm("확인 버튼을 누르면 회원 탈퇴가 진행됩니다.")) {
+      e.preventDefault();
+
+      const data = {
+        username: params.username,
+        password: values.password,
+      };
+
+      const result = await quit(data);
+
+      if (result.status == 200) {
+        alert("탈퇴되었습니다. 한케어는 고객님과 함께해서 행복했어요 ☘️");
+        navigate("/"); //삭제 후 Startpage로 가게 하기
+      } else {
+        alert("실패하였습니다. 다시 입력해 주세요.");
+      }
     } else {
       alert("취소되었습니다. 한케어와 더 함께해요!");
       navigate(-1);
@@ -168,7 +145,7 @@ useEffect(() => {
         <h3> 숙멋사 님 가지 마세요</h3>
         <img alt="cancelNo" src="/images/cancelNo.png" />
         {/*비밀번호 입력 -> 회원탈퇴 */}
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleQuitSubmit}>
           <Infobox>
             <Label for="password">비밀번호</Label>
             <Inputbox
