@@ -1,5 +1,5 @@
 import "./App.css";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import styled from "styled-components";
 import Startpage from "./pages/account/Startpage";
 // import Signup from "./pages/account/Signup";
