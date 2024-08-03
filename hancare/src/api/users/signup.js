@@ -9,8 +9,8 @@ export const signup = async (data) => {
       },
     });
 
-    if (res.status === 200) {
-      return res.data;
+    if (res.status === 201) {
+      return res;
     }
   } catch (err) {
     console.error(err);
