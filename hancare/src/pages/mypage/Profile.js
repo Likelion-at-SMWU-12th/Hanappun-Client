@@ -33,7 +33,7 @@ useEffect(() => {
   };
 
   return (
-    <div className="background">
+    <div className="MPbackground">
       <header className="blackHeader">
         <img alt="back" onClick={BackButton} src="/images/back.png" />
         <h2 className="Ph2">MY</h2>
@@ -57,10 +57,9 @@ useEffect(() => {
           <img alt="constitutionWorld" src="/images/constitutionWorld.png" />
           <span className="purple">체질을 잘못 선택했나요?</span>
           <p>
-            체질이 자가진단 결과와 다르거나 잘못 선택한 경우 1회에 한해서 수정이
-            가능해요
+            체질이 자가진단 결과와 다르거나 잘못 선택한 경우 수정이 가능해요
           </p>
-          <button onClick={() => navigate(`/editConstitution`)}>
+          <button onClick={() => navigate(`/myCON/editMyCON`)}>
             {/*체질 수정 페이지 navigate*/}
             체질 수정하기
           </button>

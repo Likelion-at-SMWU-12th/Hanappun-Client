@@ -10,6 +10,8 @@ const Background = styled.div`
   background-color: black;
   width: 100%;
   height: 100vh;
+  overflow-y: scroll;
+  padding-bottom: 50px;
 `;
 
 const BlackHeader = styled.header`
@@ -19,6 +21,7 @@ const BlackHeader = styled.header`
   & img {
     width: 13px;
     margin: auto 30px;
+    cursor: pointer;
   }
 
   & h2 {
@@ -84,6 +87,7 @@ const SignupBtn = styled.button`
   color: white;
   font-size: 17px;
   font-weight: 600;
+  cursor: pointer;
 `;
 
 const Cancel = () => {

@@ -11,8 +11,19 @@ import Cancel from "./pages/mypage/Cancel";
 import CalendarMain from "./pages/calendar/CalendarMain";
 import MapMain from "./pages/hospital/MapMain";
 import OurCareStart from "./pages/ourcare/OurCareStart";
-import ColumnPancreotonia from "./pages/Columns/ColumnPancreotonia";
-import ColumnMoreKM1 from "./pages/Columns/ColumnMoreKM1";
+import ColumnPancreotonia from "./pages/Columns/eight_CON/ColumnPancreotonia";
+import ColumnHepatonia from "./pages/Columns/eight_CON/ColumnHepatonia";
+import ColumnCholecystonia from "./pages/Columns/eight_CON/ColumnCholecystonia";
+import ColumnGastrotonia from "./pages/Columns/eight_CON/ColumnGastrotonia";
+import ColumnPulmotonia from "./pages/Columns/eight_CON/ColumnPulmotonia";
+import ColumnColonotonia from "./pages/Columns/eight_CON/ColumnColonotonia";
+import ColumnRenotonia from "./pages/Columns/eight_CON/ColumnRenotonia";
+import ColumnVesicotonia from "./pages/Columns/eight_CON/ColumnVesicotonia";
+import ColumnMoreKM1 from "./pages/Columns/moreKM/ColumnMoreKM1";
+import ColumnMoreKM2 from "./pages/Columns/moreKM/ColumnMoreKM2";
+import ColumnMoreKM3 from "./pages/Columns/moreKM/ColumnMoreKM3";
+import ColumnMoreKM4 from "./pages/Columns/moreKM/ColumnMoreKM4";
+import QmyCON from "./pages/myCON/QmyCON";
 import MyCON from "./pages/myCON/MyCON";
 import ChooseMyCON from "./pages/myCON/ChooseMyCON";
 import SelfTest from "./pages/myCON/SelfTest";
@@ -52,8 +63,19 @@ function App() {
         {/*칼럼 -- 더 추가 예정 ... */}
         <Route path="/column" element={<ColumnMain />} />
         <Route path="/column/Pancreotonia" element={<ColumnPancreotonia />} />
+        <Route path="/column/Hepatonia" element={<ColumnHepatonia />} />
+        <Route path="/column/Cholecystonia" element={<ColumnCholecystonia />} />
+        <Route path="/column/Gastrotonia" element={<ColumnGastrotonia />} />
+        <Route path="/column/Pulmotonia" element={<ColumnPulmotonia />} />
+        <Route path="/column/Colonotonia" element={<ColumnColonotonia />} />
+        <Route path="/column/Renotonia" element={<ColumnRenotonia />} />
+        <Route path="/column/Vesicotonia" element={<ColumnVesicotonia />} />
         <Route path="/column/moreKM1" element={<ColumnMoreKM1 />} />
+        <Route path="/column/moreKM2" element={<ColumnMoreKM2 />} />
+        <Route path="/column/moreKM3" element={<ColumnMoreKM3 />} />
+        <Route path="/column/moreKM4" element={<ColumnMoreKM4 />} />
         {/*나의 체질*/}
+        <Route path="/q_myCON" element={<QmyCON />} />
         <Route path="/myCON" element={<MyCON />} />
         <Route path="/myCON/selfTest" element={<SelfTest />} />
         <Route path="/myCON/selfTestResult" element={<SelfTestResult />} />
