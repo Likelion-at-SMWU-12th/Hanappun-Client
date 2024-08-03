@@ -1,0 +1,109 @@
+/* 전체 설정 */
+.QmCbackground {
+  background-color: black;
+  width: 100%;
+  height: auto;
+}
+
+.blackHeader {
+  padding-top: 30px;
+  display: flex;
+}
+
+/* 이전페이지로 가기 버튼 */
+.blackHeader img {
+  width: 13px;
+  margin: auto 30px;
+}
+
+.STh2 {
+  margin-left: calc(30% - 36px);
+  color: white;
+}
+
+/* main */
+.QmCmain {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  color: white;
+}
+
+.QmCmain p {
+  font-size: 14pt;
+  font-weight: 600;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+/* STRinfo */
+.QmCinfo {
+  width: 350px;
+  height: 250px;
+  background-color: white;
+  border-radius: 30px;
+  display: flex;
+  margin-bottom: 80px;
+}
+
+.QmCinfo img {
+  height: 150px;
+  margin-left: 30px;
+  margin-top: 50px;
+}
+
+.QmCinfo p {
+  color: black;
+  font-size: 11pt;
+  font-weight: 400;
+  margin-top: 75px;
+  margin-left: 15px;
+  width: 190px;
+}
+
+.QmCpurple {
+  color: #7350ff;
+  font-weight: 600;
+}
+
+.Qmcarrow {
+  width: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 100px;
+}
+
+/* QmCbtns */
+.QmCbtns {
+  margin-bottom: 100px;
+  text-align: center;
+}
+.QmCbtns button {
+  padding: 12px;
+  border: none;
+  border-radius: 30px;
+  font-size: 11pt;
+  font-weight: 700;
+  width: 240px;
+  cursor: pointer;
+}
+
+.QmCwhiteBtn {
+  background-color: white;
+  color: black;
+  margin-bottom: 15px;
+}
+
+.QmCwhiteBtn:hover {
+  background-color: #bcbcbc;
+}
+
+.QmCpurpleBtn {
+  background-color: #7350ff;
+  color: white;
+}
+
+.QmCpurpleBtn:hover {
+  background-color: #593ec4;
+}

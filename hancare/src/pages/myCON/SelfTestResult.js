@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./SelfTestResult.css";
 
-// 백엔드 연동 시
-// const SelfTestResult = ({ results }) => {
 const SelfTestResult = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { results } = location.state || { results: [] };
 
   // 페이지 로드 시 맨 위로 스크롤
   useEffect(() => {
@@ -20,38 +20,29 @@ const SelfTestResult = () => {
   // 테스트용 데이터
   const userData = {
     name: "홍길동",
-    results: ["Hepatonia", "Cholecystonia", "Pancreotonia"],
-  };
-
-  // 체질 영어 이름을 한글 이름으로 매핑하는 함수
-  const getKoreanTypeName = (type) => {
-    const typeToKoreanMap = {
-      Hepatonia: "목양체질",
-      Cholecystonia: "목음체질",
-      Pancreotonia: "토양체질",
-      Gastrotonia: "토음체질",
-      Pulmotonia: "금양체질",
-      Colonotonia: "금음체질",
-      Renotonia: "수양체질",
-      Vesicotonia: "수음체질",
-    };
-    return typeToKoreanMap[type] || "";
+    results: results,
   };
 
   // 체질 이름을 이미지 경로로 매핑하는 함수
   const getImagePath = (type) => {
     const typeToImageMap = {
-      Hepatonia: "/images/myCON_Hepatonia.png",
-      Cholecystonia: "/images/myCON_Cholecystonia.png",
-      Pancreotonia: "/images/myCON_Pancreotonia.png",
-      Gastrotonia: "/images/myCON_Gastrotonia.png",
-      Pulmotonia: "/images/myCON_Pulmotonia.png",
-      Colonotonia: "/images/myCON_Colonotonia.png",
-      Renotonia: "/images/myCON_Renotonia.png",
-      Vesicotonia: "/images/myCON_Vesicotonia.png",
+      목양체질: "/images/myCON_Hepatonia.png",
+      목음체질: "/images/myCON_Cholecystonia.png",
+      토양체질: "/images/myCON_Pancreotonia.png",
+      토음체질: "/images/myCON_Gastrotonia.png",
+      금양체질: "/images/myCON_Pulmotonia.png",
+      금음체질: "/images/myCON_Colonotonia.png",
+      수양체질: "/images/myCON_Renotonia.png",
+      수음체질: "/images/myCON_Vesicotonia.png",
     };
     return typeToImageMap[type] || "";
   };
+
+  // 콘솔로 results 디버깅
+  useEffect(() => {
+    console.log("Received results:", results);
+    window.scrollTo(0, 0);
+  }, [results]);
 
   const renderResults = () => {
     return (
@@ -66,23 +57,17 @@ const SelfTestResult = () => {
             <p>
               자기진단 결과,
               <br />
-              {userData.name}님은{" "}
-              {userData.results
-                .map((result) => getKoreanTypeName(result))
-                .join(" 또는 ")}
+              {userData.name}님은 {userData.results.join(" 또는 ")}
               이에요
             </p>
             {/* 결과 이미지 */}
-            {userData.results.map((result, index) => {
-              const koreanTypeName = getKoreanTypeName(result);
-              return (
-                <img
-                  key={index}
-                  src={getImagePath(result)}
-                  alt={`${koreanTypeName} 이미지`}
-                />
-              );
-            })}
+            {userData.results.map((result, index) => (
+              <img
+                key={index}
+                src={getImagePath(result)}
+                alt={`${result} 이미지`}
+              />
+            ))}
             {userData.results.length > 1 && <p>앗! 중복 결과가 나왔어요</p>}
           </div>
           <div className="STRinfo">

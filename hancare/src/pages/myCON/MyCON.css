@@ -2,7 +2,9 @@
 .MCbackground {
   background-color: black;
   width: 100%;
-  height: auto;
+  height: 100vh;
+  overflow-y: scroll;
+  margin-bottom: 0px;
 }
 
 .blackHeader {
@@ -37,9 +39,6 @@
 }
 
 /* MCbtns */
-.MCbtns {
-  margin-bottom: 100px;
-}
 .MCbtns button {
   padding: 10px;
   border: none;
