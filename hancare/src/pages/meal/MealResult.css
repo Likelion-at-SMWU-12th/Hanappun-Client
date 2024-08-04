@@ -1,0 +1,189 @@
+.MRbackground {
+  background-color: black;
+  width: 100%;
+  height: 100vh;
+  overflow-y: scroll;
+  margin-bottom: 0;
+}
+
+.blackHeader {
+  padding-top: 30px;
+  display: flex;
+}
+
+/* 이전 페이지로 가기 버튼 */
+.blackHeader img {
+  width: 13px;
+  margin: auto 30px;
+}
+
+.MRh2 {
+  margin-left: calc(30% - 50px);
+  color: white;
+}
+
+/* MRdate */
+.MRdate {
+  text-align: center;
+  background-color: white;
+  border: none;
+  border-radius: 15px;
+  width: 100px;
+  color: black;
+  font-size: 11pt;
+  font-weight: 700;
+  padding: 3px 10px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+}
+
+/* main */
+.MRmain {
+  background-color: white;
+  text-align: center;
+  margin-bottom: 100px;
+  border: none;
+  border-radius: 25px 25px 0 0;
+  padding-top: 50px;
+  height: 90vh;
+  overflow-y: scroll;
+  margin-bottom: 0;
+}
+
+.MRmain hr {
+  width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.MRpurpleDiv {
+  background-color: #7450ff;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 4px 25px;
+  font-size: 11pt;
+  font-weight: 500;
+}
+
+/* MRmenu */
+.MRmenu {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 25px;
+}
+
+.MRmenu button {
+  margin-left: 10px;
+  background: none;
+  border: none;
+  font-size: 10pt;
+  font-weight: 600;
+  color: #bdbfc2;
+  cursor: pointer;
+}
+
+.MRmenu button.selected {
+  color: #7350ff;
+  font-weight: 800;
+}
+
+.MRmenu button:hover {
+  background-color: #f0f0f0;
+  border-radius: 10px;
+}
+
+/* ddddddddddddddddddddddddddddddd*/
+.MFmain hr {
+  width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.MRtitle {
+  font-size: 15pt;
+  font-weight: 600;
+  color: #7350ff;
+}
+
+/* MRcontent */
+.MRcontent {
+  margin-bottom: 20px;
+  width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.MRmeal-item {
+  display: flex;
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.MRmeal-item span {
+  margin-bottom: 10px;
+}
+
+.MRmeal-item p {
+  background-color: #7350ff;
+  border: none;
+  border-radius: 30px;
+  color: white;
+  font-size: 11pt;
+  font-weight: 600;
+  text-align: center;
+  padding: 7px 20px;
+}
+
+.MRmeal-item ul {
+  right: 300px;
+  list-style-type: none;
+  padding-top: 5px;
+  padding-left: 20px;
+  color: #6a6a6a;
+  font-size: 10pt;
+  font-weight: 500;
+  display: flex;
+}
+
+.MRmeal-item li {
+  margin-right: 10px;
+}
+
+/* MRbtns */
+.MRbtns {
+  margin-top: 30px;
+  margin-bottom: 100px;
+  text-align: center;
+}
+
+.MRbtns button {
+  padding: 7px;
+  border: none;
+  border-radius: 30px;
+  font-size: 9pt;
+  font-weight: 600;
+  width: 100px;
+  cursor: pointer;
+}
+
+.MRblackBtn {
+  background-color: black;
+  color: white;
+
+  margin-right: 30px;
+}
+
+.MRblackBtn:hover {
+  background-color: #a2a2a2;
+}
+
+.MRpurpleBtn {
+  background-color: #7350ff;
+  color: white;
+}
+
+.MRpurpleBtn:hover {
+  background-color: #3e3077;
+}

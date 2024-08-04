@@ -1,0 +1,220 @@
+/* 전체 설정 */
+.Mbackground {
+  background-color: black;
+  width: 100%;
+  height: 100vh;
+  overflow-y: scroll;
+  margin-bottom: 0;
+}
+
+.blackHeader {
+  padding-top: 30px;
+  display: flex;
+}
+
+/* 이전페이지로 가기 버튼 */
+.blackHeader img {
+  width: 13px;
+  margin: auto 30px;
+}
+
+.Mh2 {
+  margin-left: calc(15% - 30px);
+  color: white;
+}
+
+/* main */
+.Mmain {
+  color: white;
+  text-align: center;
+  margin-bottom: 100px;
+}
+
+/* Mdate */
+.Mdate {
+  background-color: white;
+  border: none;
+  border-radius: 15px;
+  width: 100px;
+  color: black;
+  font-size: 11pt;
+  font-weight: 700;
+  padding: 3px 10px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+}
+
+/* Minfo */
+.Minfo {
+  position: relative;
+  width: 325px;
+  height: 450px;
+  background-color: white;
+  border-radius: 40px;
+  border-radius: 40px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 35px;
+}
+
+/* Mback_purple */
+.Mback_purple {
+  background-color: #7450ff;
+  height: 115px;
+  border-radius: 40px 40px 0 0;
+  color: white;
+  text-align: left;
+  padding-left: 40px;
+  padding-top: 25px;
+}
+
+.Mback_purple span {
+  font-size: 10.5pt;
+  color: white;
+  font-weight: 400;
+}
+
+.Mback_purple h2 {
+  margin-top: 5px;
+}
+
+.Mback_purple_img {
+  position: absolute;
+  width: 100px;
+  top: 25px;
+  right: 35px;
+}
+
+.Mback_purple_img2 {
+  position: absolute;
+  width: 90px;
+  top: 10px;
+  right: 10px;
+}
+
+/* Mback_white */
+.Mback_white {
+}
+
+.Mback_white img {
+  width: 150px;
+  margin-top: 40px;
+}
+
+.Mback_white p {
+  margin-top: 20px;
+  color: black;
+  font-size: 9pt;
+  font-weight: 400;
+  margin-bottom: 0;
+}
+
+/* Mback_white2 */
+.Mback_white2 {
+}
+.MpurpleDiv {
+  background-color: #7450ff;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 5px 5px;
+  font-size: 11pt;
+  font-weight: 500;
+  margin-top: 30px;
+  margin-left: 50px;
+  margin-bottom: px;
+}
+
+.Mmeal_name {
+  display: flex;
+  flex-direction: column;
+  width: 100px;
+}
+.Mmeal_one {
+  margin-top: -230px;
+  display: flex;
+  flex-direction: column;
+}
+
+.Mmeal_one ul {
+  color: #6a6a6a;
+  text-align: left;
+  font-size: 10pt;
+  font-weight: 350;
+  margin-left: 100px;
+  margin-bottom: 8px;
+}
+
+.Mblue::marker {
+  color: #65c9d0;
+}
+.Mred::marker {
+  color: #f39090;
+}
+
+/* Marrow */
+.Marrow {
+  width: 50px;
+  margin-top: 0px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 40px;
+}
+
+/* Mbtns */
+.Mbtns {
+  margin-bottom: 100px;
+  text-align: center;
+}
+
+.MwhiteBtn {
+  background-color: white;
+  color: black;
+  margin-bottom: 15px;
+  padding: 12px;
+  border: none;
+  border-radius: 30px;
+  font-size: 11pt;
+  font-weight: 700;
+  width: 150px;
+  cursor: pointer;
+}
+
+.MwhiteBtn:hover {
+  background-color: #bcbcbc;
+}
+
+.MpurpleBtn {
+  background-color: #7350ff;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 30px;
+  font-size: 11pt;
+  font-weight: 700;
+  width: 240px;
+  cursor: pointer;
+}
+
+.MpurpleBtn:hover {
+  background-color: #593ec4;
+}
+
+/* MpurpleBtn2 */
+.MpurpleBtn2 {
+  background-color: #7350ff;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 30px;
+  font-size: 11pt;
+  font-weight: 700;
+  width: 150px;
+  cursor: pointer;
+  margin-left: 15px;
+}
+
+.MpurpleBtn2:hover {
+  background-color: #593ec4;
+}

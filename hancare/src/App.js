@@ -32,10 +32,19 @@ import EditMyCON from "./pages/myCON/EditMyCON";
 import OurCareFamily from "./pages/ourcare/OurCareFamily";
 import OurCareProfile from "./pages/ourcare/OurCareProfile";
 import HospitalHome from "./pages/hospital/HospitalHome";
+import MealMain from "./pages/meal/Mealmain";
+import MealAnalysis from "./pages/meal/MealAnalysis";
+import MealFirst from "./pages/meal/MealFirst";
+import MealSecond from "./pages/meal/MealSecond";
+import MealResult from "./pages/meal/MealResult";
+import MealREResult from "./pages/meal/MealREResult";
+import Condition from "./pages/condition/Condition";
+import EditCondition from "./pages/condition/EditCondition";
 
 const Wrapper = styled.div`
   width: 400px;
   height: 100vh;
+  min-height: 844px;
   margin: 0 auto;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3),
     0 8px 10px -6px rgba(0, 0, 0, 0.3);
@@ -91,6 +100,16 @@ function App() {
         {/* 한의원 */}
         <Route path="/map" element={<MapMain />} />
         <Route path="/map/:id" element={<HospitalHome />} />
+        {/* 식단 */}
+        <Route path="/meal" element={<MealMain />} />
+        <Route path="/meal/analysis" element={<MealAnalysis />} />
+        <Route path="/meal/first" element={<MealFirst />} />
+        <Route path="/meal/second" element={<MealSecond />} />
+        <Route path="/meal/result" element={<MealResult />} />
+        <Route path="/meal/re_result" element={<MealREResult />} />
+        {/* 컨디션 */}
+        <Route path="/condition" element={<Condition />} />
+        <Route path="/editCondition" element={<EditCondition />} />
       </Routes>
     </Wrapper>
   );
