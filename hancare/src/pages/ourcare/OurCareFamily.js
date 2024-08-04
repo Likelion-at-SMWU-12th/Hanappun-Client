@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { Container, Title } from "./OurCareStart";
 import OurCareModal from "../../components/OurCareModal";
@@ -7,6 +7,7 @@ import axios from "axios";
 
 const OurCareFamily = () => {
   const navigate = useNavigate();
+  const params = useParams();
   const [isModalOpen, setISModalOpen] = useState(false);
   const [currentProfileId, setCurrentProfileId] = useState(null);
   const [friend, setFriend] = useState([]);
@@ -109,6 +110,7 @@ const OurCareFamily = () => {
           isOpen={isModalOpen}
           closeModal={closeModal}
           addProfile={handleAddProfile}
+          username={params.username}
         />
       )}
     </Container>

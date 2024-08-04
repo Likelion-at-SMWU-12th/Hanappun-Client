@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-function OurCareModal({ isOpen, closeModal, addProfile }) {
+import { post_ourcare } from "../api/users/post_ourcare";
+
+function OurCareModal({ isOpen, closeModal, username, addProfile }) {
   const [selectedButton, setSelectedButton] = useState("엄마/아빠");
   const [values, setValues] = useState({
     id: "",
@@ -19,10 +21,18 @@ function OurCareModal({ isOpen, closeModal, addProfile }) {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handlePostOurcare = async (e) => {
     e.preventDefault();
-    if (values.id.trim() !== "") {
-      addProfile(values.id, "이름");
+    const data = {
+      my_username: username,
+      friend_username: values.id,
+    };
+    const result = await post_ourcare(data);
+
+    if (result.status == 200) {
+      alert("우리케어 추가에 성공하였습니다. ");
+    } else {
+      alert("우리케어 추가에 실패하였습니다. 다시 입력해 주세요.");
     }
   };
 
@@ -49,7 +59,7 @@ function OurCareModal({ isOpen, closeModal, addProfile }) {
             )}
           </BtnWrapper>
         </Purple>
-        <IdForm onSubmit={handleSubmit}>
+        <IdForm>
           <span>추가할 우리케어 이용자의 아이디를 입력해주세요</span>
           <input
             type="text"
@@ -59,7 +69,9 @@ function OurCareModal({ isOpen, closeModal, addProfile }) {
             placeholder="아이디를 입력"
             required
           />
-          <CheckBtn type="submit">확인</CheckBtn>
+          <CheckBtn type="submit" onClick={handlePostOurcare}>
+            확인
+          </CheckBtn>
           <CloseButton onClick={closeModal}>닫기</CloseButton>
         </IdForm>
       </Container>
