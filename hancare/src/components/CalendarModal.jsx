@@ -4,6 +4,8 @@ import styled from "styled-components";
 import OurCareFamily from "../pages/ourcare/OurCareFamily";
 
 function CalendarModal({ isOpen, closeModal, selectedDate }) {
+  const navigate = useNavigate();
+
   // 수정 버튼 상태
   const [fix, setFix] = useState(false);
   const handleFixbtnClick = () => {
@@ -12,11 +14,13 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
 
   const userinfo = {
     name: "나",
+    hospital: "숙명 한의원",
     reservation: "17:30",
   };
   const friendinfo = {
     name: "나",
-    reservation: "오후 05시 30분",
+    reservation: "17:30",
+    hospital: "숙명 한의원",
   };
   const foodinfo = {
     result: "건강이 염려되는걸요?",
@@ -79,7 +83,17 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
                       <h2>알림</h2>
                     </MyFixTitle>
                   </Purple>
-                  <Notimg src="/images/nothospital.png"></Notimg>
+                  <NotWrapper>
+                    <Notimg src="/images/nothospital.png"></Notimg>
+                    <h3>
+                      해당 예약자의 나의 한의원이 설정되어 있지 않습니다
+                      <br />
+                      설정 후 다시 이용해 주세요
+                    </h3>
+                    <CloseButton onClick={() => navigate("/map")}>
+                      나의 한의원 찾기
+                    </CloseButton>
+                  </NotWrapper>
                 </>
               )}
             </>
@@ -97,7 +111,7 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
                   <h3>{userinfo.name}</h3>
                   <Myimg src="/images/mycareimg.png"></Myimg>
                   <img src="images/whitebar.png"></img>
-                  {userinfo.hospital ? (
+                  {userinfo.reservation ? (
                     <>
                       <h3>{userinfo.hospital}</h3>
                       <p>{userinfo.reservation}</p>
@@ -116,7 +130,7 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
                   <h3>{friendinfo.name}</h3>
                   <Myimg src="/images/ourcareimg.png"></Myimg>
                   <img src="images/whitebar.png"></img>
-                  {friendinfo.hospital ? (
+                  {friendinfo.reservation ? (
                     <>
                       <h3>{friendinfo.hospital}</h3>
                       <p>{friendinfo.reservation}</p>
@@ -135,7 +149,7 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
                   <h3>{userinfo.name}</h3>
                   <Myimg src="/images/ourcareimg.png"></Myimg>
                   <img src="images/whitebar.png"></img>
-                  {friendinfo.hospital ? (
+                  {friendinfo.reservation ? (
                     <>
                       <h3>{friendinfo.hospital}</h3>
                       <p>{friendinfo.reservation}</p>
@@ -379,6 +393,7 @@ const HospitalBox = styled.div`
     position: absolute;
     top: 115px;
     right: 30px;
+    cursor: pointer;
   }
 `;
 
@@ -395,8 +410,20 @@ const HospitalName = styled.h2`
   margin-left: 25px;
   margin-top: 10px;
 `;
+const NotWrapper = styled.div`
+  padding: 15px;
+
+  button {
+    width: 200px;
+  }
+
+  h3 {
+    font-size: 13px;
+    text-align: center;
+  }
+`;
 const Notimg = styled.img`
-  width: 250px;
+  width: 230px;
   display: block;
   margin: 20px auto;
 `;
