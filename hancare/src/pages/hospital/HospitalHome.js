@@ -400,7 +400,7 @@ const HospitalHome = () => {
   );
 };
 
-const Container = styled.div`
+export const Container = styled.div`
   background-color: black;
   height: 100vh;
   width: 100%;
@@ -410,7 +410,7 @@ const Container = styled.div`
   overflow: hidden;
 `;
 
-const Title = styled.div`
+export const Title = styled.div`
   display: flex;
   padding-top: 15px;
   justify-content: center;

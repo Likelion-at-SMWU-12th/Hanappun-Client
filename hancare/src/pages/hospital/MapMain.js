@@ -236,12 +236,13 @@ const MapBox = styled.div`
   height: 70vh;
   width: 100%;
   border-radius: 25px;
+  z-index: 0;
 `;
 
 const SelectedHospitalBox = styled.div`
   position: absolute;
   background-color: white;
-  bottom: 40px;
+  bottom: 50px;
   left: 0;
   right: 0;
   border-radius: 25px;
