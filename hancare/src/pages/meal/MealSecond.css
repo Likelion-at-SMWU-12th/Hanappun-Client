@@ -1,0 +1,181 @@
+/* 전체 설정 */
+.MSbackground {
+  background-color: black;
+  width: 100%;
+  height: 100vh;
+  overflow-y: scroll;
+  margin-bottom: 0;
+}
+
+.blackHeader {
+  padding-top: 30px;
+  display: flex;
+}
+
+/* 이전 페이지로 가기 버튼 */
+.blackHeader img {
+  width: 13px;
+  margin: auto 30px;
+}
+
+.MSh2 {
+  margin-left: calc(30% - 50px);
+  color: white;
+}
+
+/* MSdate */
+.MSdate {
+  text-align: center;
+  background-color: white;
+  border: none;
+  border-radius: 15px;
+  width: 100px;
+  color: black;
+  font-size: 11pt;
+  font-weight: 700;
+  padding: 3px 10px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+}
+
+/* main */
+.MSmain {
+  background-color: white;
+  text-align: center;
+  margin-bottom: 100px;
+  border: none;
+  border-radius: 25px 25px 0 0;
+  padding-top: 25px;
+  height: 80vh;
+
+  overflow-y: scroll;
+  margin-bottom: 0;
+}
+
+/* MSmenu */
+.MSmenu {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 15px;
+  width: 320px;
+}
+
+.MSmenu button {
+  margin-left: 10px;
+  margin-bottom: 5px;
+  background-color: #bcbcbc;
+  color: white;
+  font-weight: 800;
+  border: none;
+  border-radius: 30px;
+  padding: 7px 15px;
+  font-size: 11pt;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.MSmenu button.selected {
+  background-color: #7350ff;
+}
+
+.MSmenu hr {
+  width: 320px;
+  height: 0.5px;
+  background-color: #3e3e3e;
+}
+
+/* MScontents */
+.MScontents {
+  display: flex;
+  flex-wrap: wrap;
+  text-align: left;
+  padding-top: 0;
+  padding-left: 40px;
+  padding-right: 40px;
+  margin-bottom: 100px;
+  gap: 10px;
+}
+
+.MScontents .meal-item {
+  background-color: #7350ff;
+  color: white;
+  padding: 5px 5px 5px 15px;
+  height: 25px;
+  border-radius: 30px;
+  margin-right: 10px;
+}
+
+.MScontents p {
+  font-size: 9pt;
+  margin-bottom: 0;
+}
+
+.MSbold {
+  font-weight: 600;
+}
+
+/* meal_category */
+.meal_category {
+  position: relative;
+  width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.meal_category h3 {
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+.meal_category hr {
+  width: 320px;
+  height: 0.7px;
+  background-color: #bcbcbc;
+  opacity: 0.4;
+  border: none;
+  margin-bottom: 15px;
+}
+
+.meal_category button {
+  background-color: #bcbcbc;
+  color: white;
+  font-size: 9pt;
+  font-weight: 350;
+  border: none;
+  border-radius: 30px;
+  padding: 5px 10px;
+  margin-top: 5px;
+  margin-right: 7px;
+  cursor: pointer;
+}
+
+.meal_category button:hover {
+  background-color: #7350ff;
+}
+
+.meal_category button.selected {
+  background-color: #7350ff;
+}
+
+/* Mbtns */
+.MSbtns {
+  margin-bottom: 100px;
+  text-align: center;
+}
+
+.MSpurpleBtn {
+  background-color: #7350ff;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 30px;
+  font-size: 11pt;
+  font-weight: 700;
+  width: 240px;
+  cursor: pointer;
+}
+
+.MspurpleBtn:hover {
+  background-color: #593ec4;
+}

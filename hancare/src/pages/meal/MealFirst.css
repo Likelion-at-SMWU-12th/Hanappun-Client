@@ -1,0 +1,212 @@
+/* 전체 설정 */
+.MFbackground {
+  background-color: black;
+  width: 100%;
+  height: 100vh;
+  overflow-y: scroll;
+  margin-bottom: 0;
+}
+
+.blackHeader {
+  padding-top: 30px;
+  display: flex;
+}
+
+/* 이전 페이지로 가기 버튼 */
+.blackHeader img {
+  width: 13px;
+  margin: auto 30px;
+}
+
+.MFh2 {
+  margin-left: calc(30% - 50px);
+  color: white;
+}
+
+/* MFdate */
+.MFdate {
+  text-align: center;
+  background-color: white;
+  border: none;
+  border-radius: 15px;
+  width: 100px;
+  color: black;
+  font-size: 11pt;
+  font-weight: 700;
+  padding: 3px 10px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+}
+
+/* main */
+.MFmain {
+  background-color: white;
+  text-align: center;
+  margin-bottom: 100px;
+  border: none;
+  border-radius: 25px 25px 0 0;
+  padding-top: 50px;
+  height: 90vh;
+  overflow-y: scroll;
+  margin-bottom: 0;
+}
+
+.MFmain hr {
+  width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.MFpurpleDiv {
+  background-color: #7450ff;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 4px 25px;
+  font-size: 11pt;
+  font-weight: 500;
+}
+
+/* MFmenu */
+.MFmenu {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 25px;
+}
+
+.MFmenu button {
+  margin-left: 10px;
+  background: none;
+  border: none;
+  font-size: 10pt;
+  font-weight: 600;
+  color: #bdbfc2;
+  cursor: pointer;
+}
+
+.MFmenu button.selected {
+  color: #7350ff;
+  font-weight: 800;
+}
+
+.MFmenu button:hover {
+  background-color: #f0f0f0;
+  border-radius: 10px;
+}
+
+/* MFinput */
+.MFinput {
+  display: flex;
+  position: relavtive;
+  margin-bottom: 20px;
+}
+
+.MFinput input {
+  margin-left: 40px;
+  width: 300px;
+  background-color: #eceef0;
+  padding: 12px 10px;
+  border-radius: 30px;
+  font-size: 10pt;
+  border: none;
+}
+
+.MFinput button {
+  color: #7350ff;
+  font-weight: 400;
+  margin-left: -50px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* MFcontents */
+.MFcontents {
+  display: flex;
+  flex-wrap: wrap;
+  padding-top: 20px;
+  padding-left: 40px;
+  padding-right: 40px;
+  margin-bottom: 200px;
+  gap: 10px;
+}
+
+.meal-item {
+  background-color: #7350ff;
+  color: white;
+  padding: 5px 5px 5px 15px;
+  height: 25px;
+  border-radius: 30px;
+  margin-right: 0;
+}
+
+.remove-button {
+  background: none;
+  border: none;
+  color: white;
+  width: 25px;
+  height: 20px;
+  padding-bottom: 5px;
+  cursor: pointer;
+  margin: 0;
+}
+
+/* Mbtns */
+.Mbtns {
+  margin-bottom: 100px;
+  text-align: center;
+}
+
+.MwhiteBtn {
+  background-color: white;
+  color: black;
+  margin-bottom: 15px;
+  padding: 12px;
+  border: none;
+  border-radius: 30px;
+  font-size: 11pt;
+  font-weight: 700;
+  width: 150px;
+  cursor: pointer;
+}
+
+.MwhiteBtn:hover {
+  background-color: #bcbcbc;
+}
+
+.MpurpleBtn {
+  background-color: #7350ff;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 30px;
+  font-size: 11pt;
+  font-weight: 700;
+  width: 240px;
+  cursor: pointer;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.MpurpleBtn:hover {
+  background-color: #593ec4;
+}
+
+/* MpurpleBtn2 */
+.MpurpleBtn2 {
+  background-color: #7350ff;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 30px;
+  font-size: 11pt;
+  font-weight: 700;
+  width: 150px;
+  cursor: pointer;
+  margin-left: 15px;
+}
+
+.MpurpleBtn2:hover {
+  background-color: #593ec4;
+}
