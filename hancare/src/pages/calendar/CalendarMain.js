@@ -22,6 +22,7 @@ const events = [
     image: "/images/grayspot.png",
   },
 ];
+
 // 기록한 날 다 불러와서 저거 적용하기
 
 const reservations = [
@@ -49,13 +50,6 @@ const CalendarMain = () => {
   const [date, setDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
 
-  const renderEvents = (date) => {
-    const event = events.find((event) => isSameDay(event.date, date));
-    return event ? (
-      <img src={event.image} alt={event.event} className="event-image" />
-    ) : null;
-  };
-
   const renderReservation = (date) => {
     const reservation = reservations.find((reservation) =>
       isSameDay(reservation.date, date)
@@ -66,6 +60,13 @@ const CalendarMain = () => {
         alt={reservation.event}
         className="reservation-image"
       />
+    ) : null;
+  };
+
+  const renderEvents = (date) => {
+    const event = events.find((event) => isSameDay(event.date, date));
+    return event ? (
+      <img src={event.image} alt={event.event} className="event-image" />
     ) : null;
   };
 
@@ -101,8 +102,8 @@ const CalendarMain = () => {
             tileContent={({ date, view }) =>
               view === "month" && (
                 <>
-                  {renderEvents(date)}
                   {renderReservation(date)}
+                  {renderEvents(date)}
                 </>
               )
             }
