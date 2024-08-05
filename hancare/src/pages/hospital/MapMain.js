@@ -225,6 +225,7 @@ const HospitalList = styled.div`
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
   overflow-y: auto;
+  padding-bottom: 70px;
 `;
 const NoResult = styled.p`
   text-align: center;

@@ -49,7 +49,7 @@ const BottomNav = () => {
         {/* 우리 케어 */}
 
         <Link
-          to={`/ourcare/family/list/${username}`}
+          to={`/ourcare/`}
           className="nav-link"
           onClick={() => setActiveNav(2)}
         >

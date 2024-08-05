@@ -41,7 +41,7 @@ const OurCareProfile = () => {
         .then((response) => {
           console.log(response);
           alert("삭제되었습니다.");
-          navigate("/ourcare/family/");
+          navigate("/ourcare/family/list/:username");
         })
         .catch((error) => {
           console.log(error);
