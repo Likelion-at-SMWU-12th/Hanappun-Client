@@ -21,6 +21,7 @@ const OurCareProfile = () => {
   const params = useParams();
   const username = useSelector((state) => state.username);
   const [friendInfo, setFriendInfo] = useState([]); // 초기 상태를 null로 설정
+  const ApiKey = process.env.REACT_APP_KAKAO_API_KEY;
 
   const getFriendInfo = () => {
     axios
@@ -37,7 +38,7 @@ const OurCareProfile = () => {
   useEffect(() => {
     if (window.Kakao) {
       if (!window.Kakao.isInitialized()) {
-        window.Kakao.init("60c004dfae745dd8f45c124a54557159");
+        window.Kakao.init(process.env.REACT_APP_KAKAO_API_KEY);
       }
     }
     getFriendInfo();
@@ -212,7 +213,7 @@ const NameWrapper = styled.div`
     font-size: 20px;
   }
   img {
-    width: 25px;
+    width: 17px;
     cursor: pointer;
   }
 `;
