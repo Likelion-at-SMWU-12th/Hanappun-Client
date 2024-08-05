@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { quit } from "../../api/users/quit";
+
+import { getuserData } from "../../api/getuserData";
 
 const Background = styled.div`
   background-color: black;
@@ -93,6 +95,20 @@ const Cancel = () => {
 
   const navigate = useNavigate();
   const params = useParams();
+  const [userData, setUserData] = useState("");
+
+  const getUserNickname = async () => {
+    const result = await getuserData(params.username);
+
+    if (result.status == 200) {
+      setUserData(result.data.result.nickname);
+    } else {
+    }
+  };
+
+  useEffect(() => {
+    getUserNickname();
+  }, [params.username]);
 
   // 이전 페이지도 이동 버튼
   const BackButton = () => {
@@ -141,7 +157,7 @@ const Cancel = () => {
         <h2 id="cancelH2">회원 탈퇴</h2>
       </BlackHeader>
       <BlackMain>
-        <h3> 숙멋사 님 가지 마세요</h3>
+        <h3> {userData} 님 가지 마세요</h3>
         <img alt="cancelNo" src="/images/cancelNo.png" />
         {/*비밀번호 입력 -> 회원탈퇴 */}
         <form onSubmit={handleQuitSubmit}>

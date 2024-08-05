@@ -82,7 +82,7 @@ const Condition = () => {
       );
       if (response.status === 200) {
         alert("컨디션 정보가 저장되었습니다!");
-        navigate("/"); // 홈 페이지로 이동
+        navigate("/mainpage"); // 홈 페이지로 이동
       }
     } catch (error) {
       console.error("Error saving condition data:", error);
