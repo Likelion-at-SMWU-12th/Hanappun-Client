@@ -1,39 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import { baseURL } from "../../api/baseURL";
 import Constitutions from "../../components/Constitutions";
 import "./MyCON.css";
 
 const MyCON = () => {
   const navigate = useNavigate();
-  //const { id } = useParams();
-  const name = "홍길동";
-  const myConstitution = "Hepatonia";
+  const params = useParams(); // 유저 아이디
+  const [userData, setUserData] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(
+          `${baseURL}/users/profile?username=${params.username}`
+        );
+        setUserData(response.data.result);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setError("사용자 정보를 불러오는데 실패했습니다.");
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [params.username]);
 
   // 이전 페이지로 이동 버튼
   const BackButton = () => {
     navigate(-1);
   };
 
-  // 테스트용 데이터
-  const userData = {
-    name: "홍길동",
-    myConstitution: "Gastrotonia",
-  };
-
-  // 체질 영어 이름을 한글 이름으로 매핑하는 함수
-  const getKoreanTypeName = (type) => {
-    const typeToKoreanMap = {
-      Hepatonia: "목양체질",
-      Cholecystonia: "목음체질",
-      Pancreotonia: "토양체질",
-      Gastrotonia: "토음체질",
-      Pulmotonia: "금양체질",
-      Colonotonia: "금음체질",
-      Renotonia: "수양체질",
-      Vesicotonia: "수음체질",
-    };
-    return typeToKoreanMap[type] || "";
-  };
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <div className="MCbackground">
@@ -42,19 +45,28 @@ const MyCON = () => {
         <h2 className="STh2">나의 체질</h2>
       </header>
       <main className="MCmain">
-        <p className="MCinfo">
-          {userData.name}님은 {getKoreanTypeName(userData.myConstitution)}
-          이에요
-        </p>
-        <Constitutions selectedId={userData.myConstitution} />
-        <div className="MCbtns">
-          <button className="MCwhiteBtn" onClick={() => navigate("/mainpage")}>
-            메인 페이지
-          </button>
-          <button className="MCpurpleBtn" onClick={() => navigate("/column")}>
-            칼럼 읽기
-          </button>
-        </div>
+        {userData && (
+          <>
+            <p className="MCinfo">
+              {userData.nickname}님은 {userData.constitution_8}체질 이에요
+            </p>
+            <Constitutions selectedId={userData.constitution_8} />
+            <div className="MCbtns">
+              <button
+                className="MCwhiteBtn"
+                onClick={() => navigate(`/mainpage/${params.username}`)}
+              >
+                메인 페이지
+              </button>
+              <button
+                className="MCpurpleBtn"
+                onClick={() => navigate("/column")}
+              >
+                칼럼 읽기
+              </button>
+            </div>
+          </>
+        )}
       </main>
     </div>
   );
