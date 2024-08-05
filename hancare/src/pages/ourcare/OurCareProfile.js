@@ -21,14 +21,28 @@ const OurCareProfile = () => {
   const params = useParams();
   const username = useSelector((state) => state.username);
   const [friendInfo, setFriendInfo] = useState([]); // 초기 상태를 null로 설정
-  const ApiKey = process.env.REACT_APP_KAKAO_API_KEY;
+  const [friendDetail, setFriendDetail] = useState([]);
 
+  // 나의 친구 리스트 정보
   const getFriendInfo = () => {
     axios
       .get(`${baseURL}/users/profile?username=${params.id}`)
       .then((response) => {
         console.log(response);
         setFriendInfo(response.data.result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  // 친구 프로필
+  const getFriendDetail = () => {
+    axios
+      .get(`${baseURL}/users/ourcare/profile/${params.id}`)
+      .then((response) => {
+        console.log(response);
+        setFriendDetail(response.data.result);
       })
       .catch((error) => {
         console.log(error);
@@ -42,6 +56,7 @@ const OurCareProfile = () => {
       }
     }
     getFriendInfo();
+    getFriendDetail();
   }, []);
 
   const onBtnDel = () => {
@@ -64,6 +79,12 @@ const OurCareProfile = () => {
     } else {
       alert("취소");
     }
+  };
+
+  // 날짜 form 함수
+  const formatReservationDate = (reservationDate) => {
+    const [datePart, timePart] = reservationDate.split("T");
+    return `${datePart} ${timePart}`;
   };
 
   const BackButton = () => {
@@ -145,8 +166,9 @@ const OurCareProfile = () => {
                 <List>
                   <ListItem onClick={() => navigate("/map")}>
                     <Box1Img src="/images/hospital.png" alt="map"></Box1Img>
-                    {friendInfo.my_clinic && friendInfo.my_clinic !== "" ? (
-                      <Box1Text>{friendInfo.my_clinic}</Box1Text>
+                    {friendDetail.reservation_clinic &&
+                    friendDetail.reservation_clinic !== "" ? (
+                      <Box1Text>{friendDetail.reservation_clinic}</Box1Text>
                     ) : (
                       <Box1Text>한의원을 알아볼까요?</Box1Text>
                     )}
@@ -156,11 +178,33 @@ const OurCareProfile = () => {
                       src="/images/reservation.png"
                       alt="reservation"
                     ></Box1Img>
-                    <Box1Text>예약 미정</Box1Text>
+                    {friendDetail.reservation_datetime &&
+                    friendDetail.reservation_datetime !== "" ? (
+                      <Box1Text>
+                        {formatReservationDate(
+                          friendDetail.reservation_datetime
+                        )}
+                      </Box1Text>
+                    ) : (
+                      <Box1Text>예약 미정</Box1Text>
+                    )}
                   </ListItem>
                 </List>
               </Box1>
-              <ShareBtn onClick={reservationShare}>예약 내역 공유하기</ShareBtn>
+              <ShareBtn
+                onClick={() => {
+                  if (
+                    friendDetail.reservation_datetime &&
+                    friendDetail.reservation_datetime !== ""
+                  ) {
+                    reservationShare();
+                  } else {
+                    alert("예약 내역이 없습니다.");
+                  }
+                }}
+              >
+                예약 내역 공유하기
+              </ShareBtn>
             </BoxWrapper>
           </ProfileWrapper>
           <BarImg src="/images/ourcarebar.png"></BarImg>

@@ -4,6 +4,8 @@ import styled from "styled-components";
 import SetMyModal from "../../components/SetMyModal";
 import ReservateModal from "../../components/ReservateModal";
 import axios from "axios";
+import { baseURL } from "../../api/baseURL";
+import { useSelector } from "react-redux";
 
 const HospitalHome = () => {
   const location = useLocation();
@@ -12,10 +14,14 @@ const HospitalHome = () => {
   const [activeTab, setActiveTab] = useState("소개");
   const [pickhospital, setPickhospital] = useState([]);
   const [user, setUser] = useState([]);
+  const username = useSelector((state) => state.username);
+  const [doctorBtn, setDoctorBtn] = useState(false);
+  const [review, setReview] = useState([]);
+  const [reviewDetail, setReviewDetail] = useState([]);
 
   const getInfo = () => {
     axios
-      .get(`http://localhost:8000/hospital/${id}`)
+      .get(`${baseURL}/clinic/info/${id}/`)
       .then((response) => {
         setPickhospital(response.data);
       })
@@ -30,9 +36,9 @@ const HospitalHome = () => {
 
   const getmyInfo = () => {
     axios
-      .get(`http://localhost:8000/users`)
+      .get(`${baseURL}/users/profile?username=${username}`)
       .then((response) => {
-        setUser(response.data);
+        setUser(response.data.result);
       })
       .catch((error) => {
         console.log(error);
@@ -43,17 +49,39 @@ const HospitalHome = () => {
     getmyInfo();
   }, []);
 
-  const Addhospital = () => {
+  // 리뷰 카테고리 합산 api 연결
+  const getReview = () => {
     axios
-      .post("http://localhost:8002/users", {
-        hospital: pickhospital.name,
-      })
+      .get(`${baseURL}/review/cate/${id}/`)
       .then((response) => {
-        console.log(response);
-        setIsmy(true);
-        closeModal();
+        setReview(response.data);
+      })
+      .catch((error) => {
+        alert("리뷰실패");
+        console.log(error);
       });
   };
+
+  useEffect(() => {
+    getReview();
+  }, []);
+
+  // 리뷰 api 연결
+  const getReviewDetail = () => {
+    axios
+      .get(`${baseURL}/review?clinic=${id}`)
+      .then((response) => {
+        setReviewDetail(response.data);
+      })
+      .catch((error) => {
+        alert("리뷰디테일실패");
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    getReviewDetail();
+  }, []);
 
   // 나의 한의원 모달창 관련
   const [isMyModalOpen, setISMyModalOpen] = useState(false);
@@ -61,7 +89,10 @@ const HospitalHome = () => {
   const openModal = () => {
     setISMyModalOpen(true);
   };
-  const closeModal = () => setISMyModalOpen(false);
+  const closeModal = () => {
+    setISMyModalOpen(false);
+    getmyInfo();
+  };
   const handleSetMy = () => {
     setIsmy(!isSetmy);
     closeModal();
@@ -101,6 +132,30 @@ const HospitalHome = () => {
     setComment(e.target.value);
   };
 
+  // 리뷰 작성 연동 코드
+  const WriteReview = () => {
+    axios
+      .post(`${baseURL}/review/`, {
+        reviewer: username,
+        content: comment,
+        clinic: id,
+        rate: 3,
+        is_selected_Facility: feedback.clean,
+        is_selected_Prescription: feedback.medicine,
+        is_selected_Health: feedback.manage,
+        is_selected_Kindness: feedback.doctor,
+      })
+      .then((response) => {
+        console.log(response);
+        alert("리뷰가 작성되었습니다");
+        navigate(`/map/${id}`);
+      })
+      .catch((error) => {
+        console.log(error);
+        alert("리뷰 작성에 실패했습니다");
+      });
+  };
+
   const BackButton = () => {
     navigate(-1);
   };
@@ -110,6 +165,18 @@ const HospitalHome = () => {
   };
   const ReviewSubmit = (e) => {
     e.preventDefault();
+    WriteReview();
+  };
+
+  const doctorImages = [
+    "/images/doctor1.png",
+    "/images/doctor2.png",
+    "/images/doctor2.png",
+  ];
+
+  // 닥터 버튼
+  const handleDoctorBtnClick = () => {
+    setDoctorBtn(!doctorBtn);
   };
 
   return (
@@ -120,16 +187,20 @@ const HospitalHome = () => {
       </Title>
       <Name>{pickhospital.name}</Name>
       <Wrapper>
-        <Hashtag>{pickhospital.hashtag1}</Hashtag>
-        <Hashtag>{pickhospital.hashtag2}</Hashtag>
-        <Hashtag>{pickhospital.hashtag3}</Hashtag>
+        <Hashtag>{pickhospital.clinic_cate_1}</Hashtag>
+        <Hashtag>{pickhospital.clinic_cate_2}</Hashtag>
+        <Hashtag>{pickhospital.clinic_cate_3}</Hashtag>
         <MyHospital onClick={openModal}>
-          {isSetmy ? "V 나의 한의원" : "나의 한의원"}
+          {user.my_clinic &&
+          pickhospital.id &&
+          user.my_clinic === pickhospital.id
+            ? "V 나의 한의원"
+            : "나의 한의원"}
         </MyHospital>
       </Wrapper>
       <Info>
         <Bold>위치</Bold>
-        {pickhospital.address}
+        {pickhospital.location}
       </Info>
       <Info>
         <Bold>전화번호</Bold>
@@ -154,39 +225,38 @@ const HospitalHome = () => {
         {activeTab === "소개" ? (
           <>
             <SubTitle>{pickhospital.name}</SubTitle>
-            <Information>
-              {pickhospital.name}은 슈바이처를 본받고자 했던 김명숙 원장에 의해
-              설립되었습니다. 1966년 5월 17일 개원하여 1979년 5월 현 위치로 옮겨
-              진료를 하고 있습니다. {pickhospital.name}은 권OO박사의 8체질
-              의학에 근거해서 진료합니다.
-            </Information>
+            <Information>{pickhospital.detail}</Information>
             <SubTitle>의료진</SubTitle>
             <DoctorWrapper>
-              <DoctorBox>
-                <h3>송진리 원장</h3>
-                <img src="/images/doctor1.png" alt="doctor1"></img>
-              </DoctorBox>
-              <DoctorBox>
-                <h3>명순헌 원장</h3>
-                <Doctor2 src="/images/doctor2.png" alt="doctor1"></Doctor2>
-              </DoctorBox>
-              <DoctorBox>
-                <h3>김수련 원장</h3>
-                <p>
-                  숙명여대 한의과대학 졸업
-                  <br />
-                  숙명의료원 일반의료원 수료
-                  <br />
-                  숙명여대 경락의과학과 석박사
-                  <br />
-                  전 숙명여대 한의학융합연구정보센터 연구원
-                  <br />
-                  현 대한학의학회 정회원
-                  <br />현 {pickhospital.name} 새힘관실 원장
-                </p>
-              </DoctorBox>
+              {pickhospital.doctor_list &&
+                pickhospital.doctor_list.map((item, index) => (
+                  <DoctorBox key={index} onClick={handleDoctorBtnClick}>
+                    <h3>{item.name} 원장</h3>
+                    {doctorBtn ? (
+                      <p>
+                        {item.profile[1]}
+                        <br />
+                        {item.profile[2]}
+                        <br />
+                        {item.profile[3]}
+                        <br />
+                        {item.profile[4]}
+                        <br />
+                        {item.profile[5]}
+                        <br />
+                        {item.profile[6]}
+                      </p>
+                    ) : (
+                      <img src={doctorImages[index]} alt="doctor" />
+                    )}
+                  </DoctorBox>
+                ))}
             </DoctorWrapper>
             <SubTitle>사진</SubTitle>
+            <PhotoWrapper>
+              <img src={pickhospital.image_1}></img>
+              <img src={pickhospital.image_2}></img>
+            </PhotoWrapper>
           </>
         ) : (
           <>
@@ -195,11 +265,21 @@ const HospitalHome = () => {
                 <SubTitle2>이런 점이 좋았어요</SubTitle2>
                 <ReviewWrapper>
                   <ReviewOption>
-                    <img src="/images/review_nice.png"></img>
-                    <p>{pickhospital.reviewtext}</p>
+                    <img src="/images/review_clean.png"></img>
+                    <p>시설이 쾌적해요</p>
                   </ReviewOption>
                   <Reviewnum>
-                    <p>{pickhospital.reviewnum}</p>
+                    <p>{review.facility_count}</p>
+                    <img src="/images/reviewnumimg.png" alt="num"></img>
+                  </Reviewnum>
+                </ReviewWrapper>
+                <ReviewWrapper>
+                  <ReviewOption>
+                    <img src="/images/review_medicine.png"></img>
+                    <p>약 처방이 잘 맞아요</p>
+                  </ReviewOption>
+                  <Reviewnum>
+                    <p>{review.prescription_count}</p>
                     <img src="/images/reviewnumimg.png" alt="num"></img>
                   </Reviewnum>
                 </ReviewWrapper>
@@ -209,43 +289,41 @@ const HospitalHome = () => {
                     <p>건강 관리에 철저해요</p>
                   </ReviewOption>
                   <Reviewnum>
-                    <p>79</p>
+                    <p>{review.health_count}</p>
                     <img src="/images/reviewnumimg.png" alt="num"></img>
                   </Reviewnum>
                 </ReviewWrapper>
                 <ReviewWrapper>
                   <ReviewOption>
-                    <img src="/images/review_clean.png"></img>
-                    <p>시설이 쾌적해요</p>
+                    <img src="/images/review_nice.png"></img>
+                    <p>의료진, 직원이 친절해요</p>
                   </ReviewOption>
                   <Reviewnum>
-                    <p>999+</p>
+                    <p>{review.kindness_count}</p>
                     <img src="/images/reviewnumimg.png" alt="num"></img>
                   </Reviewnum>
                 </ReviewWrapper>
                 <SubTitle2>더 많은 이야기</SubTitle2>
-                <StoryBox>
-                  <p>
-                    <Bold>김눈송님</Bold>
-                    <br />
-                    김수련 원장님 매번 친절하게 상담해주셔서 좋았어요! 요즘
-                    감기도 걸리고 몸이 많이 안좋았는데 한의원 다니면서 효과도
-                    확실히 봐요ㅎㅎ
-                    <br />
-                    <Bold>#의료진, 직원이 친절해요 #건강관리에 철저해요</Bold>
-                  </p>
-                </StoryBox>
-                <StoryBox>
-                  <p>
-                    <Bold>파송송님</Bold>
-                    <br />
-                    매번 소화가 잘 안되서 문제였는데, 진료 받으면서 식습관을 잘
-                    고치게 되었던 것같아요! 매번 한약도 잘 복용하면서 한의원
-                    다니고 있습니다.
-                    <br />
-                    <Bold>#의료진, 직원이 친절해요 #건강관리에 철저해요</Bold>
-                  </p>
-                </StoryBox>
+                {reviewDetail &&
+                  reviewDetail.slice(0, 2).map((item) => (
+                    <StoryBox key={item.id}>
+                      <p>
+                        <Bold>{item.reviewer_nickname.nickname}</Bold>
+                        <br />
+                        {item.content}
+                        <br />
+                        <Bold>
+                          {item.is_selected_Facility && "#시설이 쾌적해요 "}
+                          {item.is_selected_Prescription &&
+                            "#약 처방이 잘 맞아요 "}
+                          <br />
+                          {item.is_selected_Health && "#건강관리에 철저해요 "}
+                          {item.is_selected_Kindness &&
+                            "#의료진, 직원이 친절해요 "}
+                        </Bold>
+                      </p>
+                    </StoryBox>
+                  ))}
                 <MoreBtn onClick={handleMorebtnClick}>더보기</MoreBtn>
                 <SubTitle2>나의 이야기</SubTitle2>
                 <form>
@@ -317,65 +395,26 @@ const HospitalHome = () => {
             ) : (
               <>
                 <SubTitle2>더 많은 이야기</SubTitle2>
-                <StoryBox>
-                  <p>
-                    <Bold>김눈송님</Bold>
-                    <br />
-                    김수련 원장님 매번 친절하게 상담해주셔서 좋았어요! 요즘
-                    감기도 걸리고 몸이 많이 안좋았는데 한의원 다니면서 효과도
-                    확실히 봐요ㅎㅎ
-                    <br />
-                    <Bold>#의료진, 직원이 친절해요 #건강관리에 철저해요</Bold>
-                  </p>
-                </StoryBox>
-                <StoryBox>
-                  <p>
-                    <Bold>파송송님</Bold>
-                    <br />
-                    매번 소화가 잘 안되서 문제였는데, 진료 받으면서 식습관을 잘
-                    고치게 되었던 것같아요! 매번 한약도 잘 복용하면서 한의원
-                    다니고 있습니다.
-                    <br />
-                    <Bold>#의료진, 직원이 친절해요 #건강관리에 철저해요</Bold>
-                  </p>
-                </StoryBox>
-                <StoryBox>
-                  <p>
-                    <Bold>김명숙님</Bold>
-                    <br />
-                    우리 딸이 알려줘서 한의원 방문했습니다^^ 원장님께서 잘
-                    진찰해주셔서 더 신뢰가 가네요. 앞으로도 자주 찾아갈 것
-                    같아요
-                    <br />
-                    <Bold>
-                      #처방약이 좋아요 #건강관리에 철저해요 #의료진, 직원이
-                      친절해요
-                    </Bold>
-                  </p>
-                </StoryBox>
-                <StoryBox>
-                  <p>
-                    <Bold>푸른하늘님</Bold>
-                    <br />
-                    한의원이 좋아요
-                    <br />
-                    <Bold>#건강관리에 철저해요</Bold>
-                  </p>
-                </StoryBox>
-                <StoryBox>
-                  <p>
-                    <Bold>Bubble님</Bold>
-                    <br />
-                    교통사고가 갑자기 나서 근처 한의원으로 급하게 찾았는데 잘
-                    회복하는 중이에요ㅠㅠ 좋은 한의원 잘 찾은 것 같아서 주변에
-                    추천하고 다닙니다.
-                    <br />
-                    <Bold>
-                      #처방약이 좋아요 #건강관리에 철저해요 #의료진, 직원이
-                      친절해요
-                    </Bold>
-                  </p>
-                </StoryBox>
+                {reviewDetail &&
+                  reviewDetail.map((item) => (
+                    <StoryBox key={item.id}>
+                      <p>
+                        <Bold>{item.reviewer_nickname.nickname}</Bold>
+                        <br />
+                        {item.content}
+                        <br />
+                        <Bold>
+                          {item.is_selected_Facility && "#시설이 쾌적해요 "}
+                          {item.is_selected_Prescription &&
+                            "#약 처방이 잘 맞아요 "}{" "}
+                          <br />
+                          {item.is_selected_Health && "#건강관리에 철저해요 "}
+                          {item.is_selected_Kindness &&
+                            "#의료진, 직원이 친절해요 "}
+                        </Bold>
+                      </p>
+                    </StoryBox>
+                  ))}
                 <MoreBtn onClick={handleMorebtnClick}>돌아가기</MoreBtn>
               </>
             )}
@@ -387,13 +426,15 @@ const HospitalHome = () => {
           isOpen={isMyModalOpen}
           closeModal={closeModal}
           handleSetMy={handleSetMy}
-          isSetmy={isSetmy}
+          myClinic={user.my_clinic}
+          clinicName={pickhospital}
         />
       )}
       {ReservateOpen && (
         <ReservateModal
           isReservateOpen={setReservateOpen}
           closeReesrvateModal={closeReservateModal}
+          cliniccall={pickhospital.call}
         />
       )}
     </Container>
@@ -555,13 +596,17 @@ const DoctorBox = styled.div`
   border-radius: 20px;
   width: 120px;
   height: 170px;
+  cursor: pointer;
   h3 {
     color: white;
     font-size: 14px;
   }
 
   img {
-    width: 80%;
+    justify-content: space-between;
+    width: auto;
+    height: 70%;
+    margin-top: 3px;
   }
 
   p {
@@ -571,6 +616,18 @@ const DoctorBox = styled.div`
 `;
 const Doctor2 = styled.img`
   width: 80px !important;
+`;
+
+const PhotoWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+
+  img {
+    width: 170px;
+    height: 150px;
+  }
 `;
 
 const SubTitle2 = styled.h3`
@@ -585,7 +642,7 @@ const ReviewWrapper = styled.div`
 const ReviewOption = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   box-shadow: 0 0 8px #cecece;
   width: 250px;
   border-radius: 20px;
@@ -595,7 +652,7 @@ const ReviewOption = styled.div`
 
   p {
     font-size: 13px;
-    text-align: center;
+    margin-left: 70px;
   }
   img {
     width: 12%;

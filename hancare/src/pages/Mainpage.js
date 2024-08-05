@@ -78,8 +78,11 @@ const Mainpage = () => {
   }, []);
 
   const formatReservationDate = (reservationDate) => {
+    if (!reservationDate) return ""; // reservationDate가 없으면 빈 문자열 반환
     const [datePart, timePart] = reservationDate.split("T");
-    return `${datePart} ${timePart}`;
+    if (!timePart) return datePart; // timePart가 없으면 datePart만 반환
+    const [hours, minutes] = timePart.split(":");
+    return `${datePart} ${hours}:${minutes}`;
   };
 
   return (
@@ -110,9 +113,9 @@ const Mainpage = () => {
                 alt="reservation"
               ></Box1Img>
               {user.appointment && user.appointment.length !== 0 ? (
-                <Box1Text>
+                <DateBox1Text>
                   {formatReservationDate(user.appointment.date)}
-                </Box1Text>
+                </DateBox1Text>
               ) : (
                 <Box1Text>예약 미정</Box1Text>
               )}
@@ -125,11 +128,11 @@ const Mainpage = () => {
               <Box1Img src="/images/test.png" alt="test"></Box1Img>
               {user.my_constitution_8 &&
               user.my_constitution_8.length !== "" ? (
-                <Box1Text onClick={() => navigate("/myCon")}>
+                <Box1Text onClick={() => navigate(`/myCon/${param2}`)}>
                   {user.my_constitution_8}체질
                 </Box1Text>
               ) : (
-                <Box1Text onClick={() => navigate("/q_myCON")}>
+                <Box1Text onClick={() => navigate(`/q_myCON/${param2}`)}>
                   나의 체질은?
                 </Box1Text>
               )}
@@ -158,7 +161,7 @@ const Mainpage = () => {
               <ListItem>
                 <TitleText>{mealFeedback.message}</TitleText>
               </ListItem>
-              <ListItem onClick={() => navigate("/meal")}>
+              <ListItem onClick={() => navigate(`/meal/${param2}`)}>
                 {/* 리스트 아이템 이모지는 렌더링방식으로 각각 처리 */}
                 {userdata.breakfast ? (
                   <>
@@ -172,7 +175,7 @@ const Mainpage = () => {
                   </>
                 )}
               </ListItem>
-              <ListItem onClick={() => navigate("/meal")}>
+              <ListItem onClick={() => navigate(`/meal/${param2}`)}>
                 {userdata.lunch ? (
                   <>
                     <PlusImg src="/images/check.png"></PlusImg>
@@ -185,7 +188,7 @@ const Mainpage = () => {
                   </>
                 )}
               </ListItem>
-              <ListItem onClick={() => navigate("/meal")}>
+              <ListItem onClick={() => navigate(`/meal/${param2}`)}>
                 {userdata.dinner ? (
                   <>
                     <PlusImg src="/images/check.png"></PlusImg>
@@ -235,48 +238,54 @@ const Mainpage = () => {
           <RightBox>
             {userdata.breakfast || userdata.lunch || userdata.dinner ? (
               <>
-                <EatRecordWrapper onClick={() => navigate("/meal")}>
+                <EatRecordWrapper onClick={() => navigate(`/meal/${param2}`)}>
                   <h3>아침</h3>
                   <FoodListWrapper>
-                    {userdata.breakfast.slice(0, 2).map((food, index) => (
-                      <div key={index}>
-                        <p>{food}</p>
-                      </div>
-                    ))}
-                    {userdata.breakfast.length > 2 && <p>..</p>}
+                    {userdata.breakfast &&
+                      userdata.breakfast.slice(0, 2).map((food, index) => (
+                        <div key={index}>
+                          <p>{food}</p>
+                        </div>
+                      ))}
+                    {userdata.breakfast && userdata.breakfast.length > 2 && (
+                      <p>..</p>
+                    )}
                   </FoodListWrapper>
                 </EatRecordWrapper>
-                <EatRecordWrapper onClick={() => navigate("/meal")}>
+                <EatRecordWrapper onClick={() => navigate(`/meal/${param2}`)}>
                   <h3>점심</h3>
                   <FoodListWrapper>
-                    {userdata.lunch.slice(0, 2).map((food, index) => (
-                      <div key={index}>
-                        <p>{food}</p>
-                      </div>
-                    ))}
-                    {userdata.lunch.length > 2 && <p>..</p>}
+                    {userdata.lunch &&
+                      userdata.lunch.slice(0, 2).map((food, index) => (
+                        <div key={index}>
+                          <p>{food}</p>
+                        </div>
+                      ))}
+                    {userdata.lunch && userdata.lunch.length > 2 && <p>..</p>}
                   </FoodListWrapper>
                 </EatRecordWrapper>
-                <EatRecordWrapper onClick={() => navigate("/meal")}>
+                <EatRecordWrapper onClick={() => navigate(`/meal/${param2}`)}>
                   <h3>저녁</h3>
                   <FoodListWrapper>
-                    {userdata.dinner.slice(0, 2).map((food, index) => (
-                      <div key={index}>
-                        <p>{food}</p>
-                      </div>
-                    ))}
-                    {userdata.dinner.length > 2 && <p>..</p>}
+                    {userdata.dinner &&
+                      userdata.dinner.slice(0, 2).map((food, index) => (
+                        <div key={index}>
+                          <p>{food}</p>
+                        </div>
+                      ))}
+                    {userdata.dinner && userdata.dinner.length > 2 && <p>..</p>}
                   </FoodListWrapper>
                 </EatRecordWrapper>
-                <EatRecordWrapper onClick={() => navigate("/meal")}>
+                <EatRecordWrapper onClick={() => navigate(`/meal/${param2}`)}>
                   <h3>간식</h3>
                   <FoodListWrapper>
-                    {userdata.snack.slice(0, 2).map((food, index) => (
-                      <div key={index}>
-                        <p>{food}</p>
-                      </div>
-                    ))}
-                    {userdata.snack.length > 2 && <p>..</p>}
+                    {userdata.snack &&
+                      userdata.snack.slice(0, 2).map((food, index) => (
+                        <div key={index}>
+                          <p>{food}</p>
+                        </div>
+                      ))}
+                    {userdata.snack && userdata.snack.length > 2 && <p>..</p>}
                   </FoodListWrapper>
                 </EatRecordWrapper>
               </>
@@ -287,7 +296,9 @@ const Mainpage = () => {
                   src="/images/potato.png"
                   alt="potato"
                 ></RightBoxImg>
-                <WriteBtn>기록하기</WriteBtn>
+                <WriteBtn onClick={() => navigate(`/meal/${param2}`)}>
+                  기록하기
+                </WriteBtn>
               </>
             )}
           </RightBox>
@@ -300,29 +311,39 @@ const Mainpage = () => {
           <RightBox>
             {user.condition ? (
               <>
-                <EatRecordWrapper onClick={() => navigate("/condition")}>
+                <EatRecordWrapper
+                  onClick={() => navigate(`/condition/${param2}`)}
+                >
                   <h3>몸상태</h3>
                   <FoodListWrapper>
-                    {user.condition_cate.slice(0, 2).map((food, index) => (
-                      <div key={index}>
-                        <p>{food}</p>
-                      </div>
-                    ))}
-                    {user.condition_cate.length > 2 && <p>..</p>}
+                    {user.condition_cate &&
+                      user.condition_cate.slice(0, 2).map((food, index) => (
+                        <div key={index}>
+                          <p>{food}</p>
+                        </div>
+                      ))}
+                    {user.condition_cate && user.condition_cate.length > 2 && (
+                      <p>..</p>
+                    )}
                   </FoodListWrapper>
                 </EatRecordWrapper>
-                <EatRecordWrapper onClick={() => navigate("/condition")}>
+                <EatRecordWrapper
+                  onClick={() => navigate(`/condition/${param2}`)}
+                >
                   <h3>기분</h3>
                   <FoodListWrapper>
-                    {user.mood_cate.slice(0, 2).map((food, index) => (
-                      <div key={index}>
-                        <p>{food}</p>
-                      </div>
-                    ))}
-                    {user.mood_cate.length > 2 && <p>..</p>}
+                    {user.mood_cate &&
+                      user.mood_cate.slice(0, 2).map((food, index) => (
+                        <div key={index}>
+                          <p>{food}</p>
+                        </div>
+                      ))}
+                    {user.mood_cate && user.mood_cate.length > 2 && <p>..</p>}
                   </FoodListWrapper>
                 </EatRecordWrapper>
-                <EatRecordWrapper onClick={() => navigate("/condition")}>
+                <EatRecordWrapper
+                  onClick={() => navigate(`/condition/${param2}`)}
+                >
                   <h3>메모</h3>
                   <FoodListWrapper>
                     <p>자세히 보기</p>
@@ -336,7 +357,7 @@ const Mainpage = () => {
                   src="/images/condition.png"
                   alt="condition"
                 ></RightBoxImg>
-                <WriteBtn onClick={() => navigate("/condition")}>
+                <WriteBtn onClick={() => navigate(`/condition/${param2}`)}>
                   기록하기
                 </WriteBtn>
               </>
@@ -421,12 +442,19 @@ export const Box1Text = styled.span`
   cursor: pointer;
 `;
 
+const DateBox1Text = styled.span`
+  font-size: 11px;
+  color: #7350ff;
+  font-weight: 500;
+  cursor: pointer;
+`;
+
 const RoundedBox = styled.div`
   background-color: #f5f5f5;
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
   margin-top: 18px;
-  padding-bottom: max(50px, calc(100vh - 650px));
+  padding-bottom: max(50px, calc(100vh - 600px));
   min-height: fit-content;
   overflow-y: auto;
   height: inherit;
