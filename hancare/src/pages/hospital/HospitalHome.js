@@ -66,16 +66,23 @@ const HospitalHome = () => {
     getReview();
   }, []);
 
+  // 리뷰 api 연결
   const getReviewDetail = () => {
     axios
-      .get(`${baseURL}/review?clinic=${pickhospital.id}`)
+      .get(`${baseURL}/review?clinic=${id}`)
       .then((response) => {
+        alert("리뷰디테일성공");
         setReviewDetail(response.data);
       })
       .catch((error) => {
+        alert("리뷰디테일실패");
         console.log(error);
       });
   };
+
+  useEffect(() => {
+    getReviewDetail();
+  }, []);
 
   // 나의 한의원 모달창 관련
   const [isMyModalOpen, setISMyModalOpen] = useState(false);
@@ -273,28 +280,26 @@ const HospitalHome = () => {
                   </Reviewnum>
                 </ReviewWrapper>
                 <SubTitle2>더 많은 이야기</SubTitle2>
-                <StoryBox>
-                  <p>
-                    <Bold>김눈송님</Bold>
-                    <br />
-                    김수련 원장님 매번 친절하게 상담해주셔서 좋았어요! 요즘
-                    감기도 걸리고 몸이 많이 안좋았는데 한의원 다니면서 효과도
-                    확실히 봐요ㅎㅎ
-                    <br />
-                    <Bold>#의료진, 직원이 친절해요 #건강관리에 철저해요</Bold>
-                  </p>
-                </StoryBox>
-                <StoryBox>
-                  <p>
-                    <Bold>파송송님</Bold>
-                    <br />
-                    매번 소화가 잘 안되서 문제였는데, 진료 받으면서 식습관을 잘
-                    고치게 되었던 것같아요! 매번 한약도 잘 복용하면서 한의원
-                    다니고 있습니다.
-                    <br />
-                    <Bold>#의료진, 직원이 친절해요 #건강관리에 철저해요</Bold>
-                  </p>
-                </StoryBox>
+                {reviewDetail &&
+                  reviewDetail.slice(0, 2).map((item) => (
+                    <StoryBox key={item.id}>
+                      <p>
+                        <Bold>{item.reviewer_nickname.nickname}</Bold>
+                        <br />
+                        {item.content}
+                        <br />
+                        <Bold>
+                          {item.is_selected_Facility && "#시설이 쾌적해요 "}
+                          {item.is_selected_Prescription &&
+                            "#약 처방이 잘 맞아요 "}
+                          <br />
+                          {item.is_selected_Health && "#건강관리에 철저해요 "}
+                          {item.is_selected_Kindness &&
+                            "#의료진, 직원이 친절해요 "}
+                        </Bold>
+                      </p>
+                    </StoryBox>
+                  ))}
                 <MoreBtn onClick={handleMorebtnClick}>더보기</MoreBtn>
                 <SubTitle2>나의 이야기</SubTitle2>
                 <form>
@@ -366,65 +371,26 @@ const HospitalHome = () => {
             ) : (
               <>
                 <SubTitle2>더 많은 이야기</SubTitle2>
-                <StoryBox>
-                  <p>
-                    <Bold>김눈송님</Bold>
-                    <br />
-                    김수련 원장님 매번 친절하게 상담해주셔서 좋았어요! 요즘
-                    감기도 걸리고 몸이 많이 안좋았는데 한의원 다니면서 효과도
-                    확실히 봐요ㅎㅎ
-                    <br />
-                    <Bold>#의료진, 직원이 친절해요 #건강관리에 철저해요</Bold>
-                  </p>
-                </StoryBox>
-                <StoryBox>
-                  <p>
-                    <Bold>파송송님</Bold>
-                    <br />
-                    매번 소화가 잘 안되서 문제였는데, 진료 받으면서 식습관을 잘
-                    고치게 되었던 것같아요! 매번 한약도 잘 복용하면서 한의원
-                    다니고 있습니다.
-                    <br />
-                    <Bold>#의료진, 직원이 친절해요 #건강관리에 철저해요</Bold>
-                  </p>
-                </StoryBox>
-                <StoryBox>
-                  <p>
-                    <Bold>김명숙님</Bold>
-                    <br />
-                    우리 딸이 알려줘서 한의원 방문했습니다^^ 원장님께서 잘
-                    진찰해주셔서 더 신뢰가 가네요. 앞으로도 자주 찾아갈 것
-                    같아요
-                    <br />
-                    <Bold>
-                      #처방약이 좋아요 #건강관리에 철저해요 #의료진, 직원이
-                      친절해요
-                    </Bold>
-                  </p>
-                </StoryBox>
-                <StoryBox>
-                  <p>
-                    <Bold>푸른하늘님</Bold>
-                    <br />
-                    한의원이 좋아요
-                    <br />
-                    <Bold>#건강관리에 철저해요</Bold>
-                  </p>
-                </StoryBox>
-                <StoryBox>
-                  <p>
-                    <Bold>Bubble님</Bold>
-                    <br />
-                    교통사고가 갑자기 나서 근처 한의원으로 급하게 찾았는데 잘
-                    회복하는 중이에요ㅠㅠ 좋은 한의원 잘 찾은 것 같아서 주변에
-                    추천하고 다닙니다.
-                    <br />
-                    <Bold>
-                      #처방약이 좋아요 #건강관리에 철저해요 #의료진, 직원이
-                      친절해요
-                    </Bold>
-                  </p>
-                </StoryBox>
+                {reviewDetail &&
+                  reviewDetail.map((item) => (
+                    <StoryBox key={item.id}>
+                      <p>
+                        <Bold>{item.reviewer_nickname.nickname}</Bold>
+                        <br />
+                        {item.content}
+                        <br />
+                        <Bold>
+                          {item.is_selected_Facility && "#시설이 쾌적해요 "}
+                          {item.is_selected_Prescription &&
+                            "#약 처방이 잘 맞아요 "}{" "}
+                          <br />
+                          {item.is_selected_Health && "#건강관리에 철저해요 "}
+                          {item.is_selected_Kindness &&
+                            "#의료진, 직원이 친절해요 "}
+                        </Bold>
+                      </p>
+                    </StoryBox>
+                  ))}
                 <MoreBtn onClick={handleMorebtnClick}>돌아가기</MoreBtn>
               </>
             )}
