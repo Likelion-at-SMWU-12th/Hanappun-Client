@@ -133,6 +133,30 @@ const HospitalHome = () => {
     setComment(e.target.value);
   };
 
+  // 리뷰 작성 연동 코드
+  const WriteReview = () => {
+    axios
+      .post(`${baseURL}/review/`, {
+        reviewer: username,
+        content: comment,
+        clinic: id,
+        rate: 3,
+        is_selected_Facility: feedback.clean,
+        is_selected_Prescription: feedback.medicine,
+        is_selected_Health: feedback.manage,
+        is_selected_Kindness: feedback.doctor,
+      })
+      .then((response) => {
+        console.log(response);
+        alert("리뷰가 작성되었습니다");
+        navigate(`/map/${id}`);
+      })
+      .catch((error) => {
+        console.log(error);
+        alert("리뷰 작성에 실패했습니다");
+      });
+  };
+
   const BackButton = () => {
     navigate(-1);
   };
@@ -142,6 +166,7 @@ const HospitalHome = () => {
   };
   const ReviewSubmit = (e) => {
     e.preventDefault();
+    WriteReview();
   };
 
   const doctorImages = [
