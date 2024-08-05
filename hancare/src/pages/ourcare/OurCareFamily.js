@@ -39,7 +39,6 @@ const OurCareFamily = () => {
         username: username,
       })
       .then((response) => {
-        alert("조회에 성공하였습니다.");
         setFriend(response.data.result);
       })
       .catch((error) => {

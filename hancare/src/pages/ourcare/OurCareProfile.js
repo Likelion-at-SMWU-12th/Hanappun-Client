@@ -87,7 +87,8 @@ const OurCareProfile = () => {
                 <List>
                   <ListItem>
                     <Box1Img src="/images/test.png" alt="test"></Box1Img>
-                    {friendInfo.constitution_8 ? (
+                    {friendInfo.constitution_8 &&
+                    friendInfo.constitution_8 !== "" ? (
                       <Box1Text>{friendInfo.constitution_8}</Box1Text>
                     ) : (
                       <Box1Text>나의 체질은?</Box1Text>
@@ -103,7 +104,7 @@ const OurCareProfile = () => {
                 <List>
                   <ListItem onClick={() => navigate("/map")}>
                     <Box1Img src="/images/hospital.png" alt="map"></Box1Img>
-                    {friendInfo.my_clinic ? (
+                    {friendInfo.my_clinic && friendInfo.my_clinic !== "" ? (
                       <Box1Text>{friendInfo.my_clinic}</Box1Text>
                     ) : (
                       <Box1Text>한의원을 알아볼까요?</Box1Text>
@@ -123,7 +124,7 @@ const OurCareProfile = () => {
           </ProfileWrapper>
           <BarImg src="/images/ourcarebar.png"></BarImg>
           <Body>
-            {friendInfo.constitution_8 ? (
+            {friendInfo.constitution_8 !== "" ? (
               <>
                 <BodyInfoimg
                   src={`/images/${friendInfo.constitution_8}.png`}

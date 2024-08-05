@@ -4,20 +4,23 @@ import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { setUsername } from "../redux/action";
+import { useSelector } from "react-redux";
+import { baseURL } from "../api/baseURL";
 
 const Mainpage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const params = useParams();
+  const [param2, setParam2] = useState(params.username);
 
   //테스트용 데이터
   const userdata = {
     name: "홍길동",
     todayMeal: "good",
-    breakfast: ["", "오렌지주스"],
+    breakfast: ["오렌지주스"],
     lunch: ["탕수육, 보리차", "짬뽕"],
     dinner: ["돈가츠", "레몬에이드"],
-    snack: ["", "커피"],
+    snack: ["커피"],
   };
 
   // todayMeal에 따른 메시지와 이미지 설정
@@ -54,13 +57,15 @@ const Mainpage = () => {
   const formattedDate = `${
     today.getMonth() + 1
   }월 ${today.getDate()}일 ${dayOfWeek}요일`;
+
+  // 내 정보 불러오기
   const [user, setUser] = useState([]);
 
   const getInfo = () => {
     axios
-      .get("http://localhost:8002/users")
+      .get(`${baseURL}/calendars/event/today/${param2}`)
       .then((response) => {
-        setUser(response.data[0]);
+        setUser(response.data.result);
       })
       .catch((error) => {
         console.log(error);
@@ -69,9 +74,13 @@ const Mainpage = () => {
 
   useEffect(() => {
     getInfo();
-    const username = params.username;
-    dispatch(setUsername(username));
+    dispatch(setUsername(param2));
   }, []);
+
+  const formatReservationDate = (reservationDate) => {
+    const [datePart, timePart] = reservationDate.split("T");
+    return `${datePart} ${timePart}`;
+  };
 
   return (
     <Container>
@@ -81,7 +90,7 @@ const Mainpage = () => {
           alt="calendar"
           onClick={() => navigate("/calendar")}
         ></CalendarImg>
-        <Name>{userdata.name} 님</Name>
+        <Name>{user.nickname} 님</Name>
         <Message>오늘 하루도 힘차게 시작해봐요!</Message>
       </Guest>
       <Box1Wrapper>
@@ -89,8 +98,8 @@ const Mainpage = () => {
           <List>
             <ListItem onClick={() => navigate("/map")}>
               <Box1Img src="/images/hospital.png" alt="map"></Box1Img>
-              {user.hospital ? (
-                <Box1Text>{user.hospital}</Box1Text>
+              {user.my_clinic ? (
+                <Box1Text>{user.my_clinic}</Box1Text>
               ) : (
                 <Box1Text>한의원을 알아볼까요?</Box1Text>
               )}
@@ -100,7 +109,13 @@ const Mainpage = () => {
                 src="/images/reservation.png"
                 alt="reservation"
               ></Box1Img>
-              <Box1Text>예약 미정</Box1Text>
+              {user.appointment && user.appointment.length !== 0 ? (
+                <Box1Text>
+                  {formatReservationDate(user.appointment.date)}
+                </Box1Text>
+              ) : (
+                <Box1Text>예약 미정</Box1Text>
+              )}
             </ListItem>
           </List>
         </Box1>
@@ -108,15 +123,22 @@ const Mainpage = () => {
           <List>
             <ListItem>
               <Box1Img src="/images/test.png" alt="test"></Box1Img>
-              {user.body ? (
-                <Box1Text>{user.body}체질</Box1Text>
+              {user.my_constitution_8 &&
+              user.my_constitution_8.length !== "" ? (
+                <Box1Text>{user.my_constitution_8}체질</Box1Text>
               ) : (
-                <Box1Text>나의 체질은?</Box1Text>
+                <Box1Text onClick={() => navigate("/q_myCON")}>
+                  나의 체질은?
+                </Box1Text>
               )}
             </ListItem>
             <ListItem onClick={() => navigate("/column")}>
               <Box1Img src="/images/info.png" alt="info"></Box1Img>
-              <Box1Text>체질별 주의사항</Box1Text>
+              {user.my_constitution_8 && user.my_constitution_8 !== "" ? (
+                <Box1Text>{user.warn_message}</Box1Text>
+              ) : (
+                <Box1Text>체질별 주의사항</Box1Text>
+              )}
             </ListItem>
           </List>
         </Box1>
@@ -148,7 +170,7 @@ const Mainpage = () => {
                   </>
                 )}
               </ListItem>
-              <ListItem>
+              <ListItem onClick={() => navigate("/meal")}>
                 {userdata.lunch ? (
                   <>
                     <PlusImg src="/images/check.png"></PlusImg>
@@ -185,9 +207,9 @@ const Mainpage = () => {
               <ListItem>
                 <TitleText>우리 케어</TitleText>
               </ListItem>
-              {user.friend ? (
+              {user.friend_usernames && user.friend_usernames.length !== 0 ? (
                 <>
-                  {user.friend.map((item, index) => (
+                  {user.friend_usernames.map((item, index) => (
                     <Friend key={index}>
                       <p>{item}</p>
                     </Friend>
@@ -209,50 +231,50 @@ const Mainpage = () => {
             <LeftboxBar src="/images/bar.png"></LeftboxBar>
           </Leftbox>
           <RightBox>
-            {user.breakfast || user.lunch || user.dinner ? (
+            {userdata.breakfast || userdata.lunch || userdata.dinner ? (
               <>
-                <EatRecordWrapper>
+                <EatRecordWrapper onClick={() => navigate("/meal")}>
                   <h3>아침</h3>
                   <FoodListWrapper>
-                    {user.breakfast.slice(0, 2).map((food, index) => (
+                    {userdata.breakfast.slice(0, 2).map((food, index) => (
                       <div key={index}>
                         <p>{food}</p>
                       </div>
                     ))}
-                    {user.breakfast.length > 2 && <p>..</p>}
+                    {userdata.breakfast.length > 2 && <p>..</p>}
                   </FoodListWrapper>
                 </EatRecordWrapper>
-                <EatRecordWrapper>
+                <EatRecordWrapper onClick={() => navigate("/meal")}>
                   <h3>점심</h3>
                   <FoodListWrapper>
-                    {user.lunch.slice(0, 2).map((food, index) => (
+                    {userdata.lunch.slice(0, 2).map((food, index) => (
                       <div key={index}>
                         <p>{food}</p>
                       </div>
                     ))}
-                    {user.lunch.length > 2 && <p>..</p>}
+                    {userdata.lunch.length > 2 && <p>..</p>}
                   </FoodListWrapper>
                 </EatRecordWrapper>
-                <EatRecordWrapper>
+                <EatRecordWrapper onClick={() => navigate("/meal")}>
                   <h3>저녁</h3>
                   <FoodListWrapper>
-                    {user.dinner.slice(0, 2).map((food, index) => (
+                    {userdata.dinner.slice(0, 2).map((food, index) => (
                       <div key={index}>
                         <p>{food}</p>
                       </div>
                     ))}
-                    {user.dinner.length > 2 && <p>..</p>}
+                    {userdata.dinner.length > 2 && <p>..</p>}
                   </FoodListWrapper>
                 </EatRecordWrapper>
-                <EatRecordWrapper>
+                <EatRecordWrapper onClick={() => navigate("/meal")}>
                   <h3>간식</h3>
                   <FoodListWrapper>
-                    {user.snack.slice(0, 2).map((food, index) => (
+                    {userdata.snack.slice(0, 2).map((food, index) => (
                       <div key={index}>
                         <p>{food}</p>
                       </div>
                     ))}
-                    {user.snack.length > 2 && <p>..</p>}
+                    {userdata.snack.length > 2 && <p>..</p>}
                   </FoodListWrapper>
                 </EatRecordWrapper>
               </>
@@ -274,31 +296,31 @@ const Mainpage = () => {
             <LeftboxBar src="/images/bar.png"></LeftboxBar>
           </Leftbox>
           <RightBox>
-            {user.bodycondition || user.feeling || user.memo ? (
+            {user.condition ? (
               <>
-                <EatRecordWrapper>
+                <EatRecordWrapper onClick={() => navigate("/condition")}>
                   <h3>몸상태</h3>
                   <FoodListWrapper>
-                    {user.bodycondition.slice(0, 2).map((food, index) => (
+                    {user.condition_cate.slice(0, 2).map((food, index) => (
                       <div key={index}>
                         <p>{food}</p>
                       </div>
                     ))}
-                    {user.bodycondition.length > 2 && <p>..</p>}
+                    {user.condition_cate.length > 2 && <p>..</p>}
                   </FoodListWrapper>
                 </EatRecordWrapper>
-                <EatRecordWrapper>
+                <EatRecordWrapper onClick={() => navigate("/condition")}>
                   <h3>기분</h3>
                   <FoodListWrapper>
-                    {user.feeling.slice(0, 2).map((food, index) => (
+                    {user.mood_cate.slice(0, 2).map((food, index) => (
                       <div key={index}>
                         <p>{food}</p>
                       </div>
                     ))}
-                    {user.feeling.length > 2 && <p>..</p>}
+                    {user.mood_cate.length > 2 && <p>..</p>}
                   </FoodListWrapper>
                 </EatRecordWrapper>
-                <EatRecordWrapper>
+                <EatRecordWrapper onClick={() => navigate("/condition")}>
                   <h3>메모</h3>
                   <FoodListWrapper>
                     <p>자세히 보기</p>

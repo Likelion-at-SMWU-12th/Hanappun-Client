@@ -10,8 +10,12 @@ import {
 } from "./Signup";
 
 import { login } from "../../api/users/login";
+import { useDispatch } from "react-redux";
+import { setUsername } from "../../redux/action";
 
 const Login = () => {
+  const dispatch = useDispatch();
+
   const [values, setValues] = useState({
     id: "",
     password: "",
@@ -39,6 +43,7 @@ const Login = () => {
 
     if (result.status == 200) {
       alert("로그인에 성공하였습니다. ");
+      dispatch(setUsername(values.id));
       navigate(`/mainpage/${values.id}`);
     } else {
       alert("로그인에 실패하였습니다. 다시 입력해 주세요.");
