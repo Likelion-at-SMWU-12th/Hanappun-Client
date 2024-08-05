@@ -65,6 +65,7 @@ const Mainpage = () => {
     axios
       .get(`${baseURL}/calendars/event/today/${param2}`)
       .then((response) => {
+        alert("유저 정보 성공");
         setUser(response.data.result);
       })
       .catch((error) => {

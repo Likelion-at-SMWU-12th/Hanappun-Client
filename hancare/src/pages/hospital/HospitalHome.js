@@ -52,11 +52,12 @@ const HospitalHome = () => {
   // 리뷰 카테고리 합산 api 연결
   const getReview = () => {
     axios
-      .get(`${baseURL}/review/cate/${pickhospital.id}`)
+      .get(`${baseURL}/review/cate/${id}/`)
       .then((response) => {
         setReview(response.data);
       })
       .catch((error) => {
+        alert("리뷰실패");
         console.log(error);
       });
   };
@@ -64,6 +65,17 @@ const HospitalHome = () => {
   useEffect(() => {
     getReview();
   }, []);
+
+  const getReviewDetail = () => {
+    axios
+      .get(`${baseURL}/review?clinic=${pickhospital.id}`)
+      .then((response) => {
+        setReviewDetail(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   // 나의 한의원 모달창 관련
   const [isMyModalOpen, setISMyModalOpen] = useState(false);
@@ -222,11 +234,21 @@ const HospitalHome = () => {
                 <SubTitle2>이런 점이 좋았어요</SubTitle2>
                 <ReviewWrapper>
                   <ReviewOption>
-                    <img src="/images/review_nice.png"></img>
-                    <p>{pickhospital.reviewtext}</p>
+                    <img src="/images/review_clean.png"></img>
+                    <p>시설이 쾌적해요</p>
                   </ReviewOption>
                   <Reviewnum>
-                    <p>{pickhospital.reviewnum}</p>
+                    <p>{review.facility_count}</p>
+                    <img src="/images/reviewnumimg.png" alt="num"></img>
+                  </Reviewnum>
+                </ReviewWrapper>
+                <ReviewWrapper>
+                  <ReviewOption>
+                    <img src="/images/review_medicine.png"></img>
+                    <p>약 처방이 잘 맞아요</p>
+                  </ReviewOption>
+                  <Reviewnum>
+                    <p>{review.prescription_count}</p>
                     <img src="/images/reviewnumimg.png" alt="num"></img>
                   </Reviewnum>
                 </ReviewWrapper>
@@ -236,17 +258,17 @@ const HospitalHome = () => {
                     <p>건강 관리에 철저해요</p>
                   </ReviewOption>
                   <Reviewnum>
-                    <p>79</p>
+                    <p>{review.health_count}</p>
                     <img src="/images/reviewnumimg.png" alt="num"></img>
                   </Reviewnum>
                 </ReviewWrapper>
                 <ReviewWrapper>
                   <ReviewOption>
-                    <img src="/images/review_clean.png"></img>
-                    <p>시설이 쾌적해요</p>
+                    <img src="/images/review_nice.png"></img>
+                    <p>의료진, 직원이 친절해요</p>
                   </ReviewOption>
                   <Reviewnum>
-                    <p>999+</p>
+                    <p>{review.kindness_count}</p>
                     <img src="/images/reviewnumimg.png" alt="num"></img>
                   </Reviewnum>
                 </ReviewWrapper>
@@ -629,7 +651,7 @@ const ReviewWrapper = styled.div`
 const ReviewOption = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   box-shadow: 0 0 8px #cecece;
   width: 250px;
   border-radius: 20px;
@@ -639,7 +661,7 @@ const ReviewOption = styled.div`
 
   p {
     font-size: 13px;
-    text-align: center;
+    margin-left: 70px;
   }
   img {
     width: 12%;
