@@ -1,27 +1,78 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import "./Condition.css";
 
+import { baseURL } from "../../api/baseURL";
+
 const Condition = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
+  const params = useParams();
 
-  const today = new Date();
+  const today = new Date(params.date);
   const week = ["일", "월", "화", "수", "목", "금", "토"];
   const dayOfWeek = week[today.getDay()];
   const formattedDate = `${
     today.getMonth() + 1
   }월 ${today.getDate()}일 ${dayOfWeek}요일`;
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   const [conditionData, setConditionData] = useState({
-    bodyCondition: [],
-    moodChange: [],
+    condition_cate: [],
+    mood_cate: [],
     memo: "",
   });
+
+  const [payload, setPayload] = useState({
+    user: "",
+    date: "",
+    condition_cate: "",
+    mood_cate: "",
+    memo: "",
+  });
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    initializePayload();
+    fetchConditionData();
+  }, []);
+
+  const initializePayload = () => {
+    setPayload({
+      user: params.username,
+      date: params.date,
+      condition_cate: "",
+      mood_cate: "",
+      memo: "",
+    });
+  };
+
+  const fetchConditionData = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(
+        `${baseURL}/condition/${params.username}/${params.date}`
+      );
+      if (response.data.data.length > 0) {
+        const data = response.data.data[0];
+        setConditionData({
+          condition_cate: data.condition_cate.split(", "),
+          mood_cate: data.mood_cate.split(", "),
+          memo: data.memo,
+        });
+        setPayload({
+          user: params.username,
+          date: params.date,
+          condition_cate: data.condition_cate,
+          mood_cate: data.mood_cate,
+          memo: data.memo,
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching condition data:", error);
+    }
+    setIsLoading(false);
+  };
 
   // 카테고리별 요소들
   const elementCategories = {
@@ -37,7 +88,6 @@ const Condition = () => {
       "소화불량",
       "근육통",
       "메스꺼움/구토",
-
       "발열",
       "오한",
       "충분한 수면",
@@ -59,11 +109,18 @@ const Condition = () => {
 
   const handleElementClick = (category, element) => {
     setConditionData((prevData) => {
-      const updatedCategory = prevData[category].includes(element)
-        ? prevData[category].filter((item) => item !== element)
-        : [...prevData[category], element];
+      const categoryKey =
+        category === "몸 상태" ? "condition_cate" : "mood_cate";
+      const updatedCategory = prevData[categoryKey].includes(element)
+        ? prevData[categoryKey].filter((item) => item !== element)
+        : [...prevData[categoryKey], element];
 
-      return { ...prevData, [category]: updatedCategory };
+      setPayload((prev) => ({
+        ...prev,
+        [categoryKey]: updatedCategory.join(", "),
+      }));
+
+      return { ...prevData, [categoryKey]: updatedCategory };
     });
   };
 
@@ -72,40 +129,72 @@ const Condition = () => {
       ...prevData,
       memo: e.target.value,
     }));
+    setPayload((prev) => ({
+      ...prev,
+      memo: e.target.value,
+    }));
   };
 
   const handleSave = async () => {
     try {
-      const response = await axios.post(
-        "https://your-backend-api.com/saveCondition",
-        conditionData
+      const checkResponse = await axios.get(
+        `${baseURL}/condition/${params.username}/${params.date}`
       );
-      if (response.status === 200) {
-        alert("컨디션 정보가 저장되었습니다!");
-        navigate("/mainpage"); // 홈 페이지로 이동
+      console.log("Check response:", checkResponse);
+      let response;
+      if (checkResponse.data.data && checkResponse.data.data.length > 0) {
+        // 기존 데이터가 있으면 수정
+        response = await axios.put(
+          `${baseURL}/condition/${params.username}/${payload.date}/`,
+          payload
+        );
+        console.log("Save/Update response:", response);
+      } else {
+        // 기존 데이터가 없으면 생성
+        response = await axios.post(`${baseURL}/condition/`, payload);
+        console.log("Save/Update response:", response);
+      }
+
+      if (response.status === 201) {
+        alert(`${formattedDate}의 컨디션이 저장되었습니다`);
+        navigate(-1);
+      } else if (response.status === 200) {
+        alert(`${formattedDate}의 컨디션이 수정되었습니다`);
+        navigate(-1);
       }
     } catch (error) {
-      console.error("Error saving condition data:", error);
-      alert("컨디션 정보 저장에 실패했습니다.");
+      console.error("Error in handleSave:", error);
+
+      if (error.response) {
+        // 서버가 응답을 반환했지만 2xx 범위를 벗어난 상태 코드
+        console.error("Error response:", error.response);
+        const errorMessage =
+          error.response.data.message ||
+          error.response.data ||
+          "알 수 없는 서버 오류";
+        alert(`서버 오류: ${errorMessage}`);
+      } else if (error.request) {
+        // 요청이 이루어졌지만 응답을 받지 못함
+        console.error("Error request:", error.request);
+        alert("네트워크 오류: 서버에 연결할 수 없습니다.");
+      } else {
+        // 요청을 설정하는 중에 문제가 발생
+        console.error("Error", error.message);
+        alert("오류 발생: " + error.message);
+      }
     }
-    navigate("/mainpage");
   };
 
   const renderElements = (category) => {
     return elementCategories[category].map((element) => (
       <button
         key={element}
-        onClick={() =>
-          handleElementClick(
-            category === "몸 상태" ? "bodyCondition" : "moodChange",
-            element
-          )
-        }
+        onClick={() => handleElementClick(category, element)}
         className={
           conditionData[
-            category === "몸 상태" ? "bodyCondition" : "moodChange"
+            category === "몸 상태" ? "condition_cate" : "mood_cate"
           ].includes(element)
-            ? "selected"
+            ? "Cselected"
             : ""
         }
       >
@@ -113,6 +202,10 @@ const Condition = () => {
       </button>
     ));
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="Cbackground">
