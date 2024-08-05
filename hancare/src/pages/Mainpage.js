@@ -125,7 +125,9 @@ const Mainpage = () => {
               <Box1Img src="/images/test.png" alt="test"></Box1Img>
               {user.my_constitution_8 &&
               user.my_constitution_8.length !== "" ? (
-                <Box1Text>{user.my_constitution_8}체질</Box1Text>
+                <Box1Text onClick={() => navigate("/myCon")}>
+                  {user.my_constitution_8}체질
+                </Box1Text>
               ) : (
                 <Box1Text onClick={() => navigate("/q_myCON")}>
                   나의 체질은?

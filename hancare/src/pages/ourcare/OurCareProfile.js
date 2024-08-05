@@ -35,6 +35,11 @@ const OurCareProfile = () => {
   };
 
   useEffect(() => {
+    if (window.Kakao) {
+      if (!window.Kakao.isInitialized()) {
+        window.Kakao.init("60c004dfae745dd8f45c124a54557159");
+      }
+    }
     getFriendInfo();
   }, []);
 
@@ -64,6 +69,41 @@ const OurCareProfile = () => {
     navigate(-1);
   };
 
+  //카카오톡 공유 기능
+  const reservationShare = () => {
+    if (window.Kakao) {
+      window.Kakao.Share.sendDefault({
+        objectType: "text",
+        text: "한의원 예약 정보",
+        link: {
+          mobileWebUrl: "http://localhost:3000",
+          webUrl: "http://localhost:3000",
+        },
+      });
+    }
+  };
+  // const testShare = () => {
+  //   if (window.Kakao){
+  //     const kakao=window.Kakao
+
+  //     if (!kakao.isInitialized()){
+  //       kakao.init('60c004dfae745dd8f45c124a54557159')
+  //     }
+
+  //     kakao.Share.sendDefault({
+  //       objectType: 'feed',
+  //       content:{
+  //         title: "나의 체질 검사하기",
+  //         description: "8체질 중 나의 체질은? 지금 바로 검사해요",
+  //         imageUrl:"/images/logo.png",
+  //         link:{
+  //         },
+  //       },
+  //       buttons: [{title:"지금 바로 검사하기", link:{webUrl:,},},],
+  //     });
+  //   }
+  // }
+
   return (
     <Container>
       {friendInfo && (
@@ -89,7 +129,7 @@ const OurCareProfile = () => {
                     <Box1Img src="/images/test.png" alt="test"></Box1Img>
                     {friendInfo.constitution_8 &&
                     friendInfo.constitution_8 !== "" ? (
-                      <Box1Text>{friendInfo.constitution_8}</Box1Text>
+                      <Box1Text>{friendInfo.constitution_8}체질</Box1Text>
                     ) : (
                       <Box1Text>나의 체질은?</Box1Text>
                     )}
@@ -119,7 +159,7 @@ const OurCareProfile = () => {
                   </ListItem>
                 </List>
               </Box1>
-              <ShareBtn>예약 내역 공유하기</ShareBtn>
+              <ShareBtn onClick={reservationShare}>예약 내역 공유하기</ShareBtn>
             </BoxWrapper>
           </ProfileWrapper>
           <BarImg src="/images/ourcarebar.png"></BarImg>
