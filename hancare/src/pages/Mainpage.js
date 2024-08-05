@@ -61,18 +61,17 @@ const Mainpage = () => {
   // 내 정보 불러오기
   const [user, setUser] = useState([]);
 
-  const getInfo = () => {
-    axios
-      .get(`${baseURL}/calendars/event/today/${param2}`)
-      .then((response) => {
-        setUser(response.data.result);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
   useEffect(() => {
+    const getInfo = () => {
+      axios
+        .get(`${baseURL}/calendars/event/today/${param2}`)
+        .then((response) => {
+          setUser(response.data.result);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
     getInfo();
     dispatch(setUsername(param2));
   }, []);

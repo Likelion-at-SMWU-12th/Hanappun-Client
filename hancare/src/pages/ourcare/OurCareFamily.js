@@ -48,7 +48,19 @@ const OurCareFamily = () => {
   };
 
   useEffect(() => {
-    console.log("useEffect called");
+    const getInfo = () => {
+      axios
+        .get(`${baseURL}/users/ourcare?username=${username}`, {
+          username: username,
+        })
+        .then((response) => {
+          setFriend(response.data.result);
+        })
+        .catch((error) => {
+          alert("사용자를 찾을 수 없습니다.");
+          console.log(error);
+        });
+    };
     getInfo();
   }, []);
 

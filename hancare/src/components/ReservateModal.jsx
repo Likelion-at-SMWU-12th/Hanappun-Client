@@ -9,7 +9,8 @@ import {
   SetButton,
 } from "./SetMyModal";
 
-function ReservateModal({ isReservateOpen, closeReesrvateModal, cliniccall }) {
+function ReservateModal({ isReservateOpen, closeReservateModal, cliniccall }) {
+  // 수정된 부분
   const navigate = useNavigate();
 
   const [ButtonClick, setButtonClick] = useState(true);
@@ -32,7 +33,9 @@ function ReservateModal({ isReservateOpen, closeReesrvateModal, cliniccall }) {
                 예약을 원하신다면 바로 전화를 연결해드릴게요
               </p>
               <BtnWrapper>
-                <CloseButton onClick={closeReesrvateModal}>
+                <CloseButton onClick={closeReservateModal}>
+                  {" "}
+                  {/* 수정된 부분 */}
                   뒤로가기
                 </CloseButton>
                 <a href={`tel:${cliniccall}`}>
@@ -52,7 +55,9 @@ function ReservateModal({ isReservateOpen, closeReesrvateModal, cliniccall }) {
                 메인 페이지에서 예약 일정을 알려드릴게요
               </p>
               <BtnWrapper>
-                <CloseButton onClick={closeReesrvateModal}>
+                <CloseButton onClick={closeReservateModal}>
+                  {" "}
+                  {/* 수정된 부분 */}
                   뒤로가기
                 </CloseButton>
                 <SetButton onClick={() => navigate("/calendar")}>

@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
 
 const HospitalItem = ({ item }) => {
   const navigate = useNavigate();
   const [selectedButton, setSelectedButton] = useState("소개");
+  const username = useSelector((state) => state.username);
 
   const handleClick = () => {
-    navigate(`/map/${item.id}`);
+    navigate(`/map/${username}/${item.id}`);
   };
 
   return (
