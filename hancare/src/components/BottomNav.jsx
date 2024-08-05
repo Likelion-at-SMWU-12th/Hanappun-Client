@@ -6,7 +6,7 @@ import {
   faShieldHeart,
   faHandHoldingHeart,
   faLocationDot,
-  faFileLines,
+  faCalendar,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -29,7 +29,7 @@ const BottomNav = () => {
       setActiveNav(2);
     } else if (location.pathname.startsWith("/map")) {
       setActiveNav(3);
-    } else if (location.pathname.startsWith("/column")) {
+    } else if (location.pathname.startsWith("/calendar")) {
       setActiveNav(4);
     } else if (location.pathname.startsWith("/profile")) {
       setActiveNav(5);
@@ -71,10 +71,10 @@ const BottomNav = () => {
             />
           </div>
         </Link>
-        <Link to="/column" className="nav-link">
+        <Link to={`/calendar/${username}`} className="nav-link">
           <div>
             <FontAwesomeIcon
-              icon={faFileLines}
+              icon={faCalendar}
               size="lg"
               className={activeNav === 4 ? "nav-item active" : "nav-item"}
             />
