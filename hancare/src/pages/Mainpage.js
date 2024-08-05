@@ -289,7 +289,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   background-color: black;
-  height: 100vh;
+  height: 100%;
 `;
 
 const CalendarImg = styled.img`
@@ -363,13 +363,14 @@ const RoundedBox = styled.div`
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
   margin-top: 18px;
-  height: 100vh;
-  padding-bottom: 70px;
+  padding-bottom: max(50px, calc(100vh - 650px));
+  min-height: fit-content;
   overflow-y: auto;
+  height: inherit;
 `;
 const When = styled.div`
   text-align: center;
-  margin-top: 13px;
+  margin-top: 16px;
   background-color: #7350ff;
   padding: 10px;
   color: white;

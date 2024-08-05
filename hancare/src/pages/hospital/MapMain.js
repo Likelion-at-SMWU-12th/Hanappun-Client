@@ -219,7 +219,7 @@ const MyHospital = styled.span`
 
 const HospitalList = styled.div`
   margin-top: 20px;
-  height: 100vh;
+  height: 100%;
   padding: 10px;
   background-color: white;
   border-top-left-radius: 25px;

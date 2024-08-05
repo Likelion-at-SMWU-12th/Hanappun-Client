@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
-import BottomNav from "./components/BottomNav";
 import axios from "axios";
 
 import store from "./redux/store";
@@ -18,7 +17,6 @@ root.render(
     <Provider store={store}>
       <BrowserRouter>
         <App />
-        <BottomNav />
       </BrowserRouter>
     </Provider>
   </React.StrictMode>

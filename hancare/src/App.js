@@ -41,9 +41,11 @@ import MealREResult from "./pages/meal/MealREResult";
 import Condition from "./pages/condition/Condition";
 import EditCondition from "./pages/condition/EditCondition";
 
+import BottomNav from "./components/BottomNav";
+
 const Wrapper = styled.div`
   width: 400px;
-  height: 100vh;
+  height: 100%;
   margin: 0 auto;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3),
     0 8px 10px -6px rgba(0, 0, 0, 0.3);
@@ -110,6 +112,7 @@ function App() {
         <Route path="/condition" element={<Condition />} />
         <Route path="/Condition/edit" element={<EditCondition />} />
       </Routes>
+      <BottomNav />
     </Wrapper>
   );
 }
