@@ -32,7 +32,7 @@ const HospitalHome = () => {
 
   useEffect(() => {
     getInfo();
-  }, []);
+  }, [id]);
 
   const getmyInfo = () => {
     axios
@@ -47,7 +47,7 @@ const HospitalHome = () => {
 
   useEffect(() => {
     getmyInfo();
-  }, []);
+  }, [username]);
 
   // 리뷰 카테고리 합산 api 연결
   const getReview = () => {
@@ -64,7 +64,7 @@ const HospitalHome = () => {
 
   useEffect(() => {
     getReview();
-  }, []);
+  }, [id]);
 
   // 리뷰 api 연결
   const getReviewDetail = () => {
@@ -81,7 +81,7 @@ const HospitalHome = () => {
 
   useEffect(() => {
     getReviewDetail();
-  }, []);
+  }, [id]);
 
   // 나의 한의원 모달창 관련
   const [isMyModalOpen, setISMyModalOpen] = useState(false);
@@ -148,7 +148,6 @@ const HospitalHome = () => {
       .then((response) => {
         console.log(response);
         alert("리뷰가 작성되었습니다");
-        navigate(`/map/${id}`);
       })
       .catch((error) => {
         console.log(error);
@@ -377,7 +376,7 @@ const HospitalHome = () => {
                   </CheckboxWrapper>
                   <ReviewQuest>
                     <img src="/images/puplespot.png"></img>
-                    <h3>숙멋사님의 이야기를 들려주세요</h3>
+                    <h3>{user.nickname}님의 이야기를 들려주세요</h3>
                   </ReviewQuest>
                   <CommentWrapper>
                     <CommentBox
