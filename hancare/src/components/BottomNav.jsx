@@ -1,43 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./BottomNav.css";
 import { useLocation, Link } from "react-router-dom";
-// FontAwesomIcon 컴포넌트를 사용하기 위해 import
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-//사용할 아이콘 import
-import { faShieldHeart } from "@fortawesome/free-solid-svg-icons";
-import { faHandHoldingHeart } from "@fortawesome/free-solid-svg-icons";
-import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
-import { faFileLines } from "@fortawesome/free-solid-svg-icons";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
-
-import { useSelector } from "react-redux";
+import {
+  faShieldHeart,
+  faHandHoldingHeart,
+  faLocationDot,
+  faFileLines,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 
 const BottomNav = () => {
-  // state username을 선택
-  const username = useSelector((state) => state.username);
-
-  //현재 선택된 아이콘을 관리하는 state
   const [activeNav, setActiveNav] = useState(1);
+  const location = useLocation();
 
-  //현재 url
-  const locationNow = useLocation();
+  useEffect(() => {
+    // 현재 경로에 따라 activeNav 상태 업데이트
+    if (
+      location.pathname.startsWith("/mainpage") ||
+      location.pathname === "/"
+    ) {
+      setActiveNav(1);
+    } else if (location.pathname.startsWith("/ourcare")) {
+      setActiveNav(2);
+    } else if (location.pathname.startsWith("/map")) {
+      setActiveNav(3);
+    } else if (location.pathname.startsWith("/column")) {
+      setActiveNav(4);
+    } else if (location.pathname.startsWith("/profile")) {
+      setActiveNav(5);
+    }
+  }, [location]);
 
   if (
-    locationNow.pathname !== "/" &&
-    locationNow.pathname !== "/signup" &&
-    locationNow.pathname !== "/login" &&
-    locationNow.pathname !== "/myCON/selfTest"
-    //navbar를 표시하지 않을 url 작성
+    location.pathname !== "/signup" &&
+    location.pathname !== "/login" &&
+    location.pathname !== "/myCON/selfTest"
   ) {
     return (
       <nav className="wrapper">
-        {/*하단 네비게이션 최상위 태그*/}
-        {/* 나의 케어 */}
-        <Link
-          to={`/mainpage/${username}`}
-          className="nav-link"
-          onClick={() => setActiveNav(1)}
-        >
+        <Link to="/mainpage" className="nav-link">
           <div>
             <FontAwesomeIcon
               icon={faShieldHeart}
@@ -46,13 +48,7 @@ const BottomNav = () => {
             />
           </div>
         </Link>
-        {/* 우리 케어 */}
-
-        <Link
-          to={`/ourcare/`}
-          className="nav-link"
-          onClick={() => setActiveNav(2)}
-        >
+        <Link to="/ourcare" className="nav-link">
           <div>
             <FontAwesomeIcon
               icon={faHandHoldingHeart}
@@ -61,8 +57,7 @@ const BottomNav = () => {
             />
           </div>
         </Link>
-        {/* 한의원 (지도) */}
-        <Link to="/map" className="nav-link" onClick={() => setActiveNav(3)}>
+        <Link to="/map" className="nav-link">
           <div>
             <FontAwesomeIcon
               icon={faLocationDot}
@@ -71,8 +66,7 @@ const BottomNav = () => {
             />
           </div>
         </Link>
-        {/* 칼럼 */}
-        <Link to="/column" className="nav-link" onClick={() => setActiveNav(4)}>
+        <Link to="/column" className="nav-link">
           <div>
             <FontAwesomeIcon
               icon={faFileLines}
@@ -81,12 +75,7 @@ const BottomNav = () => {
             />
           </div>
         </Link>
-        {/* MY */}
-        <Link
-          to={`/profile/${username}`}
-          className="nav-link"
-          onClick={() => setActiveNav(5)}
-        >
+        <Link to="/profile" className="nav-link">
           <div>
             <FontAwesomeIcon
               icon={faUser}

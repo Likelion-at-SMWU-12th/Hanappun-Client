@@ -7,8 +7,6 @@ const Background = styled.div`
   background-color: black;
   width: 100%;
   height: 100vh;
-  overflow-y: scroll;
-  padding-bottom: 50px;
 `;
 
 const BlackHeader = styled.header`
@@ -28,15 +26,16 @@ const BlackHeader = styled.header`
 `;
 
 const BlackMain = styled.main`
-  margin: 30px auto;
+  margin: 10px auto;
   background-color: #f7f7f7;
   width: 90%;
-  height: 70vh;
+  height: 75vh;
   border-radius: 10px;
   text-align: center;
+  overflow-y: scroll;
 
   & h3 {
-    padding-top: 80px;
+    padding-top: 30px;
     color: #7350ff;
   }
 

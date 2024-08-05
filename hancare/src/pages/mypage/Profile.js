@@ -34,11 +34,11 @@ useEffect(() => {
 
   return (
     <div className="MPbackground">
-      <header className="blackHeader">
+      <header className="MPblackHeader">
         <img alt="back" onClick={BackButton} src="/images/back.png" />
         <h2 className="Ph2">MY</h2>
       </header>
-      <main className="blackMain">
+      <main className="MPblackMain">
         <div className="profile">
           <img alt="myImage" src="/images/myImage.png" />
           <div className="profileText">
@@ -70,7 +70,6 @@ useEffect(() => {
           <span className="purple">회원 정보</span>
           <div className="idPw">
             <p>아이디 smwulikelion</p> {/*아이디 연결*/}
-            <p>비밀번호 1234****</p> {/*비밀번호 연결*/}
           </div>
           <button onClick={() => navigate(`/cancel`)}>회원 탈퇴하기</button>
         </div>

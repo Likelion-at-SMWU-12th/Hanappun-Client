@@ -56,7 +56,6 @@ const ChooseMyCON = () => {
             <br />
             나의 체질을 선택해주세요
           </p>
-          <span> 계정별로 수정 횟수는 1회로 제한되어 있어요</span>
         </div>
         <form onSubmit={handleSubmit} className="MCchoices">
           <div className="MCchoices_btn">

@@ -115,8 +115,8 @@ const MealFirst = () => {
         </div>
         <hr />
         <div className="MFcontents">{renderMealItems()}</div>
-        <div className="MRbtns">
-          <button className="MpurpleBtn" onClick={handleNext}>
+        <div className="MFbtns">
+          <button className="MFpurpleBtn" onClick={handleNext}>
             다음
           </button>
         </div>
