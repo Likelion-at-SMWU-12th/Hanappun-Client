@@ -10,9 +10,13 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 
+import { useSelector } from "react-redux";
+
 const BottomNav = () => {
   const [activeNav, setActiveNav] = useState(1);
   const location = useLocation();
+
+  const username = useSelector((state) => state.username);
 
   useEffect(() => {
     // 현재 경로에 따라 activeNav 상태 업데이트
@@ -39,7 +43,7 @@ const BottomNav = () => {
   ) {
     return (
       <nav className="wrapper">
-        <Link to="/mainpage" className="nav-link">
+        <Link to={`/mainpage/${username}`} className="nav-link">
           <div>
             <FontAwesomeIcon
               icon={faShieldHeart}
@@ -75,7 +79,7 @@ const BottomNav = () => {
             />
           </div>
         </Link>
-        <Link to="/profile" className="nav-link">
+        <Link to={`/profile/${username}`} className="nav-link">
           <div>
             <FontAwesomeIcon
               icon={faUser}
