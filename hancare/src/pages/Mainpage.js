@@ -156,7 +156,7 @@ const Mainpage = () => {
               <ListItem>
                 <TitleText>{mealFeedback.message}</TitleText>
               </ListItem>
-              <ListItem>
+              <ListItem onClick={() => navigate("/meal")}>
                 {/* 리스트 아이템 이모지는 렌더링방식으로 각각 처리 */}
                 {userdata.breakfast ? (
                   <>
@@ -183,7 +183,7 @@ const Mainpage = () => {
                   </>
                 )}
               </ListItem>
-              <ListItem>
+              <ListItem onClick={() => navigate("/meal")}>
                 {userdata.dinner ? (
                   <>
                     <PlusImg src="/images/check.png"></PlusImg>
@@ -334,7 +334,9 @@ const Mainpage = () => {
                   src="/images/condition.png"
                   alt="condition"
                 ></RightBoxImg>
-                <WriteBtn>기록하기</WriteBtn>
+                <WriteBtn onClick={() => navigate("/condition")}>
+                  기록하기
+                </WriteBtn>
               </>
             )}
           </RightBox>
@@ -590,6 +592,7 @@ const EatRecordWrapper = styled.div`
   align-items: flex-start;
   flex-wrap: wrap;
   margin-top: -1px;
+  cursor: pointer;
   &:first-child {
     margin-top: 15px;
   }
