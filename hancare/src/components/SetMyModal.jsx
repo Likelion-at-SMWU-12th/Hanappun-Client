@@ -1,13 +1,33 @@
+import axios from "axios";
 import React from "react";
 import styled from "styled-components";
+import { baseURL } from "../api/baseURL";
+import { useSelector } from "react-redux";
 
-function SetMyModal({ isOpen, closeModal, handleSetMy, isSetmy }) {
+function SetMyModal({ isOpen, closeModal, myClinic, clinicName }) {
+  const username = useSelector((state) => state.username);
+
+  const ChangeHospital = () => {
+    const newClinic = myClinic === clinicName.id ? null : clinicName.id;
+    axios
+      .patch(`${baseURL}/users/profile/`, {
+        username: username,
+        my_clinic: newClinic,
+      })
+      .then((response) => {
+        console.log(response);
+        closeModal();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   return (
     <div>
       <ModalOverlay style={{ display: isOpen ? "flex" : "none" }}>
         <Container>
           <Purple>
-            {isSetmy ? (
+            {myClinic === clinicName.id ? (
               <>
                 <h2>나의 한의원을 취소하시겠어요?</h2>
               </>
@@ -25,8 +45,8 @@ function SetMyModal({ isOpen, closeModal, handleSetMy, isSetmy }) {
           </p>
           <BtnWrapper>
             <CloseButton onClick={closeModal}>뒤로가기</CloseButton>
-            <SetButton onClick={handleSetMy}>
-              {isSetmy ? <>취소하기</> : <>설정하기</>}
+            <SetButton onClick={ChangeHospital}>
+              {myClinic === clinicName.id ? <>취소하기</> : <>설정하기</>}
             </SetButton>
           </BtnWrapper>
         </Container>

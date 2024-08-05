@@ -4,6 +4,8 @@ import styled from "styled-components";
 import SetMyModal from "../../components/SetMyModal";
 import ReservateModal from "../../components/ReservateModal";
 import axios from "axios";
+import { baseURL } from "../../api/baseURL";
+import { useSelector } from "react-redux";
 
 const HospitalHome = () => {
   const location = useLocation();
@@ -12,10 +14,14 @@ const HospitalHome = () => {
   const [activeTab, setActiveTab] = useState("소개");
   const [pickhospital, setPickhospital] = useState([]);
   const [user, setUser] = useState([]);
+  const username = useSelector((state) => state.username);
+  const [doctorBtn, setDoctorBtn] = useState(false);
+  const [review, setReview] = useState([]);
+  const [reviewDetail, setReviewDetail] = useState([]);
 
   const getInfo = () => {
     axios
-      .get(`http://localhost:8000/hospital/${id}`)
+      .get(`${baseURL}/clinic/info/${id}/`)
       .then((response) => {
         setPickhospital(response.data);
       })
@@ -30,9 +36,9 @@ const HospitalHome = () => {
 
   const getmyInfo = () => {
     axios
-      .get(`http://localhost:8000/users`)
+      .get(`${baseURL}/users/profile?username=${username}`)
       .then((response) => {
-        setUser(response.data);
+        setUser(response.data.result);
       })
       .catch((error) => {
         console.log(error);
@@ -43,17 +49,21 @@ const HospitalHome = () => {
     getmyInfo();
   }, []);
 
-  const Addhospital = () => {
+  // 리뷰 카테고리 합산 api 연결
+  const getReview = () => {
     axios
-      .post("http://localhost:8002/users", {
-        hospital: pickhospital.name,
-      })
+      .get(`${baseURL}/review/cate/${pickhospital.id}`)
       .then((response) => {
-        console.log(response);
-        setIsmy(true);
-        closeModal();
+        setReview(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
+
+  useEffect(() => {
+    getReview();
+  }, []);
 
   // 나의 한의원 모달창 관련
   const [isMyModalOpen, setISMyModalOpen] = useState(false);
@@ -61,7 +71,10 @@ const HospitalHome = () => {
   const openModal = () => {
     setISMyModalOpen(true);
   };
-  const closeModal = () => setISMyModalOpen(false);
+  const closeModal = () => {
+    setISMyModalOpen(false);
+    getmyInfo();
+  };
   const handleSetMy = () => {
     setIsmy(!isSetmy);
     closeModal();
@@ -112,6 +125,17 @@ const HospitalHome = () => {
     e.preventDefault();
   };
 
+  const doctorImages = [
+    "/images/doctor1.png",
+    "/images/doctor2.png",
+    "/images/doctor2.png",
+  ];
+
+  // 닥터 버튼
+  const handleDoctorBtnClick = () => {
+    setDoctorBtn(!doctorBtn);
+  };
+
   return (
     <Container>
       <Title>
@@ -120,16 +144,20 @@ const HospitalHome = () => {
       </Title>
       <Name>{pickhospital.name}</Name>
       <Wrapper>
-        <Hashtag>{pickhospital.hashtag1}</Hashtag>
-        <Hashtag>{pickhospital.hashtag2}</Hashtag>
-        <Hashtag>{pickhospital.hashtag3}</Hashtag>
+        <Hashtag>{pickhospital.clinic_cate_1}</Hashtag>
+        <Hashtag>{pickhospital.clinic_cate_2}</Hashtag>
+        <Hashtag>{pickhospital.clinic_cate_3}</Hashtag>
         <MyHospital onClick={openModal}>
-          {isSetmy ? "V 나의 한의원" : "나의 한의원"}
+          {user.my_clinic &&
+          pickhospital.id &&
+          user.my_clinic === pickhospital.id
+            ? "V 나의 한의원"
+            : "나의 한의원"}
         </MyHospital>
       </Wrapper>
       <Info>
         <Bold>위치</Bold>
-        {pickhospital.address}
+        {pickhospital.location}
       </Info>
       <Info>
         <Bold>전화번호</Bold>
@@ -154,39 +182,38 @@ const HospitalHome = () => {
         {activeTab === "소개" ? (
           <>
             <SubTitle>{pickhospital.name}</SubTitle>
-            <Information>
-              {pickhospital.name}은 슈바이처를 본받고자 했던 김명숙 원장에 의해
-              설립되었습니다. 1966년 5월 17일 개원하여 1979년 5월 현 위치로 옮겨
-              진료를 하고 있습니다. {pickhospital.name}은 권OO박사의 8체질
-              의학에 근거해서 진료합니다.
-            </Information>
+            <Information>{pickhospital.detail}</Information>
             <SubTitle>의료진</SubTitle>
             <DoctorWrapper>
-              <DoctorBox>
-                <h3>송진리 원장</h3>
-                <img src="/images/doctor1.png" alt="doctor1"></img>
-              </DoctorBox>
-              <DoctorBox>
-                <h3>명순헌 원장</h3>
-                <Doctor2 src="/images/doctor2.png" alt="doctor1"></Doctor2>
-              </DoctorBox>
-              <DoctorBox>
-                <h3>김수련 원장</h3>
-                <p>
-                  숙명여대 한의과대학 졸업
-                  <br />
-                  숙명의료원 일반의료원 수료
-                  <br />
-                  숙명여대 경락의과학과 석박사
-                  <br />
-                  전 숙명여대 한의학융합연구정보센터 연구원
-                  <br />
-                  현 대한학의학회 정회원
-                  <br />현 {pickhospital.name} 새힘관실 원장
-                </p>
-              </DoctorBox>
+              {pickhospital.doctor_list &&
+                pickhospital.doctor_list.map((item, index) => (
+                  <DoctorBox key={index} onClick={handleDoctorBtnClick}>
+                    <h3>{item.name} 원장</h3>
+                    {doctorBtn ? (
+                      <p>
+                        {item.profile[1]}
+                        <br />
+                        {item.profile[2]}
+                        <br />
+                        {item.profile[3]}
+                        <br />
+                        {item.profile[4]}
+                        <br />
+                        {item.profile[5]}
+                        <br />
+                        {item.profile[6]}
+                      </p>
+                    ) : (
+                      <img src={doctorImages[index]} alt="doctor" />
+                    )}
+                  </DoctorBox>
+                ))}
             </DoctorWrapper>
             <SubTitle>사진</SubTitle>
+            <PhotoWrapper>
+              <img src={pickhospital.image_1}></img>
+              <img src={pickhospital.image_2}></img>
+            </PhotoWrapper>
           </>
         ) : (
           <>
@@ -387,7 +414,8 @@ const HospitalHome = () => {
           isOpen={isMyModalOpen}
           closeModal={closeModal}
           handleSetMy={handleSetMy}
-          isSetmy={isSetmy}
+          myClinic={user.my_clinic}
+          clinicName={pickhospital}
         />
       )}
       {ReservateOpen && (
@@ -555,13 +583,17 @@ const DoctorBox = styled.div`
   border-radius: 20px;
   width: 120px;
   height: 170px;
+  cursor: pointer;
   h3 {
     color: white;
     font-size: 14px;
   }
 
   img {
-    width: 80%;
+    justify-content: space-between;
+    width: auto;
+    height: 70%;
+    margin-top: 3px;
   }
 
   p {
@@ -571,6 +603,18 @@ const DoctorBox = styled.div`
 `;
 const Doctor2 = styled.img`
   width: 80px !important;
+`;
+
+const PhotoWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+
+  img {
+    width: 170px;
+    height: 150px;
+  }
 `;
 
 const SubTitle2 = styled.h3`
