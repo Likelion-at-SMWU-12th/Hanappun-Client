@@ -1,6 +1,5 @@
-// MyCON.js와 같게. but 데이터 가져오기
 import axios from "axios";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./ChooseMyCON.css";
 
@@ -8,46 +7,47 @@ const EditMyCON = () => {
   const [selectedCon, setSelectedCon] = useState("");
   const navigate = useNavigate();
   const { id } = useParams();
-  const [con, setCon] = useState("");
 
-  const onChangeCon = (e) => {
-    setCon(e.target.value);
-  };
+  useEffect(() => {
+    const fetchConstitution = async () => {
+      try {
+        const response = await axios.get(
+          `https://your-backend-api.com/constitution/${id}`
+        );
+        setSelectedCon(response.data.constitution);
+      } catch (error) {
+        console.error("Error fetching constitution data:", error);
+        alert("체질 정보를 불러오는데 실패했습니다.");
+      }
+    };
+
+    fetchConstitution();
+  }, [id]);
 
   const handleClick = (e) => {
     const { value } = e.target;
     setSelectedCon(value);
   };
 
-  // 폼 제출을 처리하는 함수
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!selectedCon) {
       alert("체질이 선택되지 않았어요");
       return;
     }
-    /* 백엔드로 데이터를 보내는 로직
-    axios
-    .get(`http://127.0.0.1:8000/??/${id}/`)
-    .then((response) => {
-        console.log(response);
-        setCon(response.data.constitution);
-        })
-        .catch((error)=> {
-            console.log(error);
-        });
-    }, [id]);
 
-    useEffect(() => {
-        getCon();
-    }, [getCon]);
-    */
-
-    // 제출 후 /myCON 페이지로 이동
-    navigate("/myCON");
+    try {
+      await axios.put(`https://your-backend-api.com/constitution/${id}`, {
+        constitution: selectedCon,
+      });
+      alert("체질 정보가 수정되었습니다!");
+      navigate("/myCON");
+    } catch (error) {
+      console.error("Error updating constitution data:", error);
+      alert("체질 정보 수정에 실패했습니다.");
+    }
   };
 
-  // 이전 페이지로 이동 버튼
   const BackButton = () => {
     navigate(-1);
   };
@@ -63,9 +63,8 @@ const EditMyCON = () => {
           <p>
             한의원/자가진단을 통해 진단한
             <br />
-            나의 체질을 선택해주세요
+            나의 체질로 수정해주세요
           </p>
-          <span> 계정별로 수정 횟수는 1회로 제한되어 있어요</span>
         </div>
         <form onSubmit={handleSubmit} className="MCchoices">
           <div className="MCchoices_btn">
