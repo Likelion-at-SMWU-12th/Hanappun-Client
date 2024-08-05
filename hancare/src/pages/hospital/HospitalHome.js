@@ -71,7 +71,6 @@ const HospitalHome = () => {
     axios
       .get(`${baseURL}/review?clinic=${id}`)
       .then((response) => {
-        alert("리뷰디테일성공");
         setReviewDetail(response.data);
       })
       .catch((error) => {
@@ -435,6 +434,7 @@ const HospitalHome = () => {
         <ReservateModal
           isReservateOpen={setReservateOpen}
           closeReesrvateModal={closeReservateModal}
+          cliniccall={pickhospital.call}
         />
       )}
     </Container>

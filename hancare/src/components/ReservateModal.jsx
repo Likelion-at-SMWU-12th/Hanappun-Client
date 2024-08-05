@@ -9,7 +9,7 @@ import {
   SetButton,
 } from "./SetMyModal";
 
-function ReservateModal({ isReservateOpen, closeReesrvateModal }) {
+function ReservateModal({ isReservateOpen, closeReesrvateModal, cliniccall }) {
   const navigate = useNavigate();
 
   const [ButtonClick, setButtonClick] = useState(true);
@@ -35,7 +35,9 @@ function ReservateModal({ isReservateOpen, closeReesrvateModal }) {
                 <CloseButton onClick={closeReesrvateModal}>
                   뒤로가기
                 </CloseButton>
-                <SetButton onClick={handleButtonclick}>전화 연결</SetButton>
+                <a href={`tel:${cliniccall}`}>
+                  <SetButton onClick={handleButtonclick}>전화 연결</SetButton>
+                </a>
               </BtnWrapper>
             </>
           ) : (
