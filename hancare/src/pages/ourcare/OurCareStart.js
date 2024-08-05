@@ -51,7 +51,9 @@ const OurCareStart = () => {
           우리케어로 함께 해요
         </h2>
         <img src="/images/startdirection.png"></img>
-        <button onClick={() => navigate("/ourcare/family/")}>시작하기</button>
+        <button onClick={() => navigate("/ourcare/family/list/:username")}>
+          시작하기
+        </button>
       </Start>
     </Container>
   );
@@ -154,6 +156,7 @@ const Start = styled.div`
     color: white;
     cursor: pointer;
   }
+  padding-bottom: 70px;
 `;
 
 export default OurCareStart;

@@ -1,10 +1,15 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
+import { setUsername } from "../redux/action";
 
 const Mainpage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const params = useParams();
+
   const today = new Date();
   const week = ["일", "월", "화", "수", "목", "금", "토"];
   let dayOfWeek = week[today.getDay()];
@@ -26,6 +31,8 @@ const Mainpage = () => {
 
   useEffect(() => {
     getInfo();
+    const username = params.username;
+    dispatch(setUsername(username));
   }, []);
 
   return (
@@ -34,7 +41,7 @@ const Mainpage = () => {
         <CalendarImg
           src="/images/calendar.png"
           alt="calendar"
-          onClick={() => navigate("/claendar")}
+          onClick={() => navigate("/calendar")}
         ></CalendarImg>
         <Name>{user.name} 님</Name>
         <Message>오늘 하루도 힘차게 시작해봐요!</Message>
@@ -83,6 +90,7 @@ const Mainpage = () => {
             {user.breakfast || user.lunch || user.dinner ? (
               <>
                 <FaceImg src="/images/happy.png" alt="face"></FaceImg>
+                {/*이거는 새로 합산 데이터 불러와서 처리 */}
                 <List>
                   <ListItem>
                     <DetailText>오늘의 식단 분석을 알려드려요</DetailText>
@@ -91,6 +99,7 @@ const Mainpage = () => {
                     <TitleText>'대체로 좋아요'</TitleText>
                   </ListItem>
                   <ListItem>
+                    {/* 리스트 아이템 이모지는 렌더링방식으로 각각 처리 */}
                     <PlusImg src="/images/check.png"></PlusImg>
                     <EatBtn>아침</EatBtn>
                   </ListItem>
@@ -355,7 +364,7 @@ const RoundedBox = styled.div`
   border-top-right-radius: 25px;
   margin-top: 18px;
   height: 100vh;
-  padding-bottom: 50px;
+  padding-bottom: 70px;
   overflow-y: auto;
 `;
 const When = styled.div`

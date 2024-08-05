@@ -9,6 +9,8 @@ import {
   SignupBtn,
 } from "./Signup";
 
+import { login } from "../../api/users/login";
+
 const Login = () => {
   const [values, setValues] = useState({
     id: "",
@@ -27,9 +29,20 @@ const Login = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    navigate("/mainpage/");
+    const data = {
+      username: values.id,
+      password: values.password,
+    };
+    const result = await login(data);
+
+    if (result.status == 200) {
+      alert("로그인에 성공하였습니다. ");
+      navigate(`/mainpage/${values.id}`);
+    } else {
+      alert("로그인에 실패하였습니다. 다시 입력해 주세요.");
+    }
   };
 
   return (

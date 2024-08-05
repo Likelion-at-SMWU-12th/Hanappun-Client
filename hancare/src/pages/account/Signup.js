@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
+import { signup } from "../../api/users/signup";
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -58,6 +60,7 @@ const Signup = () => {
   const [values, setValues] = useState({
     nickname: "",
     id: "",
+    email: "",
     password: "",
     repassword: "",
   });
@@ -74,13 +77,28 @@ const Signup = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (values.password !== values.repassword) {
       alert("비밀번호가 일치하지 않습니다.");
       return;
+    } else {
+      const data = {
+        username: values.id,
+        nickname: values.nickname,
+        email: values.email,
+        password: values.password,
+        password2: values.repassword,
+      };
+      const result = await signup(data);
+
+      if (result.status == 201) {
+        alert("회원가입에 성공하였습니다. ");
+        navigate("/login");
+      } else {
+        alert("회원가입에 실패하였습니다. 다시 입력해 주세요.");
+      }
     }
-    navigate("/login");
   };
 
   return (
@@ -89,6 +107,17 @@ const Signup = () => {
         <h1>회원가입</h1>
       </Title>
       <form onSubmit={handleSubmit}>
+        <Infobox>
+          <Label for="id">아이디</Label>
+          <Inputbox
+            type="text"
+            name="id"
+            value={values.id}
+            onChange={handleChange}
+            placeholder="아이디를 입력해주세요"
+            required
+          />
+        </Infobox>
         <Infobox>
           <Label for="nickname">닉네임</Label>
           <Inputbox
@@ -101,13 +130,13 @@ const Signup = () => {
           />
         </Infobox>
         <Infobox>
-          <Label for="id">아이디</Label>
+          <Label for="email">이메일</Label>
           <Inputbox
             type="text"
-            name="id"
-            value={values.id}
+            name="email"
+            value={values.email}
             onChange={handleChange}
-            placeholder="아이디를 입력해주세요"
+            placeholder="이메일을 입력해주세요"
             required
           />
         </Infobox>
@@ -127,7 +156,7 @@ const Signup = () => {
           <Inputbox
             type="password"
             name="repassword"
-            value={values.repasswordpassword}
+            value={values.repassword}
             onChange={handleChange}
             placeholder="비밀번호를 재입력해주세요"
             required
