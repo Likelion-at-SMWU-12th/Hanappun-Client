@@ -149,3 +149,8 @@
   margin-right: 10px;
   cursor: pointer;
 }
+
+.Pbold {
+  font-weight: 600;
+  margin-left: 5px;
+}

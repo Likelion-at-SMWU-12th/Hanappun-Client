@@ -1,35 +1,69 @@
-/* 백엔드 연동
-import axios from "axios";
-import React, {useEffect, useState} from "react"; */
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import "./Profile.css";
+
+import axios from "axios";
+import { baseURL } from "../../api/baseURL";
 
 const Profile = () => {
   const navigate = useNavigate();
 
-  /* 백엔드 연동 코드
-const [name, setName] = useState([]);
-const getName = () => {
-  axios
-  .get("http://127.0.0.1: 8000/?")
-  .then((response) => {
-    console.log(response);
-    setName(response.data);
-  })
-  .catch((error) => {
-    console.log(error);
-  })
-};
+  const params = useParams(); // 유저 아이디
+  const [userData, setUserData] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-useEffect(() => {
-  getName();
-}, []);
-*/
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(
+          `${baseURL}/users/profile?username=${params.username}`
+        );
+        setUserData(response.data.result);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setError("사용자 정보를 불러오는데 실패했습니다.");
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [params.username]);
 
   // 이전 페이지도 이동 버튼
   const BackButton = () => {
     navigate(-1);
+  };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
+
+  const constitution_8isnull = () => {
+    if (userData && userData.constitution_8 === "") {
+      return <p>나의 체질을 아직 설정하지 않았어요</p>;
+    } else if (userData && userData.constitution_8 !== "") {
+      return (
+        <p>
+          <span>{userData.constitution_8}체질</span> 이에요
+        </p>
+      );
+    } else {
+      return null;
+    }
+  };
+  const myclinicisnull = () => {
+    if (userData && userData.my_clinic === null) {
+      return <p>나의 한의원을 아직 설정하지 않았어요</p>;
+    } else if (userData && userData.my_clinic !== null) {
+      return (
+        <p>
+          <span>{userData.my_clinic}</span> 에 다니고 있어요
+        </p>
+      );
+    } else {
+      return null; // userData가 아직 로딩되지 않은 경우
+    }
   };
 
   return (
@@ -43,13 +77,9 @@ useEffect(() => {
           <img alt="myImage" src="/images/myImage.png" />
           <div className="profileText">
             {/* 사용자 이름 / 체질 / 나의 한의원 정보 가져오기*/}
-            <h3>숙멋사 님</h3>
-            <p>
-              <span>토양체질</span> 이에요
-            </p>
-            <p>
-              <span>숙명 한의원</span> 에 다니고 있어요
-            </p>
+            <h3>{userData.nickname} 님</h3>
+            {constitution_8isnull()}
+            {myclinicisnull()}
           </div>
         </div>
         <hr />
@@ -59,8 +89,9 @@ useEffect(() => {
           <p>
             체질이 자가진단 결과와 다르거나 잘못 선택한 경우 수정이 가능해요
           </p>
-          <button onClick={() => navigate(`/myCON/editMyCON`)}>
-            {/*체질 수정 페이지 navigate*/}
+          <button
+            onClick={() => navigate(`/myCON/editMyCON/${params.username}`)}
+          >
             체질 수정하기
           </button>
         </div>
@@ -69,9 +100,13 @@ useEffect(() => {
           <img alt="userInformation" src="/images/userInformation.png" />
           <span className="purple">회원 정보</span>
           <div className="idPw">
-            <p>아이디 smwulikelion</p> {/*아이디 연결*/}
+            <p>
+              아이디 <span className="Pbold">{userData.username}</span>
+            </p>
           </div>
-          <button onClick={() => navigate(`/cancel`)}>회원 탈퇴하기</button>
+          <button onClick={() => navigate(`/cancel/${params.username}`)}>
+            회원 탈퇴하기
+          </button>
         </div>
       </main>
     </div>
