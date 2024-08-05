@@ -10,6 +10,44 @@ const Mainpage = () => {
   const dispatch = useDispatch();
   const params = useParams();
 
+  //테스트용 데이터
+  const userdata = {
+    name: "홍길동",
+    todayMeal: "good",
+    breakfast: ["", "오렌지주스"],
+    lunch: ["탕수육, 보리차", "짬뽕"],
+    dinner: ["돈가츠", "레몬에이드"],
+    snack: ["", "커피"],
+  };
+
+  // todayMeal에 따른 메시지와 이미지 설정
+  const getMealFeedback = (todayMeal) => {
+    switch (todayMeal) {
+      case "bad":
+        return {
+          message: "건강이 염려되어요",
+          image: "/images/bad.png",
+        };
+      case "soso":
+        return {
+          message: "대체로 괜찮아요!",
+          image: "/images/soso.png",
+        };
+      case "good":
+        return {
+          message: "건강을 잘 챙겼어요!",
+          image: "/images/good.png",
+        };
+      default:
+        return {
+          message: "맞춤형 분석",
+          image: "/images/analysis_person.png",
+        };
+    }
+  };
+
+  const mealFeedback = getMealFeedback(userdata.todayMeal);
+
   const today = new Date();
   const week = ["일", "월", "화", "수", "목", "금", "토"];
   let dayOfWeek = week[today.getDay()];
@@ -43,7 +81,7 @@ const Mainpage = () => {
           alt="calendar"
           onClick={() => navigate("/calendar")}
         ></CalendarImg>
-        <Name>{user.name} 님</Name>
+        <Name>{userdata.name} 님</Name>
         <Message>오늘 하루도 힘차게 시작해봐요!</Message>
       </Guest>
       <Box1Wrapper>
@@ -87,57 +125,56 @@ const Mainpage = () => {
         <When>{formattedDate}</When>
         <Box1Wrapper>
           <Box2>
-            {user.breakfast || user.lunch || user.dinner ? (
-              <>
-                <FaceImg src="/images/happy.png" alt="face"></FaceImg>
-                {/*이거는 새로 합산 데이터 불러와서 처리 */}
-                <List>
-                  <ListItem>
-                    <DetailText>오늘의 식단 분석을 알려드려요</DetailText>
-                  </ListItem>
-                  <ListItem>
-                    <TitleText>'대체로 좋아요'</TitleText>
-                  </ListItem>
-                  <ListItem>
-                    {/* 리스트 아이템 이모지는 렌더링방식으로 각각 처리 */}
+            <FaceImg src={mealFeedback.image} alt="face"></FaceImg>
+            {/*이거는 새로 합산 데이터 불러와서 처리 */}
+            <List>
+              <ListItem>
+                <DetailText>오늘의 식단 분석을 알려드려요</DetailText>
+              </ListItem>
+              <ListItem>
+                <TitleText>{mealFeedback.message}</TitleText>
+              </ListItem>
+              <ListItem>
+                {/* 리스트 아이템 이모지는 렌더링방식으로 각각 처리 */}
+                {userdata.breakfast ? (
+                  <>
                     <PlusImg src="/images/check.png"></PlusImg>
                     <EatBtn>아침</EatBtn>
-                  </ListItem>
-                  <ListItem>
-                    <PlusImg src="/images/check.png"></PlusImg>
-                    <EatBtn>점심</EatBtn>
-                  </ListItem>
-                  <ListItem>
-                    <PlusImg src="/images/check.png"></PlusImg>
-                    <EatBtn>저녁</EatBtn>
-                  </ListItem>
-                </List>
-              </>
-            ) : (
-              <>
-                <FaceImg src="/images/thinking.png" alt="face"></FaceImg>
-                <List>
-                  <ListItem>
-                    <DetailText>오늘 식사 점수를 알아봐요</DetailText>
-                  </ListItem>
-                  <ListItem>
-                    <TitleText>맞춤형 분석</TitleText>
-                  </ListItem>
-                  <ListItem>
+                  </>
+                ) : (
+                  <>
                     <PlusImg src="/images/plus.png"></PlusImg>
                     <NoEatBtn>아침</NoEatBtn>
-                  </ListItem>
-                  <ListItem>
+                  </>
+                )}
+              </ListItem>
+              <ListItem>
+                {userdata.lunch ? (
+                  <>
+                    <PlusImg src="/images/check.png"></PlusImg>
+                    <EatBtn>점심</EatBtn>
+                  </>
+                ) : (
+                  <>
                     <PlusImg src="/images/plus.png"></PlusImg>
                     <NoEatBtn>점심</NoEatBtn>
-                  </ListItem>
-                  <ListItem>
+                  </>
+                )}
+              </ListItem>
+              <ListItem>
+                {userdata.dinner ? (
+                  <>
+                    <PlusImg src="/images/check.png"></PlusImg>
+                    <EatBtn>저녁</EatBtn>
+                  </>
+                ) : (
+                  <>
                     <PlusImg src="/images/plus.png"></PlusImg>
                     <NoEatBtn>저녁</NoEatBtn>
-                  </ListItem>
-                </List>
-              </>
-            )}
+                  </>
+                )}
+              </ListItem>
+            </List>
           </Box2>
           <Box2>
             <FaceImg src="/images/family.png" alt="family"></FaceImg>

@@ -1,8 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
 
 const OurCareStart = () => {
+  const username = useSelector((state) => state.username);
   const navigate = useNavigate();
   const BackButton = () => {
     navigate(-1);
@@ -51,7 +53,7 @@ const OurCareStart = () => {
           우리케어로 함께 해요
         </h2>
         <img src="/images/startdirection.png"></img>
-        <button onClick={() => navigate("/ourcare/family/list/:username")}>
+        <button onClick={() => navigate(`/ourcare/family/list/${username}`)}>
           시작하기
         </button>
       </Start>

@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { Container, Title } from "./OurCareStart";
 import OurCareModal from "../../components/OurCareModal";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { baseURL } from "../../api/baseURL";
 
 const OurCareFamily = () => {
   const navigate = useNavigate();
@@ -11,6 +13,7 @@ const OurCareFamily = () => {
   const [isModalOpen, setISModalOpen] = useState(false);
   const [currentProfileId, setCurrentProfileId] = useState(null);
   const [friend, setFriend] = useState([]);
+  const username = useSelector((state) => state.username);
 
   const maxProfiles = 3; // 최대 프로필 수
 
@@ -20,39 +23,35 @@ const OurCareFamily = () => {
     setISModalOpen(true);
   };
 
-  const closeModal = () => setISModalOpen(false);
+  const closeModal = () => {
+    getInfo();
+    setISModalOpen(false);
+  };
 
   const BackButton = () => {
     navigate(-1);
   };
 
-  // 사용자 정보 불러오기
+  //  정보 불러오기
   const getInfo = () => {
     axios
-      .get("http://localhost:8003/friends")
+      .get(`${baseURL}/users/ourcare?username=${username}`, {
+        username: username,
+      })
       .then((response) => {
-        setFriend(response.data);
+        alert("조회에 성공하였습니다.");
+        setFriend(response.data.result);
       })
       .catch((error) => {
+        alert("사용자를 찾을 수 없습니다.");
         console.log(error);
       });
   };
 
   useEffect(() => {
+    console.log("useEffect called");
     getInfo();
   }, []);
-
-  const handleAddProfile = async (id, name) => {
-    try {
-      await axios.post("http://localhost:8003/friends", {
-        id,
-        name,
-      });
-      getInfo();
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const profileImages = [
     "/images/profile1.png",
@@ -76,30 +75,37 @@ const OurCareFamily = () => {
       </Title>
       <ProfileContainer>
         <ProfileWrapper>
-          <Profilebox onClick={() => navigate("/profile/:username")}>
-            <img src={getRandomImage()} alt="profile" />
+          <Profilebox onClick={() => navigate(`/profile/${username}`)}>
+            <img src={profileImages[0]} alt="profile" />
           </Profilebox>
           <h2>나</h2>
         </ProfileWrapper>
         {friend &&
-          friend.map((otheruser) => (
-            <ProfileWrapper key={otheruser.id}>
-              <Profilebox
-                onClick={() => {
-                  navigate(`/ourcare/family/profile/${otheruser.id}`, {
-                    state: { image: getRandomImage() },
-                  });
-                }}
-              >
-                <img src={getRandomImage()} alt="profile" />
-              </Profilebox>
-              <h2>{otheruser.name}</h2>
+          friend.map((otheruser, index) => (
+            <ProfileWrapper key={index}>
+              {Object.keys(otheruser).map((key) => (
+                <React.Fragment key={key}>
+                  <Profilebox
+                    key={key}
+                    onClick={() => {
+                      navigate(`/ourcare/family/profile/${key}`, {
+                        state: {
+                          image: profileImages[index + 1],
+                        },
+                      });
+                    }}
+                  >
+                    <img src={profileImages[index + 1]} alt="profile" />
+                  </Profilebox>
+                  <h2>{otheruser[key]}</h2>
+                </React.Fragment>
+              ))}
             </ProfileWrapper>
           ))}
-        {[...Array(maxProfiles - (friend?.length || 0))].map((_, index) => (
+        {[...Array(maxProfiles - (friend.length || 0))].map((_, index) => (
           <Emptybox
             key={index}
-            onClick={() => openModal(friend?.length + index + 1 || index + 1)}
+            onClick={() => openModal(friend.length + index + 1 || index + 1)}
           >
             <img src="/images/grayplus.png" alt="grayplus" />
           </Emptybox>
@@ -109,8 +115,7 @@ const OurCareFamily = () => {
         <OurCareModal
           isOpen={isModalOpen}
           closeModal={closeModal}
-          addProfile={handleAddProfile}
-          username={params.username}
+          username={username}
         />
       )}
     </Container>
