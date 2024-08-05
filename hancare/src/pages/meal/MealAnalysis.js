@@ -117,7 +117,7 @@ const MealAnalysis = () => {
           >
             식사 다시보기
           </button>
-          <button className="MpurpleBtn2" onClick={() => navigate("/calendar")}>
+          <button className="MpurpleBtn2" onClick={() => navigate("/mainpage")}>
             확인
           </button>
         </div>
