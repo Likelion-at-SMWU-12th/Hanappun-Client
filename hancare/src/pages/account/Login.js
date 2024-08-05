@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Container,
-  Title,
-  Infobox,
-  Inputbox,
-  Label,
-  SignupBtn,
-} from "./Signup";
+import { Title, Infobox, Inputbox, Label, SignupBtn } from "./Signup";
+import styled from "styled-components";
 
 import { login } from "../../api/users/login";
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+`;
 
 const Login = () => {
   const [values, setValues] = useState({
