@@ -141,7 +141,7 @@ const MealSecond = () => {
       <button
         key={item.id}
         onClick={() => handleClickMeal(item.id)}
-        className={selectedMealItem === item.id ? "selected" : ""}
+        className={selectedMealItem === item.id ? "MSselected" : ""}
       >
         {item.name}
       </button>
@@ -159,7 +159,7 @@ const MealSecond = () => {
             onClick={() => handleElementClick(element)}
             className={
               mealElements[selectedMealItem]?.includes(element)
-                ? "selected"
+                ? "MSselected"
                 : ""
             }
           >

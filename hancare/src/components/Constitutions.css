@@ -18,9 +18,12 @@
 }
 
 .MCbold {
-  font-weight: 800;
+  font-weight: bold;
 }
 
+.global-styles .MCbold {
+  font-weight: bold;
+}
 /* CON */
 .CON {
   margin-top: 0;
@@ -66,7 +69,7 @@
 .conMeal img {
   margin-top: 0;
   width: 330px;
-  height: 25px;
+  height: 23px;
 }
 
 .conMeal p {
@@ -76,30 +79,34 @@
   font-weight: 400;
   margin-top: 5px;
   margin-left: -45px;
-  width: 170px;
 }
-
+.CONmeal_sobad {
+  margin-left: -225px;
+  margin-bottom: 0;
+}
 .CONmeal_bad {
-  margin-left: 70px;
-  margin-top: -161px;
+  margin-left: -85px;
+  margin-top: -163px;
   margin-bottom: 0;
 }
 
 .CONmeal_soso {
-  margin-left: 133px;
+  margin-left: 43px;
   margin-top: -163px;
   padding: 0;
   margin-bottom: 0;
 }
 
 .CONmeal_good {
-  margin-left: 202px;
-  margin-top: -162px;
+  margin-left: 177px;
+  margin-top: -163px;
   margin-bottom: 0;
 }
 
 .CONmeal_sogood {
-  margin-left: 270px;
+  margin-left: 320px;
+  margin-right: 0;
+  padding-right: 0;
   margin-top: -163px;
   margin-bottom: 0;
 }

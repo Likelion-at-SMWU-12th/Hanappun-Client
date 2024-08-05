@@ -84,7 +84,7 @@
   cursor: pointer;
 }
 
-.MRmenu button.selected {
+.MRmenu button.MRselected {
   color: #7350ff;
   font-weight: 800;
 }

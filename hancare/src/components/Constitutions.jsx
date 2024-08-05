@@ -4,10 +4,9 @@ import "./Constitutions.css";
 const Constitutions = ({ selectedId }) => {
   const dummy = [
     {
-      id: "Hepatonia",
-      korean: "목양체질",
+      constitution: "목양",
       img: "/images/myCON_Hepatonia.png",
-      info: "일반적으로 내장기관에서 <span className='MCbold'>간과 담이 강하고, 폐와 대장이 약한 체질</span>을 말해요. 간과 담의 기능을 더 과하게 만들어서는 안돼요. <span className='MCbold'>섭취하는 음식에 내장 기관이 영향을 받기 때문에 식습관이 중요해요!</span><br/> 더 자세한 원리는 칼럼을 통해 알려드릴게요",
+      info: "일반적으로 내장기관에서 <span className='MCbold'>간과 담이 강하고, 폐와 대장이 약한 체질</span>을 말해요. 간과 담의 기능을 더 과하게 만들어서는 안돼요. <span className='MCbold'>섭취하는 음식에 내장 기관이 영향을 받기 때문에 식습관이 중요해요!</span>",
       sobad: ["바다생선", "조개류", "갑각류", "청포도", "팥"],
       bad: ["복분자", "보리", "메밀", "오이", "모과"],
       soso: ["돼지고기", "시금치", "고추", "딸기", "미역"],
@@ -15,10 +14,9 @@ const Constitutions = ({ selectedId }) => {
       sogood: ["소고기", "밀가루", "고구마", "감자", "마늘"],
     },
     {
-      id: "Cholecystonia",
-      korean: "목음체질",
+      constitution: "목음",
       img: "/images/myCON_Cholecystonia.png",
-      info: "일반적으로 내장기관에서 <span className='MCbold'>간과 담이 강하고, 폐와 대장이 약한 체질</span>을 말해요. 간과 담의 기능을 더 과하게 만들어서는 안돼요. <span className='MCbold'>섭취하는 음식에 내장 기관이 영향을 받기 때문에 식습관이 중요해요!</span> <br/>더 자세한 원리는 칼럼을 통해 알려드릴게요",
+      info: "일반적으로 내장기관에서 <span className='MCbold'>간과 담이 강하고, 폐와 대장이 약한 체질</span>을 말해요. 간과 담의 기능을 더 과하게 만들어서는 안돼요. <span className='MCbold'>섭취하는 음식에 내장 기관이 영향을 받기 때문에 식습관이 중요해요!</span>",
       sobad: ["바다생선", "조개류", "청포도", "와인", " "],
       bad: ["복분자", "오이", "생강", "찹쌀", "꿀"],
       soso: ["닭고기", "토마토", "고구마", "현미", "보리"],
@@ -26,10 +24,9 @@ const Constitutions = ({ selectedId }) => {
       sogood: ["돼지고기", "소고기", "밀가루", "감자", "마늘"],
     },
     {
-      id: "Pancreotonia",
-      korean: "토양체질",
+      constitution: "토양",
       img: "/images/myCON_Pancreotonia.png",
-      info: "일반적으로 내장기관에서 <span className='MCbold'>췌장, 위장이 강하고, 신장과 방광이 약한 체질</span>을 말해요. 췌장과 위장의 기능을 더 과하게 만들어서는 안돼요. <span className='MCbold'>섭취하는 음식에 내장기관이 영향을 받기 때문에 식습관이 중요해요!</span> <br/>더 자세한 원리는 칼럼을 통해 알려드릴게요",
+      info: "일반적으로 내장기관에서 <span className='MCbold'>췌장, 위장이 강하고, 신장과 방광이 약한 체질</span>을 말해요. 췌장과 위장의 기능을 더 과하게 만들어서는 안돼요. <span className='MCbold'>섭취하는 음식에 내장기관이 영향을 받기 때문에 식습관이 중요해요!</span>",
       sobad: ["도라지", "현미", "미역", "망고", "고추"],
       bad: ["참기름", "고구마", "토마토", "녹용", "밤"],
       soso: ["옥수수", "시금치", "감자", "사과", "김"],
@@ -37,10 +34,9 @@ const Constitutions = ({ selectedId }) => {
       sogood: ["돼지고기", "소고기", "복어", " ", " "],
     },
     {
-      id: "Gastrotonia",
-      korean: "토음체질",
+      constitution: "토음",
       img: "/images/myCON_Gastrotonia.png",
-      info: "일반적으로 내장기관에서 <span className='MCbold'>췌장, 위장이 강하고, 신장과 방광이 약한 체질</span>을 말해요. 췌장과 위장의 기능을 더 과하게 만들어서는 안돼요. <span className='MCbold'>섭취하는 음식에 내장기관이 영향을 받기 때문에 식습관이 중요해요!</span> <br/>더 자세한 원리는 칼럼을 통해 알려드릴게요",
+      info: "일반적으로 내장기관에서 <span className='MCbold'>췌장, 위장이 강하고, 신장과 방광이 약한 체질</span>을 말해요. 췌장과 위장의 기능을 더 과하게 만들어서는 안돼요. <span className='MCbold'>섭취하는 음식에 내장기관이 영향을 받기 때문에 식습관이 중요해요!</span>",
       sobad: ["오리고기", "도라지", "닭고기", "현미", "밤"],
       bad: ["토마토", "고구마", "도토리", "마늘", "마"],
       soso: ["소고기", "감자", "가지", "김", "콩"],
@@ -48,10 +44,9 @@ const Constitutions = ({ selectedId }) => {
       sogood: ["돼지고기", "복어", " ", " ", " "],
     },
     {
-      id: "Pulmotonia",
-      korean: "금양체질",
+      constitution: "금양",
       img: "/images/myCON_Pulmotonia.png",
-      info: "일반적으로 내장기관에서 <span className='MCbold'>폐와 대장이 강하고, 간과 담이 약한 체질</span>을 말해요. 췌장과 위장의 기능을 더 과하게 만들어서는 안돼요. <span className='MCbold'>섭취하는 음식에 내장 기관이 영향을 받기 때문에 식습관이 중요해요!<br/>더 자세한 원리는 칼럼을 통해 알려드릴게요.",
+      info: "일반적으로 내장기관에서 <span className='MCbold'>폐와 대장이 강하고, 간과 담이 약한 체질</span>을 말해요. 췌장과 위장의 기능을 더 과하게 만들어서는 안돼요. <span className='MCbold'>섭취하는 음식에 내장 기관이 영향을 받기 때문에 식습관이 중요해요!",
       sobad: ["소고기", "닭고기", "밀가루", "유제품", "콩"],
       bad: ["돼지고기", "고구마", "치즈", "현미", "호박"],
       soso: ["토마토", "수박", "보리", "미역", "팥"],
@@ -59,10 +54,9 @@ const Constitutions = ({ selectedId }) => {
       sogood: ["바다생선", "조개류", "백미", "배추", "상추"],
     },
     {
-      id: "Colonotonia",
-      korean: "금음체질",
+      constitution: "금음",
       img: "/images/myCON_Colonotonia.png",
-      info: "일반적으로 내장기관에서 <span className='MCbold'>폐와 대장이 강하고, 간과 담이 약한 체질</span>을 말해요. 췌장과 위장의 기능을 더 과하게 만들어서는 안돼요. <span className='MCbold'>섭취하는 음식에 내장 기관이 영향을 받기 때문에 식습관이 중요해요!<br/>더 자세한 원리는 칼럼을 통해 알려드릴게요.",
+      info: "일반적으로 내장기관에서 <span className='MCbold'>폐와 대장이 강하고, 간과 담이 약한 체질</span>을 말해요. 췌장과 위장의 기능을 더 과하게 만들어서는 안돼요. <span className='MCbold'>섭취하는 음식에 내장 기관이 영향을 받기 때문에 식습관이 중요해요!",
       sobad: ["소고기", "바다생선", "조개류", " ", " "],
       bad: ["도라지", "고구마", "현미", "치즈", "호박"],
       soso: ["옥수수", "보리", "깻잎", "굴", "팥"],
@@ -70,10 +64,9 @@ const Constitutions = ({ selectedId }) => {
       sogood: ["바다생선", ""],
     },
     {
-      id: "Renotonia",
-      korean: "수양체질",
+      constitution: "수양",
       img: "/images/myCON_Renotonia.png",
-      info: "일반적으로 내장기관에 <span className='MCbold'>신장과 방광이 강하고, 췌장과 위장이 약한 체질</span>을 말해요. 췌장과 위장의  기능을 더 과하게 만들어서는 안돼요. <span className='MCbold'>섭취하는 음식에 내장 기관이 영향을 받기 때문에 식습관이 중요해요!</span> <br/>더 자세한 원리는 칼럼을 통해 알려드릴게요",
+      info: "일반적으로 내장기관에 <span className='MCbold'>신장과 방광이 강하고, 췌장과 위장이 약한 체질</span>을 말해요. 췌장과 위장의  기능을 더 과하게 만들어서는 안돼요. <span className='MCbold'>섭취하는 음식에 내장 기관이 영향을 받기 때문에 식습관이 중요해요!</span>",
       sobad: ["돼지고기", "알로에", "복어", "보리", "팥"],
       bad: ["붉은살 생선", "조개류", "참외", "감", " "],
       soso: ["바다생선", "민물생선", "청국장", "유제품", "소고기"],
@@ -81,10 +74,9 @@ const Constitutions = ({ selectedId }) => {
       sogood: ["오리고기", "닭고기", "감자", "사과"],
     },
     {
-      id: "Vesicotonia",
-      korean: "수음체질",
+      constitution: "수음",
       img: "/images/myCON_Vesicotonia.png",
-      info: '일반적으로 내장기관에 <span className="MCbold">신장과 방광이 강하고, 췌장과 위장이 약한 체질</span>을 말해요. 췌장과 위장의  기능을 더 과하게 만들어서는 안돼요. <span className="MCbold">섭취하는 음식에 내장 기관이 영향을 받기 때문에 식습관이 중요해요!</span> <br/>더 자세한 원리는 칼럼을 통해 알려드릴게요',
+      info: '일반적으로 내장기관에 <span className="MCbold">신장과 방광이 강하고, 췌장과 위장이 약한 체질</span>을 말해요. 췌장과 위장의  기능을 더 과하게 만들어서는 안돼요. <span className="MCbold">섭취하는 음식에 내장 기관이 영향을 받기 때문에 식습관이 중요해요!</span>',
       sobad: ["돼지고기", "갑각류", "청포도", "복어", "팥"],
       bad: ["바다생선", "흰살생선", "조개류", "메밀", "오이"],
       soso: ["시금치", "두유", "배추", "상추", "김"],
@@ -94,7 +86,7 @@ const Constitutions = ({ selectedId }) => {
   ];
 
   // 전달받은 selectedId에 맞는 체질 정보 찾기
-  const selectedCON = dummy.find((con) => con.id === selectedId);
+  const selectedCON = dummy.find((con) => con.constitution === selectedId);
 
   return (
     <div className="CONcontent">
@@ -104,19 +96,20 @@ const Constitutions = ({ selectedId }) => {
             <img
               className="CONinfo_img"
               src={selectedCON.img}
-              alt={selectedCON.korean}
+              alt={selectedCON.constitution}
             />
             <div
-              className="CONinfo_text"
+              className="CONinfo_text global-styles"
               dangerouslySetInnerHTML={{ __html: selectedCON.info }}
             />
           </div>
           <div className="CON">
             <p className="">
-              {selectedCON.korean}에게 적절한 <br /> 식습관에 대해 알려드릴게요
+              {selectedCON.constitution}체질에게 적절한 <br /> 식습관에 대해
+              알려드릴게요
             </p>
             <div className="conMeal">
-              <h3>{selectedCON.korean}</h3>
+              <h3>{selectedCON.constitution}체질</h3>
               <img alt="음식 나쁨-좋음 바" src="/images/conbar.png" />
               <div className="CONmeal_sobad">
                 {selectedCON.sobad.map((food, index) => (

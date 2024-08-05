@@ -75,7 +75,7 @@
   cursor: pointer;
 }
 
-.MSmenu button.selected {
+.MSmenu button.MSselected {
   background-color: #7350ff;
 }
 
@@ -154,7 +154,7 @@
   background-color: #7350ff;
 }
 
-.meal_category button.selected {
+.meal_category button.MSselected {
   background-color: #7350ff;
 }
 

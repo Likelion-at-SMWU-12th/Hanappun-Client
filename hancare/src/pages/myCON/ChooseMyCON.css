@@ -72,7 +72,7 @@
   transition: 0.5s ease-in-out;
 }
 
-.MCchoices_btn button.selected {
+.MCchoices_btn button.CMCselected {
   background-color: #7350ff;
   color: white;
 }
@@ -123,4 +123,5 @@
   font-weight: 500;
   width: 150px;
   cursor: pointer;
+  margin-bottom: 70px;
 }

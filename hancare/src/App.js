@@ -84,12 +84,15 @@ function App() {
         <Route path="/column/moreKM3" element={<ColumnMoreKM3 />} />
         <Route path="/column/moreKM4" element={<ColumnMoreKM4 />} />
         {/*나의 체질*/}
-        <Route path="/q_myCON" element={<QmyCON />} />
-        <Route path="/myCON" element={<MyCON />} />
-        <Route path="/myCON/selfTest" element={<SelfTest />} />
-        <Route path="/myCON/selfTestResult" element={<SelfTestResult />} />
-        <Route path="/myCON/ChooseMyCON" element={<ChooseMyCON />} />
-        <Route path="/myCON/editMyCON" element={<EditMyCON />} />
+        <Route path="/q_myCON/:username" element={<QmyCON />} />
+        <Route path="/myCON/:username" element={<MyCON />} />
+        <Route path="/myCON/selfTest/:username" element={<SelfTest />} />
+        <Route
+          path="/myCON/selfTestResult/:username"
+          element={<SelfTestResult />}
+        />
+        <Route path="/myCON/ChooseMyCON/:username" element={<ChooseMyCON />} />
+        <Route path="/myCON/editMyCON/:username" element={<EditMyCON />} />
         <Route
           path="/ourcare/family/list/:username"
           element={<OurCareFamily />}
@@ -102,15 +105,15 @@ function App() {
         <Route path="/map" element={<MapMain />} />
         <Route path="/map/:id" element={<HospitalHome />} />
         {/* 식단 */}
-        <Route path="/meal" element={<MealMain />} />
-        <Route path="/meal/analysis" element={<MealAnalysis />} />
-        <Route path="/meal/first" element={<MealFirst />} />
-        <Route path="/meal/second" element={<MealSecond />} />
-        <Route path="/meal/result" element={<MealResult />} />
-        <Route path="/meal/re_result" element={<MealREResult />} />
+        <Route path="/meal/:username" element={<MealMain />} />
+        <Route path="/meal/analysis/:username" element={<MealAnalysis />} />
+        <Route path="/meal/first/:username" element={<MealFirst />} />
+        <Route path="/meal/second/:username" element={<MealSecond />} />
+        <Route path="/meal/result/:username" element={<MealResult />} />
+        <Route path="/meal/re_result/:username" element={<MealREResult />} />
         {/* 컨디션 */}
-        <Route path="/condition" element={<Condition />} />
-        <Route path="/Condition/edit" element={<EditCondition />} />
+        <Route path="/condition/:username" element={<Condition />} />
+        <Route path="/Condition/edit/:username" element={<EditCondition />} />
       </Routes>
       <BottomNav />
     </Wrapper>
