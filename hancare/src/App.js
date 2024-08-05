@@ -101,8 +101,8 @@ function App() {
           element={<OurCareProfile />}
         />
         {/* 한의원 */}
-        <Route path="/map" element={<MapMain />} />
-        <Route path="/map/:id" element={<HospitalHome />} />
+        <Route path="/map/:username" element={<MapMain />} />
+        <Route path="/map/:username/:id" element={<HospitalHome />} />
         {/* 식단 */}
         <Route path="/meal/:username" element={<MealMain />} />
         <Route path="/meal/analysis/:username" element={<MealAnalysis />} />

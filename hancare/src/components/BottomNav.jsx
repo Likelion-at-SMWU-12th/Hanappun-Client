@@ -62,7 +62,7 @@ const BottomNav = () => {
             />
           </div>
         </Link>
-        <Link to="/map" className="nav-link">
+        <Link to={`/map/${username}`} className="nav-link">
           <div>
             <FontAwesomeIcon
               icon={faLocationDot}

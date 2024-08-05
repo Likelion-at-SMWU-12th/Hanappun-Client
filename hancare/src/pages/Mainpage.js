@@ -61,18 +61,17 @@ const Mainpage = () => {
   // 내 정보 불러오기
   const [user, setUser] = useState([]);
 
-  const getInfo = () => {
-    axios
-      .get(`${baseURL}/calendars/event/today/${param2}`)
-      .then((response) => {
-        setUser(response.data.result);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
   useEffect(() => {
+    const getInfo = () => {
+      axios
+        .get(`${baseURL}/calendars/event/today/${param2}`)
+        .then((response) => {
+          setUser(response.data.result);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
     getInfo();
     dispatch(setUsername(param2));
   }, []);
@@ -89,9 +88,9 @@ const Mainpage = () => {
     <Container>
       <Guest>
         <CalendarImg
-          src="/images/calendar.png"
+          src="/images/column.png"
           alt="calendar"
-          onClick={() => navigate("/calendar")}
+          onClick={() => navigate("/column")}
         ></CalendarImg>
         <Name>{user.nickname} 님</Name>
         <Message>오늘 하루도 힘차게 시작해봐요!</Message>
@@ -357,7 +356,9 @@ const Mainpage = () => {
                   src="/images/condition.png"
                   alt="condition"
                 ></RightBoxImg>
-                <WriteBtn onClick={() => navigate(`/condition/${param2}`)}>
+                <WriteBtn
+                  onClick={() => navigate(`/condition/${param2}/${user.date}`)}
+                >
                   기록하기
                 </WriteBtn>
               </>

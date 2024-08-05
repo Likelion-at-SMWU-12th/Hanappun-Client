@@ -32,7 +32,7 @@ const HospitalHome = () => {
 
   useEffect(() => {
     getInfo();
-  }, []);
+  }, [id]);
 
   const getmyInfo = () => {
     axios
@@ -46,10 +46,11 @@ const HospitalHome = () => {
   };
 
   useEffect(() => {
-    getmyInfo();
-  }, []);
+    if (username) {
+      getmyInfo();
+    }
+  }, [username]);
 
-  // 리뷰 카테고리 합산 api 연결
   const getReview = () => {
     axios
       .get(`${baseURL}/review/cate/${id}/`)
@@ -64,9 +65,8 @@ const HospitalHome = () => {
 
   useEffect(() => {
     getReview();
-  }, []);
+  }, [id]);
 
-  // 리뷰 api 연결
   const getReviewDetail = () => {
     axios
       .get(`${baseURL}/review?clinic=${id}`)
@@ -81,9 +81,8 @@ const HospitalHome = () => {
 
   useEffect(() => {
     getReviewDetail();
-  }, []);
+  }, [id]);
 
-  // 나의 한의원 모달창 관련
   const [isMyModalOpen, setISMyModalOpen] = useState(false);
   const [isSetmy, setIsmy] = useState(false);
   const openModal = () => {
@@ -98,20 +97,17 @@ const HospitalHome = () => {
     closeModal();
   };
 
-  // 예약 모달 창 관련
   const [ReservateOpen, setReservateOpen] = useState(false);
   const openReservateModal = () => {
     setReservateOpen(true);
   };
   const closeReservateModal = () => setReservateOpen(false);
 
-  // 더보기 버튼 관련, 돌아가기 버튼 관련
   const [MorebtnClick, setMorebtnClick] = useState(false);
   const handleMorebtnClick = () => {
     setMorebtnClick(!MorebtnClick);
   };
 
-  // 체크박스 피드백 관련
   const [feedback, setFeedback] = useState({
     clean: false,
     medicine: false,
@@ -126,13 +122,11 @@ const HospitalHome = () => {
     }));
   };
 
-  // 리뷰 코멘트 작성 관련
   const [comment, setComment] = useState("");
   const onChangeComment = (e) => {
     setComment(e.target.value);
   };
 
-  // 리뷰 작성 연동 코드
   const WriteReview = () => {
     axios
       .post(`${baseURL}/review/`, {
@@ -148,7 +142,16 @@ const HospitalHome = () => {
       .then((response) => {
         console.log(response);
         alert("리뷰가 작성되었습니다");
-        navigate(`/map/${id}`);
+        setComment("");
+        setFeedback({
+          clean: false,
+          medicine: false,
+          manage: false,
+          doctor: false,
+        });
+        getReview();
+        getReviewDetail();
+        navigate(`/map/${username}/${id}`);
       })
       .catch((error) => {
         console.log(error);
@@ -174,7 +177,6 @@ const HospitalHome = () => {
     "/images/doctor2.png",
   ];
 
-  // 닥터 버튼
   const handleDoctorBtnClick = () => {
     setDoctorBtn(!doctorBtn);
   };
@@ -377,7 +379,7 @@ const HospitalHome = () => {
                   </CheckboxWrapper>
                   <ReviewQuest>
                     <img src="/images/puplespot.png"></img>
-                    <h3>숙멋사님의 이야기를 들려주세요</h3>
+                    <h3>{user.nickname}님의 이야기를 들려주세요</h3>
                   </ReviewQuest>
                   <CommentWrapper>
                     <CommentBox
@@ -432,8 +434,8 @@ const HospitalHome = () => {
       )}
       {ReservateOpen && (
         <ReservateModal
-          isReservateOpen={setReservateOpen}
-          closeReesrvateModal={closeReservateModal}
+          isReservateOpen={ReservateOpen}
+          closeReservateModal={closeReservateModal}
           cliniccall={pickhospital.call}
         />
       )}
