@@ -37,6 +37,7 @@ const BottomNav = () => {
   }, [location]);
 
   if (
+    location.pathname !== "/" &&
     location.pathname !== "/signup" &&
     location.pathname !== "/login" &&
     location.pathname !== "/myCON/selfTest"

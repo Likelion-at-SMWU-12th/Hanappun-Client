@@ -54,6 +54,7 @@ const SignupBtn = styled.button`
   font-size: 17px;
   font-weight: 600;
   cursor: pointer;
+  margin-bottom: 50px;
 `;
 
 const Signup = () => {
