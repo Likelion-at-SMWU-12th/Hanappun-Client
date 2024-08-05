@@ -1,54 +1,65 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { Container, Title } from "../hospital/HospitalHome";
 import Calendar from "react-calendar";
-import { format, isSameDay, set } from "date-fns";
+import { format, isSameDay } from "date-fns";
 import { ko } from "date-fns/locale";
 import "react-calendar/dist/Calendar.css";
 import "./CalendarMain.css";
 import CalendarModal from "../../components/CalendarModal";
 
-const events = [
-  {
-    date: new Date(2024, 7, 1),
-    event: "이벤트 1",
-    image: "/images/grayspot.png",
-  },
-  {
-    date: new Date(2024, 7, 26),
-    event: "이벤트 1",
-    image: "/images/grayspot.png",
-  },
-];
-
-// 기록한 날 다 불러와서 저거 적용하기
-
-const reservations = [
-  {
-    date: new Date(2024, 7, 1),
-    event: "이벤트 1",
-    image: "/images/purplespot.png",
-  },
-  {
-    date: new Date(2024, 7, 16),
-    event: "이벤트 1",
-    image: "/images/purplespot.png",
-  },
-];
-
-// 예약 날짜 불러와서 적용하기
+import { baseURL } from "../../api/baseURL";
 
 const CalendarMain = () => {
   const navigate = useNavigate();
+  const [date, setDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [events, setEvents] = useState([]);
+  const [reservations, setReservations] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const params = useParams();
+
+  useEffect(() => {
+    const fetchEventsAndReservations = async () => {
+      try {
+        const username = params.username; // 동적으로 변경 필요
+        const month = format(date, "yyyy-MM");
+        const response = await axios.get(
+          `/calendars/event/month/${username}/${month}/`
+        );
+        const data = response.data.result;
+
+        const fetchedEvents = data.filter((item) => !item.is_reservation);
+        const fetchedReservations = data.filter((item) => item.is_reservation);
+
+        setEvents(
+          fetchedEvents.map((event) => ({
+            date: new Date(event.date),
+            event: "이벤트",
+            image: "/images/grayspot.png",
+          }))
+        );
+
+        setReservations(
+          fetchedReservations.map((reservation) => ({
+            date: new Date(reservation.date),
+            event: "예약",
+            image: "/images/purplespot.png",
+          }))
+        );
+      } catch (error) {
+        console.error("이벤트 및 예약을 가져오는 중 오류 발생:", error);
+      }
+    };
+
+    fetchEventsAndReservations();
+  }, [date]);
 
   const BackButton = () => {
     navigate(-1);
   };
-
-  const [date, setDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(null);
 
   const renderReservation = (date) => {
     const reservation = reservations.find((reservation) =>
@@ -70,12 +81,11 @@ const CalendarMain = () => {
     ) : null;
   };
 
-  // 모달 창 관련
-  const [modalopen, setModalopen] = useState(false);
   const openModal = () => {
-    setModalopen(true);
+    setModalOpen(true);
   };
-  const closeModal = () => setModalopen(false);
+
+  const closeModal = () => setModalOpen(false);
 
   const DateClick = (date) => {
     setSelectedDate(date);
@@ -120,9 +130,9 @@ const CalendarMain = () => {
             }}
           />
         </div>
-        {modalopen && (
+        {modalOpen && (
           <CalendarModal
-            isOpen={setModalopen}
+            isOpen={modalOpen}
             closeModal={closeModal}
             selectedDate={selectedDate ? formatDate(selectedDate) : null}
           />
