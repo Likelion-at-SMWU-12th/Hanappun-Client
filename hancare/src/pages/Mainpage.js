@@ -364,7 +364,7 @@ const RoundedBox = styled.div`
   border-top-right-radius: 25px;
   margin-top: 18px;
   height: 100vh;
-  padding-bottom: 50px;
+  padding-bottom: 70px;
   overflow-y: auto;
 `;
 const When = styled.div`

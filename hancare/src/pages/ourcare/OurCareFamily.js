@@ -75,7 +75,7 @@ const OurCareFamily = () => {
       </Title>
       <ProfileContainer>
         <ProfileWrapper>
-          <Profilebox onClick={() => navigate("/profile")}>
+          <Profilebox onClick={() => navigate("/profile/:username")}>
             <img src={getRandomImage()} alt="profile" />
           </Profilebox>
           <h2>나</h2>
@@ -85,7 +85,7 @@ const OurCareFamily = () => {
             <ProfileWrapper key={otheruser.id}>
               <Profilebox
                 onClick={() => {
-                  navigate(`/ourcare/family/${otheruser.id}`, {
+                  navigate(`/ourcare/family/profile/${otheruser.id}`, {
                     state: { image: getRandomImage() },
                   });
                 }}

@@ -22,7 +22,7 @@ function OurCareModal({ isOpen, closeModal, addProfile }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (values.id.trim() !== "") {
-      addProfile(values.id, "이름");
+      addProfile(values.id, values.id);
     }
   };
 

@@ -507,7 +507,7 @@ const Detail = styled.div`
   white-space: pre-line;
   overflow-y: auto;
   height: 100vh;
-  padding-bottom: 50px; /* 아래쪽 여백 추가 */
+  padding-bottom: 70px; /* 아래쪽 여백 추가 */
   flex: 1;
 `;
 const DetailMenu = styled.div`
