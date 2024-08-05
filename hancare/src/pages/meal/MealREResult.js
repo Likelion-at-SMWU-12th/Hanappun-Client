@@ -101,16 +101,16 @@ const MealREResult = () => {
       <main className="MRmain">
         <div className="MRmenu">
           <span className="MRpurpleDiv">끼니</span>
-          <button value="1" className={mealType === 1 ? "selected" : ""}>
+          <button value="1" className={mealType === 1 ? "MRselected" : ""}>
             아침
           </button>
-          <button value="2" className={mealType === 2 ? "selected" : ""}>
+          <button value="2" className={mealType === 2 ? "MRselected" : ""}>
             점심
           </button>
-          <button value="3" className={mealType === 3 ? "selected" : ""}>
+          <button value="3" className={mealType === 3 ? "MRselected" : ""}>
             저녁
           </button>
-          <button value="4" className={mealType === 4 ? "selected" : ""}>
+          <button value="4" className={mealType === 4 ? "MRselected" : ""}>
             간식
           </button>
         </div>

@@ -85,7 +85,7 @@
   cursor: pointer;
 }
 
-.MFmenu button.selected {
+.MFmenu button.MFselected {
   color: #7350ff;
   font-weight: 800;
 }

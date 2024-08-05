@@ -76,28 +76,28 @@ const MealFirst = () => {
           <button
             onClick={handleClickMeal}
             value="1"
-            className={mealType === 1 ? "selected" : ""}
+            className={mealType === 1 ? "MFselected" : ""}
           >
             아침
           </button>
           <button
             onClick={handleClickMeal}
             value="2"
-            className={mealType === 2 ? "selected" : ""}
+            className={mealType === 2 ? "MFselected" : ""}
           >
             점심
           </button>
           <button
             onClick={handleClickMeal}
             value="3"
-            className={mealType === 3 ? "selected" : ""}
+            className={mealType === 3 ? "MFselected" : ""}
           >
             저녁
           </button>
           <button
             onClick={handleClickMeal}
             value="4"
-            className={mealType === 4 ? "selected" : ""}
+            className={mealType === 4 ? "MFselected" : ""}
           >
             간식
           </button>
