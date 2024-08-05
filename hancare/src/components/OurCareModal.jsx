@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-
 import { post_ourcare } from "../api/users/post_ourcare";
 
 function OurCareModal({ isOpen, closeModal, username, addProfile }) {

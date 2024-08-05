@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import HospitalItem from "../../components/HospitalItem";
+import { baseURL } from "../../api/baseURL";
 
 const { kakao } = window;
 
@@ -19,7 +20,7 @@ const MapMain = () => {
   useEffect(() => {
     const getHospital = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/hospital");
+        const response = await axios.get(`${baseURL}/clinic/info/`);
         setHospital(response.data);
       } catch (e) {
         console.error(e);
@@ -33,9 +34,9 @@ const MapMain = () => {
       const cleanedKeyword = keyword.replace(/\s+/g, "");
       const filtered = hospital.filter((item) => {
         const cleanedName = item.name.replace(/\s+/g, "");
-        const cleanedhashtag1 = item.hashtag1.replace(/\s+/g, "");
-        const cleanedhashtag2 = item.hashtag2.replace(/\s+/g, "");
-        const cleanedhashtag3 = item.hashtag3.replace(/\s+/g, "");
+        const cleanedhashtag1 = item.clinic_cate_1.replace(/\s+/g, "");
+        const cleanedhashtag2 = item.clinic_cate_2.replace(/\s+/g, "");
+        const cleanedhashtag3 = item.clinic_cate_3.replace(/\s+/g, "");
         return (
           cleanedName.includes(cleanedKeyword) ||
           cleanedhashtag1.includes(cleanedKeyword) ||
@@ -77,7 +78,7 @@ const MapMain = () => {
       const markers = hospital.map((item) => {
         const marker = new kakao.maps.Marker({
           map: kakaomap,
-          position: new kakao.maps.LatLng(item.Lat, item.Lng),
+          position: new kakao.maps.LatLng(item.lat, item.lon),
           title: item.name,
           image: markerImage,
         });

@@ -11,37 +11,51 @@ import {
   ListItem,
 } from "../Mainpage";
 import axios from "axios";
+import { baseURL } from "../../api/baseURL";
+import { useSelector } from "react-redux";
 
 const OurCareProfile = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { image } = location.state;
-  const { id } = useParams();
-  const [friendInfo, setFriendInfo] = useState([]);
+  const params = useParams();
+  const username = useSelector((state) => state.username);
+  const [friendInfo, setFriendInfo] = useState([]); // 초기 상태를 null로 설정
 
   const getFriendInfo = () => {
     axios
-      .get(`http://localhost:8003/friends/${id}`)
+      .get(`${baseURL}/users/profile?username=${params.id}`)
       .then((response) => {
         console.log(response);
-        setFriendInfo(response.data);
+        setFriendInfo(response.data.result);
       })
       .catch((error) => {
         console.log(error);
       });
   };
+
   useEffect(() => {
+    if (window.Kakao) {
+      if (!window.Kakao.isInitialized()) {
+        window.Kakao.init("60c004dfae745dd8f45c124a54557159");
+      }
+    }
     getFriendInfo();
   }, []);
 
   const onBtnDel = () => {
     if (window.confirm("삭제하시겠습니까?")) {
       axios
-        .delete(`http://localhost:8003/friends/${id}`)
+        .delete(`${baseURL}/users/ourcare/`, {
+          data: {
+            my_username: username,
+            friend_username: friendInfo.username,
+          },
+        })
         .then((response) => {
           console.log(response);
           alert("삭제되었습니다.");
-          navigate("/ourcare/family/list/:username");
+          navigate(`/ourcare/family/list/${username}`);
         })
         .catch((error) => {
           console.log(error);
@@ -55,29 +69,19 @@ const OurCareProfile = () => {
     navigate(-1);
   };
 
-  // 카카오톡 공유 기능
-  // const reservationShare = () => {
-  //   if (window.Kakao){
-  //     const kakao=window.Kakao
-
-  //     if (!kakao.isInitialized()){
-  //       kakao.init('60c004dfae745dd8f45c124a54557159')
-  //     }
-
-  //     kakao.Share.sendDefault({
-  //       objectType: 'feed',
-  //       content:{
-  //         title: "한의원 예약 정보",
-  //         description: "한의원 예약 정보를 지금 확인해보세요!",
-  //         imageUrl:"/images/logo.png",
-  //         link:{
-  //         },
-  //       },
-  //       buttons: [{title:"지금 바로 보기", link:{webUrl:,},},],
-  //     });
-  //   }
-  // }
-
+  //카카오톡 공유 기능
+  const reservationShare = () => {
+    if (window.Kakao) {
+      window.Kakao.Share.sendDefault({
+        objectType: "text",
+        text: "한의원 예약 정보",
+        link: {
+          mobileWebUrl: "http://localhost:3000",
+          webUrl: "http://localhost:3000",
+        },
+      });
+    }
+  };
   // const testShare = () => {
   //   if (window.Kakao){
   //     const kakao=window.Kakao
@@ -101,80 +105,83 @@ const OurCareProfile = () => {
   // }
 
   return (
-    <div>
-      <Container>
-        <Title>
-          <img src="/images/back.png" alt="back" onClick={BackButton} />
-          <h2>우리 케어</h2>
-        </Title>
-        <ProfileWrapper>
-          <LeftWrapper>
-            <Profilebox>
-              <img src={image} alt="profile" />
-            </Profilebox>
-            <NameWrapper>
-              <h2>{friendInfo.name}</h2>
-              <img src="/images/delete.png" onClick={onBtnDel}></img>
-            </NameWrapper>
-          </LeftWrapper>
-          <BoxWrapper>
-            <Box1>
-              <List>
-                <ListItem>
-                  <Box1Img src="/images/test.png" alt="test"></Box1Img>
-                  {friendInfo.body ? (
-                    <Box1Text>{friendInfo.body}</Box1Text>
-                  ) : (
-                    <Box1Text>나의 체질은?</Box1Text>
-                  )}
-                </ListItem>
-                <ListItem onClick={() => navigate("/column")}>
-                  <Box1Img src="/images/info.png" alt="info"></Box1Img>
-                  <Box1Text>체질별 주의사항</Box1Text>
-                </ListItem>
-              </List>
-            </Box1>
-            <Box1>
-              <List>
-                <ListItem onClick={() => navigate("/map")}>
-                  <Box1Img src="/images/hospital.png" alt="map"></Box1Img>
-                  {friendInfo.hospital ? (
-                    <Box1Text>{friendInfo.hospital}</Box1Text>
-                  ) : (
-                    <Box1Text>한의원을 알아볼까요?</Box1Text>
-                  )}
-                </ListItem>
-                <ListItem>
-                  <Box1Img
-                    src="/images/reservation.png"
-                    alt="reservation"
-                  ></Box1Img>
-                  <Box1Text>예약 미정</Box1Text>
-                </ListItem>
-              </List>
-            </Box1>
-            <ShareBtn>예약 내역 공유하기</ShareBtn>
-          </BoxWrapper>
-        </ProfileWrapper>
-        <BarImg src="/images/ourcarebar.png"></BarImg>
-        <Body>
-          {friendInfo.body ? (
-            <>
-              <BodyInfoimg
-                src={`/images/${friendInfo.body}.png`}
-                alt="body"
-              ></BodyInfoimg>
-            </>
-          ) : (
-            <>
-              <h2>아직 체질이 기록되지 않았어요!</h2>
-              <img src="/images/ourcareyet.png"></img>
-              <ShareBtn>자가진단 링크 공유하기</ShareBtn>
-            </>
-          )}
-        </Body>
-      </Container>
-    </div>
+    <Container>
+      {friendInfo && (
+        <>
+          <Title>
+            <img src="/images/back.png" alt="back" onClick={BackButton} />
+            <h2>우리 케어</h2>
+          </Title>
+          <ProfileWrapper>
+            <LeftWrapper>
+              <Profilebox>
+                <img src={image} alt="profile" />
+              </Profilebox>
+              <NameWrapper>
+                <h2>{friendInfo.nickname}</h2>
+                <img src="/images/delete.png" onClick={onBtnDel}></img>
+              </NameWrapper>
+            </LeftWrapper>
+            <BoxWrapper>
+              <Box1>
+                <List>
+                  <ListItem>
+                    <Box1Img src="/images/test.png" alt="test"></Box1Img>
+                    {friendInfo.constitution_8 &&
+                    friendInfo.constitution_8 !== "" ? (
+                      <Box1Text>{friendInfo.constitution_8}체질</Box1Text>
+                    ) : (
+                      <Box1Text>나의 체질은?</Box1Text>
+                    )}
+                  </ListItem>
+                  <ListItem onClick={() => navigate("/column")}>
+                    <Box1Img src="/images/info.png" alt="info"></Box1Img>
+                    <Box1Text>체질별 주의사항</Box1Text>
+                  </ListItem>
+                </List>
+              </Box1>
+              <Box1>
+                <List>
+                  <ListItem onClick={() => navigate("/map")}>
+                    <Box1Img src="/images/hospital.png" alt="map"></Box1Img>
+                    {friendInfo.my_clinic && friendInfo.my_clinic !== "" ? (
+                      <Box1Text>{friendInfo.my_clinic}</Box1Text>
+                    ) : (
+                      <Box1Text>한의원을 알아볼까요?</Box1Text>
+                    )}
+                  </ListItem>
+                  <ListItem>
+                    <Box1Img
+                      src="/images/reservation.png"
+                      alt="reservation"
+                    ></Box1Img>
+                    <Box1Text>예약 미정</Box1Text>
+                  </ListItem>
+                </List>
+              </Box1>
+              <ShareBtn onClick={reservationShare}>예약 내역 공유하기</ShareBtn>
+            </BoxWrapper>
+          </ProfileWrapper>
+          <BarImg src="/images/ourcarebar.png"></BarImg>
+          <Body>
+            {friendInfo.constitution_8 !== "" ? (
+              <>
+                <BodyInfoimg
+                  src={`/images/${friendInfo.constitution_8}.png`}
+                  alt="body"
+                ></BodyInfoimg>
+              </>
+            ) : (
+              <>
+                <h2>아직 체질이 기록되지 않았어요!</h2>
+                <img src="/images/ourcareyet.png"></img>
+                <ShareBtn>자가진단 링크 공유하기</ShareBtn>
+              </>
+            )}
+          </Body>
+        </>
+      )}
+    </Container>
   );
 };
 

@@ -14,21 +14,18 @@ const HospitalItem = ({ item }) => {
     <Container onClick={handleClick}>
       <Firstbox>
         <HospitalName>{item.name}</HospitalName>
-        <HospitalHashtag>{item.hashtag1}</HospitalHashtag>
-        <HospitalHashtag>{item.hashtag2}</HospitalHashtag>
-        <HospitalHashtag>{item.hashtag3}</HospitalHashtag>
+        <HashTagWrapper>
+          <HospitalHashtag>{item.clinic_cate_1}</HospitalHashtag>
+          <HospitalHashtag>{item.clinic_cate_2}</HospitalHashtag>
+          <HospitalHashtag>{item.clinic_cate_3}</HospitalHashtag>
+        </HashTagWrapper>
       </Firstbox>
       <HospitalInfo>
-        <Bold>위치</Bold> {item.address}
+        <Bold>위치</Bold> {item.location}
       </HospitalInfo>
       <HospitalInfo>
         <Bold>전화 번호</Bold> {item.call}
       </HospitalInfo>
-      <SecondBox>
-        <Reviewnum>{item.reviewnum}</Reviewnum>
-        <img src="/images/reviewnumimg.png" alt="num"></img>
-        <ReviewText>{item.reviewtext}</ReviewText>
-      </SecondBox>
     </Container>
   );
 };
@@ -40,9 +37,21 @@ const Container = styled.div`
   border-radius: 20px;
   width: 90%;
   cursor: pointer;
+  padding-bottom: 15px;
 `;
 const Firstbox = styled.div`
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 5px;
+`;
+const HashTagWrapper = styled.div`
+  display: flex;
+  margin-left: 8px;
+  margin-top: -5px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 10px;
 `;
 const HospitalName = styled.h2`
   margin-left: 10px;
