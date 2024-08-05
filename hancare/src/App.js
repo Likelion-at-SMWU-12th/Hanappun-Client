@@ -39,7 +39,6 @@ import MealSecond from "./pages/meal/MealSecond";
 import MealResult from "./pages/meal/MealResult";
 import MealREResult from "./pages/meal/MealREResult";
 import Condition from "./pages/condition/Condition";
-import EditCondition from "./pages/condition/EditCondition";
 
 import BottomNav from "./components/BottomNav";
 
@@ -112,8 +111,7 @@ function App() {
         <Route path="/meal/result/:username" element={<MealResult />} />
         <Route path="/meal/re_result/:username" element={<MealREResult />} />
         {/* 컨디션 */}
-        <Route path="/condition/:username" element={<Condition />} />
-        <Route path="/Condition/edit/:username" element={<EditCondition />} />
+        <Route path="/condition/:username/:date" element={<Condition />} />
       </Routes>
       <BottomNav />
     </Wrapper>
