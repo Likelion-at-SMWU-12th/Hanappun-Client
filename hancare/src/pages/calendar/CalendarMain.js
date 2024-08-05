@@ -24,14 +24,14 @@ const CalendarMain = () => {
   useEffect(() => {
     const fetchEventsAndReservations = async () => {
       try {
-        const username = params.username; // 동적으로 변경 필요
         const month = format(date, "yyyy-MM");
+
         const response = await axios.get(
-          `/calendars/event/month/${username}/${month}/`
+          `${baseURL}/calendars/event/month/${params.username}/${month}/`
         );
         const data = response.data.result;
 
-        const fetchedEvents = data.filter((item) => !item.is_reservation);
+        const fetchedEvents = data.filter((item) => item.is_condition_or_meal);
         const fetchedReservations = data.filter((item) => item.is_reservation);
 
         setEvents(
@@ -50,7 +50,7 @@ const CalendarMain = () => {
           }))
         );
       } catch (error) {
-        console.error("이벤트 및 예약을 가져오는 중 오류 발생:", error);
+        alert("이벤트 및 예약을 가져오는 중 오류 발생:", error);
       }
     };
 
