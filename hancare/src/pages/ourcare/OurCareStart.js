@@ -63,7 +63,7 @@ const OurCareStart = () => {
 
 export const Container = styled.div`
   background-color: black;
-  height: 100%;
+  height: 100vh;
   width: 100%;
   white-space: pre-line;
   position: relative;
