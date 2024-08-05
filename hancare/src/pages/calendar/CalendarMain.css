@@ -4,19 +4,20 @@
   align-items: center;
   background-color: black;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 30px;
   color: white;
   max-width: 400px;
   margin: auto;
-  height: 700px;
+  height: 560px;
+  margin-bottom: 200px;
 }
 
 .react-calendar {
   background-color: white;
   border: none;
-  border-radius: 10px;
+  border-radius: 30px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  height: 90%; /* 캘린더 높이를 부모 컨테이너에 맞춤 */
+  height: 100%; /* 캘린더 높이를 부모 컨테이너에 맞춤 */
 }
 
 .react-calendar__viewContainer {
@@ -36,13 +37,23 @@
 .react-calendar__navigation {
   background-color: #7350ff;
   color: white;
-  border-radius: 10px 10px 0 0;
+  border-radius: 30px 30px 0 0;
+  height: 60px;
 }
 
 .react-calendar__navigation button {
   color: white;
+  background-color: none;
+  opacity: 1;
 }
 
+.react-calendar__navigation__prev2-button {
+  border-radius: 30px 0 0 0;
+}
+
+.react-calendar__navigation__next2-button {
+  border-radius: 0 30px 0 0;
+}
 .react-calendar__month-view__days__day--weekend {
   color: black;
 }
@@ -83,8 +94,10 @@
 
 .event-image {
   margin-top: 5px;
+  width: 8px;
 }
 
 .reservation-image {
   margin-top: 5px;
+  width: 8px;
 }
