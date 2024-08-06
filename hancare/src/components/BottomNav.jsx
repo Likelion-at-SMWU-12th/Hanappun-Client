@@ -53,7 +53,7 @@ const BottomNav = () => {
             />
           </div>
         </Link>
-        <Link to="/ourcare" className="nav-link">
+        <Link to={`/ourcare/${username}`} className="nav-link">
           <div>
             <FontAwesomeIcon
               icon={faHandHoldingHeart}

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./MealFirst.css";
 
 const MealFirst = () => {
   const navigate = useNavigate();
-  const today = new Date();
+  const params = useParams();
+
+  const today = new Date(params.date);
   const week = ["일", "월", "화", "수", "목", "금", "토"];
   const dayOfWeek = week[today.getDay()];
   const formattedDate = `${
@@ -44,7 +46,9 @@ const MealFirst = () => {
   };
 
   const handleNext = () => {
-    navigate("/meal/second", { state: { mealType, mealItems } });
+    navigate(`/meal/second/${params.username}/${params.date}`, {
+      state: { mealType, mealItems },
+    });
   };
 
   const renderMealItems = () => {
