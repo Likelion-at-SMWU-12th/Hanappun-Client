@@ -7,7 +7,7 @@ const MealSecond = () => {
   const location = useLocation();
   const params = useParams();
 
-  const today = new Date(params.date);
+  const today = new Date();
   const week = ["일", "월", "화", "수", "목", "금", "토"];
   const dayOfWeek = week[today.getDay()];
   const formattedDate = `${
@@ -18,7 +18,7 @@ const MealSecond = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const { mealType, mealItems } = location.state || {};
+  const { mealItems } = location.state || {};
   const [selectedMealItem, setSelectedMealItem] = useState(
     mealItems?.[0]?.id || null
   );
@@ -133,7 +133,7 @@ const MealSecond = () => {
     }
 
     navigate(`/meal/result/${params.username}/${params.date}`, {
-      state: { mealType, mealItems, mealElements },
+      state: { mealItems, mealElements },
     });
   };
 

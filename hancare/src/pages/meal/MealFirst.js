@@ -17,14 +17,8 @@ const MealFirst = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const [mealType, setMealType] = useState(1); // 기본값: 아침
   const [mealItems, setMealItems] = useState([]);
   const [inputValue, setInputValue] = useState("");
-
-  const handleClickMeal = (e) => {
-    const { value } = e.target;
-    setMealType(Number(value)); // 클릭된 버튼의 값을 상태에 저장
-  };
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -35,7 +29,7 @@ const MealFirst = () => {
     if (inputValue.trim()) {
       setMealItems((prevItems) => [
         ...prevItems,
-        { id: Date.now(), name: inputValue.trim(), type: mealType }, // mealType 추가
+        { id: Date.now(), name: inputValue.trim() },
       ]);
       setInputValue(""); // 입력 필드 초기화
     }
@@ -47,24 +41,22 @@ const MealFirst = () => {
 
   const handleNext = () => {
     navigate(`/meal/second/${params.username}/${params.date}`, {
-      state: { mealType, mealItems },
+      state: { mealItems },
     });
   };
 
   const renderMealItems = () => {
-    return mealItems
-      .filter((item) => item.type === mealType) // 선택된 mealType에 맞는 항목만 필터링
-      .map((item) => (
-        <div key={item.id} className="meal-item">
-          <span>{item.name}</span>
-          <button
-            className="remove-button"
-            onClick={() => handleRemoveMeal(item.id)}
-          >
-            x
-          </button>
-        </div>
-      ));
+    return mealItems.map((item) => (
+      <div key={item.id} className="meal-item">
+        <span>{item.name}</span>
+        <button
+          className="remove-button"
+          onClick={() => handleRemoveMeal(item.id)}
+        >
+          x
+        </button>
+      </div>
+    ));
   };
 
   return (
@@ -75,37 +67,6 @@ const MealFirst = () => {
       </header>
       <div className="MFdate">{formattedDate}</div>
       <main className="MFmain">
-        <div className="MFmenu">
-          <span className="MFpurpleDiv">끼니</span>
-          <button
-            onClick={handleClickMeal}
-            value="1"
-            className={mealType === 1 ? "MFselected" : ""}
-          >
-            아침
-          </button>
-          <button
-            onClick={handleClickMeal}
-            value="2"
-            className={mealType === 2 ? "MFselected" : ""}
-          >
-            점심
-          </button>
-          <button
-            onClick={handleClickMeal}
-            value="3"
-            className={mealType === 3 ? "MFselected" : ""}
-          >
-            저녁
-          </button>
-          <button
-            onClick={handleClickMeal}
-            value="4"
-            className={mealType === 4 ? "MFselected" : ""}
-          >
-            간식
-          </button>
-        </div>
         <div className="MFinput">
           <form id="meal-form" onSubmit={handleAddMeal}>
             <input
