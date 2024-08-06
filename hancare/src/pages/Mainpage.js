@@ -237,7 +237,9 @@ const Mainpage = () => {
           <RightBox>
             {userdata.breakfast || userdata.lunch || userdata.dinner ? (
               <>
-                <EatRecordWrapper onClick={() => navigate(`/meal/${param2}`)}>
+                <EatRecordWrapper
+                  onClick={() => navigate(`/meal/${param2}/${user.date}`)}
+                >
                   <h3>아침</h3>
                   <FoodListWrapper>
                     {userdata.breakfast &&
@@ -251,7 +253,9 @@ const Mainpage = () => {
                     )}
                   </FoodListWrapper>
                 </EatRecordWrapper>
-                <EatRecordWrapper onClick={() => navigate(`/meal/${param2}`)}>
+                <EatRecordWrapper
+                  onClick={() => navigate(`/meal/${param2}/${user.date}`)}
+                >
                   <h3>점심</h3>
                   <FoodListWrapper>
                     {userdata.lunch &&
@@ -263,7 +267,9 @@ const Mainpage = () => {
                     {userdata.lunch && userdata.lunch.length > 2 && <p>..</p>}
                   </FoodListWrapper>
                 </EatRecordWrapper>
-                <EatRecordWrapper onClick={() => navigate(`/meal/${param2}`)}>
+                <EatRecordWrapper
+                  onClick={() => navigate(`/meal/${param2}/${user.date}`)}
+                >
                   <h3>저녁</h3>
                   <FoodListWrapper>
                     {userdata.dinner &&
@@ -275,7 +281,9 @@ const Mainpage = () => {
                     {userdata.dinner && userdata.dinner.length > 2 && <p>..</p>}
                   </FoodListWrapper>
                 </EatRecordWrapper>
-                <EatRecordWrapper onClick={() => navigate(`/meal/${param2}`)}>
+                <EatRecordWrapper
+                  onClick={() => navigate(`/meal/${param2}/${user.date}`)}
+                >
                   <h3>간식</h3>
                   <FoodListWrapper>
                     {userdata.snack &&
@@ -295,7 +303,9 @@ const Mainpage = () => {
                   src="/images/potato.png"
                   alt="potato"
                 ></RightBoxImg>
-                <WriteBtn onClick={() => navigate(`/meal/${param2}`)}>
+                <WriteBtn
+                  onClick={() => navigate(`/meal/${param2}/${user.date}`)}
+                >
                   기록하기
                 </WriteBtn>
               </>
@@ -311,7 +321,7 @@ const Mainpage = () => {
             {user.condition ? (
               <>
                 <EatRecordWrapper
-                  onClick={() => navigate(`/condition/${param2}`)}
+                  onClick={() => navigate(`/condition/${param2}/${user.date}`)}
                 >
                   <h3>몸상태</h3>
                   <FoodListWrapper>
@@ -327,7 +337,7 @@ const Mainpage = () => {
                   </FoodListWrapper>
                 </EatRecordWrapper>
                 <EatRecordWrapper
-                  onClick={() => navigate(`/condition/${param2}`)}
+                  onClick={() => navigate(`/condition/${param2}/${user.date}`)}
                 >
                   <h3>기분</h3>
                   <FoodListWrapper>
@@ -341,7 +351,7 @@ const Mainpage = () => {
                   </FoodListWrapper>
                 </EatRecordWrapper>
                 <EatRecordWrapper
-                  onClick={() => navigate(`/condition/${param2}`)}
+                  onClick={() => navigate(`/condition/${param2}/${user.date}`)}
                 >
                   <h3>메모</h3>
                   <FoodListWrapper>

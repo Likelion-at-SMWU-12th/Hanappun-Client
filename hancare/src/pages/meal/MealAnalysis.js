@@ -1,10 +1,13 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./Meal.css";
+import { baseURL } from "../../api/baseURL";
 
 const MealAnalysis = () => {
   const navigate = useNavigate();
-  const today = new Date();
+  const params = useParams();
+
+  const today = new Date(params.data);
   const week = ["일", "월", "화", "수", "목", "금", "토"];
   let dayOfWeek = week[today.getDay()];
   const formattedDate = `${
@@ -23,7 +26,7 @@ const MealAnalysis = () => {
 
   //테스트용 데이터
   const user = {
-    name: "홍길동",
+    name: params.username,
     todayMeal: "good",
     breakfast: ["", "오렌지주스"],
     lunch: ["탕수육, 보리차", "짬뽕"],
@@ -113,11 +116,16 @@ const MealAnalysis = () => {
         <div className="Mbtns">
           <button
             className="MwhiteBtn"
-            onClick={() => navigate("/meal/result")}
+            onClick={() =>
+              navigate(`/meal/result/${params.username}/${params.date}`)
+            }
           >
             식사 다시보기
           </button>
-          <button className="MpurpleBtn2" onClick={() => navigate("/mainpage")}>
+          <button
+            className="MpurpleBtn2"
+            onClick={() => navigate(`/mainpage/${params.username}`)}
+          >
             확인
           </button>
         </div>

@@ -67,9 +67,6 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
 
   const WriteBtnClick = () => {
     formatDateNewReservation(selectedDate);
-    console.log(username);
-    console.log(formatDateNewReservation(selectedDate));
-    console.log(timeNewReservation);
     axios
       .post(`${baseURL}/reservation/`, {
         client: username,
@@ -103,9 +100,7 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
 
   //예약 생성 시 시간 변경
   const handleTimeChange = (e) => {
-    console.log("------------");
     setTimeNewReservation(e.target.value);
-    console.log(timeNewReservation);
   };
 
   const handleSubmit = (e) => {

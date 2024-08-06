@@ -1,10 +1,29 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import "./Meal.css";
+
+import { getuserData } from "../../api/getuserData";
 
 const Mealmain = () => {
   const navigate = useNavigate();
-  const today = new Date();
+
+  const params = useParams();
+  const [userNickname, setUserNickname] = useState("");
+
+  const getUserNickname = async () => {
+    const result = await getuserData(params.username);
+
+    if (result.status == 200) {
+      setUserNickname(result.data.result.nickname);
+    } else {
+    }
+  };
+
+  useEffect(() => {
+    getUserNickname();
+  }, [params.username]);
+
+  const today = new Date(params.date);
   const week = ["일", "월", "화", "수", "목", "금", "토"];
   let dayOfWeek = week[today.getDay()];
   const formattedDate = `${
@@ -21,8 +40,8 @@ const Mealmain = () => {
     navigate(-1);
   };
 
-  //테스트용 데이터
-  const user = { name: "홍길동" };
+  // 데이터
+  const user = { name: userNickname };
 
   return (
     <div className="Mbackground">
@@ -60,7 +79,9 @@ const Mealmain = () => {
         <div className="Mbtns">
           <button
             className="MpurpleBtn"
-            onClick={() => navigate("/meal/first")}
+            onClick={() =>
+              navigate(`/meal/first/${params.username}/${params.date}`)
+            }
           >
             식사 기록하기
           </button>
