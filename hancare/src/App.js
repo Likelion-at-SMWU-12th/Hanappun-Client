@@ -104,12 +104,18 @@ function App() {
         <Route path="/map" element={<MapMain />} />
         <Route path="/map/:id" element={<HospitalHome />} />
         {/* 식단 */}
-        <Route path="/meal/:username" element={<MealMain />} />
-        <Route path="/meal/analysis/:username" element={<MealAnalysis />} />
-        <Route path="/meal/first/:username" element={<MealFirst />} />
-        <Route path="/meal/second/:username" element={<MealSecond />} />
-        <Route path="/meal/result/:username" element={<MealResult />} />
-        <Route path="/meal/re_result/:username" element={<MealREResult />} />
+        <Route path="/meal/:username/:date" element={<MealMain />} />
+        <Route
+          path="/meal/analysis/:username/:date"
+          element={<MealAnalysis />}
+        />
+        <Route path="/meal/first/:username/:date" element={<MealFirst />} />
+        <Route path="/meal/second/:username/:date" element={<MealSecond />} />
+        <Route path="/meal/result/:username/:date" element={<MealResult />} />
+        <Route
+          path="/meal/re_result/:username/:date"
+          element={<MealREResult />}
+        />
         {/* 컨디션 */}
         <Route path="/condition/:username/:date" element={<Condition />} />
       </Routes>
