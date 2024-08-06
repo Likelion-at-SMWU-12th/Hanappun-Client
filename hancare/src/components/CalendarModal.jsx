@@ -1,56 +1,127 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import styled from "styled-components";
-import OurCareFamily from "../pages/ourcare/OurCareFamily";
+import { useSelector } from "react-redux";
+import { baseURL } from "../api/baseURL";
+import { format } from "date-fns";
+import { ko } from "date-fns/locale";
 
 function CalendarModal({ isOpen, closeModal, selectedDate }) {
   const navigate = useNavigate();
-
-  // 수정 버튼 상태
+  const username = useSelector((state) => state.username);
+  const [userinfo, setUserinfo] = useState([]);
   const [fix, setFix] = useState(false);
-  const handleFixbtnClick = () => {
+  const [time, setTime] = useState("");
+  const [timeNewReservation, setTimeNewReservation] = useState("");
+  const [selectfix, setSelectfix] = useState(false);
+
+  const formatDate = (date) => {
+    return format(date, "yyyy-MM-dd", { locale: ko });
+  };
+
+  const formatReservationDate = (reservationDate) => {
+    if (!reservationDate) return ""; // reservationDate가 없으면 빈 문자열 반환
+    const [datePart, timePart] = reservationDate.split("T");
+    if (!timePart) return datePart; // timePart가 없으면 datePart만 반환
+    const [hours, minutes] = timePart.split(":");
+    return `${datePart} ${hours}:${minutes}`;
+  };
+
+  // 특정 날짜 이벤트 불러오기
+  const getReservinfo = () => {
+    axios
+      .get(
+        `${baseURL}/calendars/event/detail/${username}/${formatDate(
+          selectedDate
+        )}/`
+      )
+      .then((response) => {
+        setUserinfo(response.data.result); // 수정된 부분
+      })
+      .catch((error) => {
+        alert("연동실패");
+        console.log({ username });
+        alert(formatDate(selectedDate));
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    if (selectedDate) {
+      getReservinfo();
+    }
+  }, [selectedDate]);
+
+  useEffect(() => {
+    if (userinfo.appointment && userinfo.appointment.length > 0) {
+      const initialTime = ReservationTime(userinfo.appointment[0].date);
+      setTime(initialTime);
+    }
+  }, [userinfo]);
+
+  // 예약 생성하기
+  const formatDateNewReservation = (date) => {
+    return format(date, "yyyyMMdd", { locale: ko });
+  };
+
+  const WriteBtnClick = () => {
+    formatDateNewReservation(selectedDate);
+    axios
+      .post(`${baseURL}/reservation/`, {
+        client: username,
+        date: `${formatDateNewReservation(selectedDate)} ${timeNewReservation}`,
+      })
+      .then((response) => {
+        console.log(response.data); // 수정된 부분
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleFixbtnClick = (appointment) => {
+    console.log("appointment", appointment);
+    setSelectfix(appointment);
+    console.log("selectfix", selectfix);
     setFix(true);
+    console.log("fix", fix);
   };
 
-  const userinfo = {
-    name: "나",
-    hospital: "숙명 한의원",
-    reservation: "17:30",
-  };
-  const friendinfo = {
-    name: "나",
-    reservation: "17:30",
-    hospital: "숙명 한의원",
-  };
-  const foodinfo = {
-    result: "건강이 염려되는걸요?",
-  };
-  const feelinginfo = {
-    result: "소화불량, 고혈압",
+  const ReservationTime = (dateTimeString) => {
+    const timePart = dateTimeString.split("T")[1];
+    const reservatetime = timePart.split(":").slice(0, 2).join(":");
+    return reservatetime;
   };
 
-  // 시간 input
-  const initialTime = userinfo.reservation ? userinfo.reservation : "";
-  const [time, setTime] = useState(initialTime);
   const handleChange = (e) => {
     setTime(e.target.value);
   };
+
+  //예약 생성 시 시간 변경
+  const handleTimeChange = (e) => {
+    setTimeNewReservation(e.target.value);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    // 여기서 시간 업데이트 등의 작업을 수행
   };
+
+  if (!isOpen) return null;
 
   return (
     <div>
       <ModalOverlay style={{ display: isOpen ? "flex" : "none" }}>
         <Container>
-          {fix ? (
+          {fix && selectfix ? (
             <>
-              {userinfo.hospital ? (
+              {selectfix.client_my_clinic ? (
                 <>
                   <Purple>
                     <MyFixTitle>
-                      <h2>{selectedDate.toString()}</h2>
-                      <MyFix>{userinfo.name}의 예약</MyFix>
+                      <h2>{formatDate(selectedDate)}</h2>
+                      <MyFix>{selectfix.client_username}의 예약</MyFix>
                     </MyFixTitle>
                   </Purple>
                   <SubTitle>
@@ -61,7 +132,9 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
                     <form onSubmit={handleSubmit}>
                       <HospitalBox>
                         <Hospitalimg src="/images/marker.png"></Hospitalimg>
-                        <HospitalName>{userinfo.hospital}</HospitalName>
+                        <HospitalName>
+                          {selectfix.client_my_clinic}
+                        </HospitalName>
                         <input
                           type="time"
                           value={time}
@@ -90,7 +163,7 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
                       <br />
                       설정 후 다시 이용해 주세요
                     </h3>
-                    <CloseButton onClick={() => navigate("/map")}>
+                    <CloseButton onClick={() => navigate(`/map/${username}`)}>
                       나의 한의원 찾기
                     </CloseButton>
                   </NotWrapper>
@@ -100,79 +173,56 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
           ) : (
             <>
               <Purple>
-                <h2>{selectedDate.toString()}</h2>
+                <h2>{formatDate(selectedDate)}</h2>
               </Purple>
               <SubTitle>
                 <img src="/images/purplespot.png" alt="purplespot"></img>
                 <h2>예약 일정</h2>
               </SubTitle>
               <OurWrapper>
-                <OurBox>
-                  <h3>{userinfo.name}</h3>
-                  <Myimg src="/images/mycareimg.png"></Myimg>
-                  <img src="images/whitebar.png"></img>
-                  {userinfo.reservation ? (
-                    <>
-                      <h3>{userinfo.hospital}</h3>
-                      <p>{userinfo.reservation}</p>
-                    </>
-                  ) : (
-                    <>
-                      <h3>아직 예약이 없어요!</h3>
-                    </>
-                  )}
-                  <Fiximg
-                    src="/images/fixreservation.png"
-                    onClick={handleFixbtnClick}
-                  ></Fiximg>
-                </OurBox>
-                <OurBox>
-                  <h3>{friendinfo.name}</h3>
-                  <Myimg src="/images/ourcareimg.png"></Myimg>
-                  <img src="images/whitebar.png"></img>
-                  {friendinfo.reservation ? (
-                    <>
-                      <h3>{friendinfo.hospital}</h3>
-                      <p>{friendinfo.reservation}</p>
-                    </>
-                  ) : (
-                    <>
-                      <h3>아직 예약이 없어요!</h3>
-                    </>
-                  )}
-                  <Fiximg
-                    src="/images/fixreservation.png"
-                    onClick={handleFixbtnClick}
-                  ></Fiximg>
-                </OurBox>
-                <OurBox>
-                  <h3>{userinfo.name}</h3>
-                  <Myimg src="/images/ourcareimg.png"></Myimg>
-                  <img src="images/whitebar.png"></img>
-                  {friendinfo.reservation ? (
-                    <>
-                      <h3>{friendinfo.hospital}</h3>
-                      <p>{friendinfo.reservation}</p>
-                    </>
-                  ) : (
-                    <>
-                      <h3>아직 예약이 없어요!</h3>
-                    </>
-                  )}
-                  <Fiximg
-                    src="/images/fixreservation.png"
-                    onClick={handleFixbtnClick}
-                  ></Fiximg>
-                </OurBox>
+                {userinfo.appointment && userinfo.appointment.length > 0 ? (
+                  <>
+                    {userinfo.appointment.map((item, index) => (
+                      <OurBox key={index}>
+                        <h3>{item.client_username}</h3>
+                        <Myimg src="/images/mycareimg.png"></Myimg>
+                        <h3>{item.client_my_clinic}</h3>
+                        <p>{ReservationTime(item.date)}</p>
+                        <Fiximg
+                          src="/images/fixreservation.png"
+                          onClick={() => handleFixbtnClick(item)}
+                        ></Fiximg>
+                      </OurBox>
+                    ))}
+                  </>
+                ) : (
+                  <form onSubmit={handleSubmit}>
+                    <WriteWrapper>
+                      <WriteBox>
+                        <input
+                          type="time"
+                          value={time}
+                          onChange={handleTimeChange}
+                        />
+                        <Writebtn onClick={() => WriteBtnClick()}>
+                          기록하기
+                        </Writebtn>
+                      </WriteBox>
+                    </WriteWrapper>
+                  </form>
+                )}
               </OurWrapper>
-              <BigBar src="images/whitebar.png"></BigBar>
               <ConditionWrapper>
                 <ConditionBox>
                   <SubTitle>
                     <img src="/images/purplespot.png" alt="purplespot"></img>
                     <h2>식습관</h2>
                   </SubTitle>
-                  <p>{foodinfo.result}</p>
+                  <p>
+                    {userinfo.meal && userinfo.meal.overall_status
+                      ? userinfo.meal.overall_status
+                      : null}
+                  </p>
                   <DetailWrapper>
                     <p>자세히 보기</p>
                     <img src="/images/seedetail.png"></img>
@@ -183,7 +233,11 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
                     <img src="/images/purplespot.png" alt="purplespot"></img>
                     <h2>몸상태 및 기분</h2>
                   </SubTitle>
-                  <p>{feelinginfo.result}</p>
+                  <p>
+                    {userinfo.condition && userinfo.condition.condition_cate
+                      ? userinfo.condition.condition_cate.split(",")[0]
+                      : null}
+                  </p>
                   <DetailWrapper>
                     <p>자세히 보기</p>
                     <img src="/images/seedetail.png"></img>
@@ -209,10 +263,12 @@ export const ModalOverlay = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000; /* Ensure the modal is above other content */
+  z-index: 1000;
 `;
 
 export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
   position: relative;
   width: 325px;
   height: auto;
@@ -302,7 +358,7 @@ const SubTitle = styled.div`
 const OurWrapper = styled.div`
   display: flex;
   align-items: stretch;
-  margin-left: 25px;
+  margin-left: 14px;
   gap: 10px;
   flex-wrap: wrap;
 `;
@@ -314,8 +370,8 @@ const OurBox = styled.div`
   flex-direction: column;
   padding: 5px 15px;
   position: relative;
-  width: 108px;
-  height: 80px;
+  width: 115px;
+  height: 100px;
 
   h3 {
     margin-top: 5px;
@@ -326,7 +382,7 @@ const OurBox = styled.div`
     font-size: 13px;
   }
   img {
-    margin-top: -10px;
+    margin-top: -5px;
     width: 95px;
   }
   p {
@@ -347,12 +403,22 @@ const Fiximg = styled.img`
   display: block !important;
   position: absolute !important;
   width: 15px !important;
-  top: 72px;
-  right: 13px;
+  top: 80px !important;
+  right: 13px !important;
   cursor: pointer;
 `;
 
 const HospitalWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 15px;
+  gap: 20px;
+  flex-wrap: wrap;
+  position: relative;
+`;
+
+const WriteWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -369,7 +435,7 @@ const HospitalBox = styled.div`
   flex-direction: column;
   justify-content: center;
   position: relative;
-  padding: 10px 20px 50px 20px;
+  padding: 10px 25px 50px 25px;
   width: 220px;
 
   input {
@@ -394,6 +460,27 @@ const HospitalBox = styled.div`
     top: 115px;
     right: 30px;
     cursor: pointer;
+  }
+`;
+
+const WriteBox = styled.div`
+  box-shadow: 0 0 8px #cecece;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  padding: 10px 25px 50px 25px;
+  width: 220px;
+
+  input {
+    margin-right: 0.5em;
+    padding: 0.5em;
+    font-size: 1em;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: white;
+    color: black;
   }
 `;
 
@@ -437,19 +524,19 @@ const ConditionWrapper = styled.div`
   display: flex;
   align-items: center;
   margin-left: 0;
-  gap: auto;
+  gap: 40px;
 `;
 
 const ConditionBox = styled.div`
   p {
-    margin-left: 30px;
+    margin-left: -15px;
     margin-top: -10px;
     font-size: 13px;
   }
 
   &:last-child {
     p {
-      margin-left: 0;
+      margin-left: -40px;
     }
   }
 `;
@@ -473,4 +560,19 @@ const DetailWrapper = styled.div`
     }
   }
 `;
+
+const Writebtn = styled.button`
+  background-color: black;
+  color: white;
+  border-radius: 25px;
+  display: block;
+  position: absolute;
+  width: 75px;
+  font-size: 12px;
+  text-align: center;
+  top: 65px;
+  right: 30px;
+  cursor: pointer;
+`;
+
 export default CalendarModal;
