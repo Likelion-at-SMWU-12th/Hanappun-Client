@@ -201,7 +201,7 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
                       <WriteBox>
                         <input
                           type="time"
-                          value={time}
+                          value={timeNewReservation}
                           onChange={handleTimeChange}
                         />
                         <Writebtn onClick={() => WriteBtnClick()}>
