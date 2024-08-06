@@ -49,13 +49,13 @@
 .Minfo {
   position: relative;
   width: 325px;
-  height: 450px;
+  height: 400px;
   background-color: white;
   border-radius: 40px;
   border-radius: 40px;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 35px;
+  margin-bottom: 20px;
 }
 
 /* Mback_purple */
@@ -98,8 +98,8 @@
 }
 
 .Mback_white img {
-  width: 150px;
-  margin-top: 40px;
+  width: 140px;
+  margin-top: 30px;
 }
 
 .Mback_white p {
@@ -155,16 +155,16 @@
 
 /* Marrow */
 .Marrow {
-  width: 50px;
+  width: 40px;
   margin-top: 0px;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 /* Mbtns */
 .Mbtns {
-  margin-bottom: 100px;
+  margin-bottom: 70px;
   text-align: center;
 }
 
