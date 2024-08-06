@@ -164,7 +164,7 @@ const OurCareProfile = () => {
               </Box1>
               <Box1>
                 <List>
-                  <ListItem onClick={() => navigate("/map")}>
+                  <ListItem>
                     <Box1Img src="/images/hospital.png" alt="map"></Box1Img>
                     {friendDetail.reservation_clinic &&
                     friendDetail.reservation_clinic !== "" ? (

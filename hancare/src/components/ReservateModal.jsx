@@ -8,10 +8,12 @@ import {
   CloseButton,
   SetButton,
 } from "./SetMyModal";
+import { useSelector } from "react-redux";
 
 function ReservateModal({ isReservateOpen, closeReservateModal, cliniccall }) {
   // 수정된 부분
   const navigate = useNavigate();
+  const username = useSelector((state) => state.username);
 
   const [ButtonClick, setButtonClick] = useState(true);
   const handleButtonclick = () => {
@@ -60,9 +62,9 @@ function ReservateModal({ isReservateOpen, closeReservateModal, cliniccall }) {
                   {/* 수정된 부분 */}
                   뒤로가기
                 </CloseButton>
-                <SetButton onClick={() => navigate("/calendar")}>
-                  예약 기록하기
-                </SetButton>
+                <a href={`/calendar/${username}`}>
+                  <SetButton>예약 기록하기</SetButton>
+                </a>
               </BtnWrapper>
             </>
           )}

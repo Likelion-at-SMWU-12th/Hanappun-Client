@@ -6,6 +6,8 @@ import styled from "styled-components";
 import { setUsername } from "../redux/action";
 import { useSelector } from "react-redux";
 import { baseURL } from "../api/baseURL";
+import { format } from "date-fns";
+import { ko } from "date-fns/locale";
 
 const Mainpage = () => {
   const navigate = useNavigate();
@@ -57,6 +59,9 @@ const Mainpage = () => {
   const formattedDate = `${
     today.getMonth() + 1
   }월 ${today.getDate()}일 ${dayOfWeek}요일`;
+  const formatDate = (date) => {
+    return format(date, "yyyy-MM-dd", { locale: ko });
+  };
 
   // 내 정보 불러오기
   const [user, setUser] = useState([]);
@@ -98,7 +103,7 @@ const Mainpage = () => {
       <Box1Wrapper>
         <Box1>
           <List>
-            <ListItem onClick={() => navigate("/map")}>
+            <ListItem onClick={() => navigate(`/map/${param2}`)}>
               <Box1Img src="/images/hospital.png" alt="map"></Box1Img>
               {user.my_clinic ? (
                 <Box1Text>{user.my_clinic}</Box1Text>
@@ -160,7 +165,9 @@ const Mainpage = () => {
               <ListItem>
                 <TitleText>{mealFeedback.message}</TitleText>
               </ListItem>
-              <ListItem onClick={() => navigate(`/meal/${param2}`)}>
+              <ListItem
+                onClick={() => navigate(`/meal/${param2}/${formatDate(today)}`)}
+              >
                 {/* 리스트 아이템 이모지는 렌더링방식으로 각각 처리 */}
                 {userdata.breakfast ? (
                   <>
@@ -174,7 +181,9 @@ const Mainpage = () => {
                   </>
                 )}
               </ListItem>
-              <ListItem onClick={() => navigate(`/meal/${param2}`)}>
+              <ListItem
+                onClick={() => navigate(`/meal/${param2}/${formatDate(today)}`)}
+              >
                 {userdata.lunch ? (
                   <>
                     <PlusImg src="/images/check.png"></PlusImg>
@@ -187,7 +196,9 @@ const Mainpage = () => {
                   </>
                 )}
               </ListItem>
-              <ListItem onClick={() => navigate(`/meal/${param2}`)}>
+              <ListItem
+                onClick={() => navigate(`/meal/${param2}/${formatDate(today)}`)}
+              >
                 {userdata.dinner ? (
                   <>
                     <PlusImg src="/images/check.png"></PlusImg>
@@ -221,7 +232,7 @@ const Mainpage = () => {
                 </>
               ) : (
                 <>
-                  <OurCareStart onClick={() => navigate("/ourcare/")}>
+                  <OurCareStart onClick={() => navigate(`/ourcare/${param2}`)}>
                     시작하기
                   </OurCareStart>
                 </>
