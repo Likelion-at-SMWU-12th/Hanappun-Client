@@ -72,7 +72,7 @@ const QmyCON = () => {
               </button>
               <button
                 className="QmCpurpleBtn"
-                onClick={() => navigate(`/myCON/SelfTest${params.username}`)}
+                onClick={() => navigate(`/myCON/SelfTest/${params.username}`)}
               >
                 자가진단으로 알아볼래요
               </button>

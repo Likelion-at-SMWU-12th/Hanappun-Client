@@ -40,9 +40,6 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
         setUserinfo(response.data.result); // 수정된 부분
       })
       .catch((error) => {
-        alert("연동실패");
-        console.log({ username });
-        alert(formatDate(selectedDate));
         console.log(error);
       });
   };
