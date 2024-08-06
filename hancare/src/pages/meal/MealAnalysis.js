@@ -4,12 +4,28 @@ import "./Meal.css";
 
 import axios from "axios";
 import { baseURL } from "../../api/baseURL";
+import { getuserData } from "../../api/getuserData";
 
 const MealAnalysis = () => {
   const navigate = useNavigate();
   const params = useParams();
   const [mealData, setMealData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [userNickname, setUserNickname] = useState("");
+
+  const getUserNickname = async () => {
+    const result = await getuserData(params.username);
+
+    if (result.status == 200) {
+      setUserNickname(result.data.result.nickname);
+    } else {
+    }
+  };
+
+  useEffect(() => {
+    getUserNickname();
+  }, [params.username]);
 
   const today = new Date(params.date);
   const week = ["일", "월", "화", "수", "목", "금", "토"];
@@ -48,7 +64,7 @@ const MealAnalysis = () => {
 
   //테스트용 데이터
   const user = {
-    name: params.username,
+    name: userNickname,
     todayMeal: mealData.overall_status,
     breakfast: [mealData.morning_good_foods, mealData.morning_bad_foods],
     lunch: [mealData.lunch_good_foods, mealData.lunch_bad_foods],
@@ -106,31 +122,25 @@ const MealAnalysis = () => {
             />
           </div>
           <div className="Mback_white2">
-            <div className="Mmeal_name">
-              <span className="MpurpleDiv">아침</span>
-              <span className="MpurpleDiv">점심</span>
-              <span className="MpurpleDiv">저녁</span>
-              <span className="MpurpleDiv">간식</span>
-            </div>
             <div className="Mmeal_one">
-              <ul>
-                <li className="Mblue">{user.breakfast[0]}</li>
-                <li className="Mred">{user.breakfast[1]}</li>
+              <ul className="MA_ulblue">
+                {Array.isArray(user.breakfast[0]) &&
+                  user.breakfast[0].length > 0 &&
+                  (user.breakfast[0] + "").split(",").map((item, index) => (
+                    <li key={`breakfast-good-${index}`} className="Mblue">
+                      {item.trim()}
+                    </li>
+                  ))}
               </ul>
-
+              <div className="vertical-divider"></div>
               <ul>
-                <li className="Mblue">{user.lunch[0]}</li>
-                <li className="Mred">{user.lunch[1]}</li>
-              </ul>
-
-              <ul>
-                <li className="Mblue">{user.dinner[0]}</li>
-                <li className="Mred">{user.dinner[1]}</li>
-              </ul>
-
-              <ul>
-                <li className="Mblue">{user.snack[0]}</li>
-                <li className="Mred">{user.snack[1]}</li>
+                {Array.isArray(user.breakfast[1]) &&
+                  user.breakfast[1].length > 0 &&
+                  (user.breakfast[1] + "").split(",").map((item, index) => (
+                    <li key={`breakfast-bad-${index}`} className="Mred">
+                      {item.trim()}
+                    </li>
+                  ))}
               </ul>
             </div>
           </div>
@@ -139,10 +149,10 @@ const MealAnalysis = () => {
           <button
             className="MwhiteBtn"
             onClick={() =>
-              navigate(`/meal/result/${params.username}/${params.date}`)
+              navigate(`/meal/first/${params.username}/${params.date}`)
             }
           >
-            식사 다시보기
+            수정
           </button>
           <button
             className="MpurpleBtn2"

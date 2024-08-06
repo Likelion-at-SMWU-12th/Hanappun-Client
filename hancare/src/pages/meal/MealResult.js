@@ -7,7 +7,7 @@ import { baseURL } from "../../api/baseURL";
 const MealResult = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { mealType, mealItems, mealElements } = location.state || {};
+  const { mealItems, mealElements } = location.state || {};
   const params = useParams();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -24,36 +24,6 @@ const MealResult = () => {
   const displayDate = `${
     today.getMonth() + 1
   }월 ${today.getDate()}일 ${dayOfWeek}요일`;
-
-  const getMealTypeName = (type) => {
-    switch (type) {
-      case 1:
-        return "morning";
-      case 2:
-        return "lunch";
-      case 3:
-        return "dinner";
-      case 4:
-        return "snack";
-      default:
-        return "";
-    }
-  };
-
-  const MealKorean = (type) => {
-    switch (type) {
-      case "morning":
-        return "아침";
-      case "lunch":
-        return "점심";
-      case "dinner":
-        return "저녁";
-      case "snack":
-        return "간식";
-      default:
-        return "";
-    }
-  };
 
   const renderMealItems = () => {
     if (!mealItems || !mealElements) {
@@ -84,7 +54,7 @@ const MealResult = () => {
       snack: [],
     };
 
-    const mealTypeName = getMealTypeName(mealType);
+    const mealTypeName = "morning";
     mealData[mealTypeName] = mealItems.map((item) => {
       const elements = mealElements[item.id] || [];
       return {
@@ -164,7 +134,7 @@ const MealResult = () => {
     }
   };
 
-  if (!mealType || !mealItems || !mealElements) {
+  if (!mealItems || !mealElements) {
     return <div>로딩 중...</div>;
   }
 
@@ -176,25 +146,7 @@ const MealResult = () => {
       </header>
       <div className="MRdate">{displayDate}</div>
       <main className="MRmain">
-        <div className="MRmenu">
-          <span className="MRpurpleDiv">끼니</span>
-          <button value="1" className={mealType === 1 ? "MRselected" : ""}>
-            아침
-          </button>
-          <button value="2" className={mealType === 2 ? "MRselected" : ""}>
-            점심
-          </button>
-          <button value="3" className={mealType === 3 ? "MRselected" : ""}>
-            저녁
-          </button>
-          <button value="4" className={mealType === 4 ? "MRselected" : ""}>
-            간식
-          </button>
-        </div>
-        <hr />
-        <p className="MRtitle">
-          오늘의 {MealKorean(getMealTypeName(mealType))}
-        </p>
+        <p className="MRtitle">MENU</p>
         <div className="MRcontent">{renderMealItems()}</div>
         <div className="MRbtns">
           <button className="MRblackBtn" onClick={() => navigate(-1)}>
