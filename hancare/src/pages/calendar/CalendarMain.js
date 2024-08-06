@@ -134,7 +134,7 @@ const CalendarMain = () => {
           <CalendarModal
             isOpen={modalOpen}
             closeModal={closeModal}
-            selectedDate={selectedDate ? formatDate(selectedDate) : null}
+            selectedDate={selectedDate ? date : null}
           />
         )}
       </Container>
