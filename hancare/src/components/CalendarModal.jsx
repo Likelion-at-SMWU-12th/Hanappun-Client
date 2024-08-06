@@ -4,13 +4,17 @@ import axios from "axios";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { baseURL } from "../api/baseURL";
-import { format, fromUnixTime } from "date-fns";
+import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 
 function CalendarModal({ isOpen, closeModal, selectedDate }) {
   const navigate = useNavigate();
   const username = useSelector((state) => state.username);
   const [userinfo, setUserinfo] = useState([]);
+  const [fix, setFix] = useState(false);
+  const [time, setTime] = useState("");
+  const [timeNewReservation, setTimeNewReservation] = useState("");
+  const [selectfix, setSelectfix] = useState(false);
 
   const formatDate = (date) => {
     return format(date, "yyyy-MM-dd", { locale: ko });
@@ -24,6 +28,7 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
     return `${datePart} ${hours}:${minutes}`;
   };
 
+  // 특정 날짜 이벤트 불러오기
   const getReservinfo = () => {
     axios
       .get(
@@ -32,7 +37,6 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
         )}/`
       )
       .then((response) => {
-        alert("연동성공");
         setUserinfo(response.data.result); // 수정된 부분
       })
       .catch((error) => {
@@ -47,34 +51,61 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
     if (selectedDate) {
       getReservinfo();
     }
-  }, []);
+  }, [selectedDate]);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    if (userinfo.appointment && userinfo.appointment.length > 0) {
+      const initialTime = ReservationTime(userinfo.appointment[0].date);
+      setTime(initialTime);
+    }
+  }, [userinfo]);
 
-  // 수정 버튼 상태
-  const [fix, setFix] = useState(false);
-  const handleFixbtnClick = () => {
-    setFix(true);
+  // 예약 생성하기
+  const formatDateNewReservation = (date) => {
+    return format(date, "yyyyMMdd", { locale: ko });
   };
 
-  // 상태 변수들
+  const WriteBtnClick = () => {
+    formatDateNewReservation(selectedDate);
+    console.log(username);
+    console.log(formatDateNewReservation(selectedDate));
+    console.log(timeNewReservation);
+    axios
+      .post(`${baseURL}/reservation/`, {
+        client: username,
+        date: `${formatDateNewReservation(selectedDate)} ${timeNewReservation}`,
+      })
+      .then((response) => {
+        console.log(response.data); // 수정된 부분
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleFixbtnClick = (appointment) => {
+    console.log("appointment", appointment);
+    setSelectfix(appointment);
+    console.log("selectfix", selectfix);
+    setFix(true);
+    console.log("fix", fix);
+  };
+
   const ReservationTime = (dateTimeString) => {
     const timePart = dateTimeString.split("T")[1];
     const reservatetime = timePart.split(":").slice(0, 2).join(":");
     return reservatetime;
   };
 
-  const [time, setTime] = useState("");
-
-  useEffect(() => {
-    if (userinfo.appointment && userinfo.appointment.date) {
-      const initialTime = ReservationTime(userinfo.appointment.date);
-      setTime(initialTime);
-    }
-  }, [userinfo]);
-
   const handleChange = (e) => {
     setTime(e.target.value);
+  };
+
+  //예약 생성 시 시간 변경
+  const handleTimeChange = (e) => {
+    console.log("------------");
+    setTimeNewReservation(e.target.value);
+    console.log(timeNewReservation);
   };
 
   const handleSubmit = (e) => {
@@ -82,116 +113,110 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
     // 여기서 시간 업데이트 등의 작업을 수행
   };
 
+  if (!isOpen) return null;
+
   return (
     <div>
       <ModalOverlay style={{ display: isOpen ? "flex" : "none" }}>
         <Container>
-          {fix ? (
+          {fix && selectfix ? (
             <>
-              {userinfo.appointment &&
-                userinfo.appointment.length !== 0 &&
-                userinfo.appointment.map((item, index) => (
-                  <div key={index}>
-                    {item.client_my_clinic ? (
-                      <>
-                        <Purple>
-                          <MyFixTitle>
-                            <h2>{selectedDate.toString()}</h2>
-                            <MyFix>{item.client_username}의 예약</MyFix>
-                          </MyFixTitle>
-                        </Purple>
-                        <SubTitle>
-                          <img
-                            src="/images/purplespot.png"
-                            alt="purplespot"
-                          ></img>
-                          <h2>예약 일정</h2>
-                        </SubTitle>
-                        <HospitalWrapper>
-                          <form onSubmit={handleSubmit}>
-                            <HospitalBox>
-                              <Hospitalimg src="/images/marker.png"></Hospitalimg>
-                              <HospitalName>
-                                {item.client_my_clinic}
-                              </HospitalName>
-                              <input
-                                type="time"
-                                value={time}
-                                onChange={handleChange}
-                              />
-                              <button>예약 삭제</button>
-                            </HospitalBox>
-                            <BtnWrapper>
-                              <SetButton onClick={closeModal}>
-                                뒤로가기
-                              </SetButton>
-                              <CloseButton type="submit">저장</CloseButton>
-                            </BtnWrapper>
-                          </form>
-                        </HospitalWrapper>
-                      </>
-                    ) : (
-                      <>
-                        <Purple>
-                          <MyFixTitle>
-                            <h2>알림</h2>
-                          </MyFixTitle>
-                        </Purple>
-                        <NotWrapper>
-                          <Notimg src="/images/nothospital.png"></Notimg>
-                          <h3>
-                            해당 예약자의 나의 한의원이 설정되어 있지 않습니다
-                            <br />
-                            설정 후 다시 이용해 주세요
-                          </h3>
-                          <CloseButton
-                            onClick={() => navigate(`/map/${username}`)}
-                          >
-                            나의 한의원 찾기
-                          </CloseButton>
-                        </NotWrapper>
-                      </>
-                    )}
-                  </div>
-                ))}
+              {selectfix.client_my_clinic ? (
+                <>
+                  <Purple>
+                    <MyFixTitle>
+                      <h2>{formatDate(selectedDate)}</h2>
+                      <MyFix>{selectfix.client_username}의 예약</MyFix>
+                    </MyFixTitle>
+                  </Purple>
+                  <SubTitle>
+                    <img src="/images/purplespot.png" alt="purplespot"></img>
+                    <h2>예약 일정</h2>
+                  </SubTitle>
+                  <HospitalWrapper>
+                    <form onSubmit={handleSubmit}>
+                      <HospitalBox>
+                        <Hospitalimg src="/images/marker.png"></Hospitalimg>
+                        <HospitalName>
+                          {selectfix.client_my_clinic}
+                        </HospitalName>
+                        <input
+                          type="time"
+                          value={time}
+                          onChange={handleChange}
+                        />
+                        <button>예약 삭제</button>
+                      </HospitalBox>
+                      <BtnWrapper>
+                        <SetButton onClick={closeModal}>뒤로가기</SetButton>
+                        <CloseButton type="submit">저장</CloseButton>
+                      </BtnWrapper>
+                    </form>
+                  </HospitalWrapper>
+                </>
+              ) : (
+                <>
+                  <Purple>
+                    <MyFixTitle>
+                      <h2>알림</h2>
+                    </MyFixTitle>
+                  </Purple>
+                  <NotWrapper>
+                    <Notimg src="/images/nothospital.png"></Notimg>
+                    <h3>
+                      해당 예약자의 나의 한의원이 설정되어 있지 않습니다
+                      <br />
+                      설정 후 다시 이용해 주세요
+                    </h3>
+                    <CloseButton onClick={() => navigate(`/map/${username}`)}>
+                      나의 한의원 찾기
+                    </CloseButton>
+                  </NotWrapper>
+                </>
+              )}
             </>
           ) : (
             <>
-              {userinfo.appointment &&
-                userinfo.appointment.length !== 0 &&
-                userinfo.appointment.map((item, index) => (
-                  <div key={index}>
-                    <Purple>
-                      <h2>{selectedDate.toString()}</h2>
-                    </Purple>
-                    <SubTitle>
-                      <img src="/images/purplespot.png" alt="purplespot"></img>
-                      <h2>예약 일정</h2>
-                    </SubTitle>
-                    <OurWrapper>
-                      <OurBox>
+              <Purple>
+                <h2>{formatDate(selectedDate)}</h2>
+              </Purple>
+              <SubTitle>
+                <img src="/images/purplespot.png" alt="purplespot"></img>
+                <h2>예약 일정</h2>
+              </SubTitle>
+              <OurWrapper>
+                {userinfo.appointment && userinfo.appointment.length > 0 ? (
+                  <>
+                    {userinfo.appointment.map((item, index) => (
+                      <OurBox key={index}>
                         <h3>{item.client_username}</h3>
                         <Myimg src="/images/mycareimg.png"></Myimg>
-                        <img src="images/whitebar.png"></img>
-                        {userinfo.reservation ? (
-                          <>
-                            <h3>{item.client_my_clinic}</h3>
-                            <p>{ReservationTime(item.date)}</p>
-                          </>
-                        ) : (
-                          <>
-                            <h3>아직 예약이 없어요!</h3>
-                          </>
-                        )}
+                        <h3>{item.client_my_clinic}</h3>
+                        <p>{ReservationTime(item.date)}</p>
                         <Fiximg
                           src="/images/fixreservation.png"
-                          onClick={handleFixbtnClick}
+                          onClick={() => handleFixbtnClick(item)}
                         ></Fiximg>
                       </OurBox>
-                    </OurWrapper>
-                  </div>
-                ))}
-              <BigBar src="images/whitebar.png"></BigBar>
+                    ))}
+                  </>
+                ) : (
+                  <form onSubmit={handleSubmit}>
+                    <WriteWrapper>
+                      <WriteBox>
+                        <input
+                          type="time"
+                          value={time}
+                          onChange={handleTimeChange}
+                        />
+                        <Writebtn onClick={() => WriteBtnClick()}>
+                          기록하기
+                        </Writebtn>
+                      </WriteBox>
+                    </WriteWrapper>
+                  </form>
+                )}
+              </OurWrapper>
               <ConditionWrapper>
                 <ConditionBox>
                   <SubTitle>
@@ -199,7 +224,9 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
                     <h2>식습관</h2>
                   </SubTitle>
                   <p>
-                    {userinfo.overall_status ? userinfo.overall_status : null}
+                    {userinfo.meal && userinfo.meal.overall_status
+                      ? userinfo.meal.overall_status
+                      : null}
                   </p>
                   <DetailWrapper>
                     <p>자세히 보기</p>
@@ -211,7 +238,11 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
                     <img src="/images/purplespot.png" alt="purplespot"></img>
                     <h2>몸상태 및 기분</h2>
                   </SubTitle>
-                  <p>{userinfo.condition ? userinfo.condition : null}</p>
+                  <p>
+                    {userinfo.condition && userinfo.condition.condition_cate
+                      ? userinfo.condition.condition_cate.split(",")[0]
+                      : null}
+                  </p>
                   <DetailWrapper>
                     <p>자세히 보기</p>
                     <img src="/images/seedetail.png"></img>
@@ -241,6 +272,8 @@ export const ModalOverlay = styled.div`
 `;
 
 export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
   position: relative;
   width: 325px;
   height: auto;
@@ -330,7 +363,7 @@ const SubTitle = styled.div`
 const OurWrapper = styled.div`
   display: flex;
   align-items: stretch;
-  margin-left: 25px;
+  margin-left: 14px;
   gap: 10px;
   flex-wrap: wrap;
 `;
@@ -342,8 +375,8 @@ const OurBox = styled.div`
   flex-direction: column;
   padding: 5px 15px;
   position: relative;
-  width: 108px;
-  height: 80px;
+  width: 115px;
+  height: 100px;
 
   h3 {
     margin-top: 5px;
@@ -354,7 +387,7 @@ const OurBox = styled.div`
     font-size: 13px;
   }
   img {
-    margin-top: -10px;
+    margin-top: -5px;
     width: 95px;
   }
   p {
@@ -375,12 +408,22 @@ const Fiximg = styled.img`
   display: block !important;
   position: absolute !important;
   width: 15px !important;
-  top: 72px;
-  right: 13px;
+  top: 80px !important;
+  right: 13px !important;
   cursor: pointer;
 `;
 
 const HospitalWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 15px;
+  gap: 20px;
+  flex-wrap: wrap;
+  position: relative;
+`;
+
+const WriteWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -397,7 +440,7 @@ const HospitalBox = styled.div`
   flex-direction: column;
   justify-content: center;
   position: relative;
-  padding: 10px 20px 50px 20px;
+  padding: 10px 25px 50px 25px;
   width: 220px;
 
   input {
@@ -422,6 +465,27 @@ const HospitalBox = styled.div`
     top: 115px;
     right: 30px;
     cursor: pointer;
+  }
+`;
+
+const WriteBox = styled.div`
+  box-shadow: 0 0 8px #cecece;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  padding: 10px 25px 50px 25px;
+  width: 220px;
+
+  input {
+    margin-right: 0.5em;
+    padding: 0.5em;
+    font-size: 1em;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: white;
+    color: black;
   }
 `;
 
@@ -465,19 +529,19 @@ const ConditionWrapper = styled.div`
   display: flex;
   align-items: center;
   margin-left: 0;
-  gap: auto;
+  gap: 40px;
 `;
 
 const ConditionBox = styled.div`
   p {
-    margin-left: 30px;
+    margin-left: -15px;
     margin-top: -10px;
     font-size: 13px;
   }
 
   &:last-child {
     p {
-      margin-left: 0;
+      margin-left: -40px;
     }
   }
 `;
@@ -500,6 +564,20 @@ const DetailWrapper = styled.div`
       margin-left: 30px;
     }
   }
+`;
+
+const Writebtn = styled.button`
+  background-color: black;
+  color: white;
+  border-radius: 25px;
+  display: block;
+  position: absolute;
+  width: 75px;
+  font-size: 12px;
+  text-align: center;
+  top: 65px;
+  right: 30px;
+  cursor: pointer;
 `;
 
 export default CalendarModal;
