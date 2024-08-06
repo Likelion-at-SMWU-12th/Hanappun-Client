@@ -35,6 +35,8 @@ const MealResult = () => {
         return "dinner";
       case 4:
         return "snack";
+      default:
+        return "";
     }
   };
 
@@ -46,8 +48,10 @@ const MealResult = () => {
         return "점심";
       case "dinner":
         return "저녁";
-      case "snak":
+      case "snack":
         return "간식";
+      default:
+        return "";
     }
   };
 
@@ -122,6 +126,7 @@ const MealResult = () => {
 
     return mealData;
   };
+
   const handleSave = async () => {
     setIsLoading(true);
     try {
@@ -132,14 +137,14 @@ const MealResult = () => {
       const existingRecord = response.data.data.find(
         (record) => record.date === formattedDate
       );
+      console.log("결과", existingRecord);
 
       let saveResponse;
       if (existingRecord) {
-        // 기존 기록 수정 (POST 요청 사용)
-        alert(JSON.stringify(mealData));
-        saveResponse = await axios.post(`${baseURL}/meal/`, mealData);
+        // 기존 기록 수정 (PUT 요청 사용)
+        saveResponse = await axios.put(`${baseURL}/meal/`, mealData);
       } else {
-        // 새 기록 생성
+        // 새 기록 생성 (POST 요청 사용)
         saveResponse = await axios.post(`${baseURL}/meal/`, mealData);
       }
 
@@ -158,6 +163,7 @@ const MealResult = () => {
       setIsLoading(false);
     }
   };
+
   if (!mealType || !mealItems || !mealElements) {
     return <div>로딩 중...</div>;
   }

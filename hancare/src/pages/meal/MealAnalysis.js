@@ -1,13 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./Meal.css";
+
+import axios from "axios";
 import { baseURL } from "../../api/baseURL";
 
 const MealAnalysis = () => {
   const navigate = useNavigate();
   const params = useParams();
+  const [mealData, setMealData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const today = new Date(params.data);
+  const today = new Date(params.date);
   const week = ["일", "월", "화", "수", "목", "금", "토"];
   let dayOfWeek = week[today.getDay()];
   const formattedDate = `${
@@ -24,14 +28,32 @@ const MealAnalysis = () => {
     navigate(-1);
   };
 
+  // 식사 기록 조회
+  useEffect(() => {
+    const fetchMealData = async () => {
+      try {
+        const response = await axios.get(
+          `${baseURL}/date/meal/${params.username}/${params.date}`
+        );
+        setMealData(response.data.data[0]);
+      } catch (error) {
+        console.error("식사 기록 조회 중 오류 발생:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchMealData();
+  }, [params.date]);
+
   //테스트용 데이터
   const user = {
     name: params.username,
-    todayMeal: "good",
-    breakfast: ["", "오렌지주스"],
-    lunch: ["탕수육, 보리차", "짬뽕"],
-    dinner: ["돈가츠", "레몬에이드"],
-    snack: ["", "커피"],
+    todayMeal: mealData.overall_status,
+    breakfast: [mealData.morning_good_foods, mealData.morning_bad_foods],
+    lunch: [mealData.lunch_good_foods, mealData.lunch_bad_foods],
+    dinner: [mealData.dinner_good_foods, mealData.dinner_bad_foods],
+    snack: [mealData.snack_good_foods, mealData.snack_bad_foods],
   };
 
   // todayMeal에 따른 메시지와 이미지 설정
