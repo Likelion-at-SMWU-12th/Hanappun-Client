@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
+import OurCareFamily from "../pages/ourcare/OurCareFamily";
 
 function CalendarModal({ isOpen, closeModal, selectedDate }) {
   const navigate = useNavigate();
@@ -12,14 +12,25 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
     setFix(true);
   };
 
-  // 상태 변수들
-  const [userinfo, setUserinfo] = useState(null);
-  const [friendinfo, setFriendinfo] = useState(null);
-  const [foodinfo, setFoodinfo] = useState(null);
-  const [feelinginfo, setFeelinginfo] = useState(null);
+  const userinfo = {
+    name: "나",
+    hospital: "숙명 한의원",
+    reservation: "17:30",
+  };
+  const friendinfo = {
+    name: "나",
+    reservation: "17:30",
+    hospital: "숙명 한의원",
+  };
+  const foodinfo = {
+    result: "건강이 염려되는걸요?",
+  };
+  const feelinginfo = {
+    result: "소화불량, 고혈압",
+  };
 
   // 시간 input
-  const initialTime = userinfo ? userinfo.reservation : "";
+  const initialTime = userinfo.reservation ? userinfo.reservation : "";
   const [time, setTime] = useState(initialTime);
   const handleChange = (e) => {
     setTime(e.target.value);
@@ -28,55 +39,13 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
     e.preventDefault();
   };
 
-  useEffect(() => {
-    const fetchDetails = async () => {
-      try {
-        const username = "test1"; // 동적으로 변경 필요
-        const response = await axios.get(
-          `/calendars/event/detail/${username}/${selectedDate}/`
-        );
-        const data = response.data.result;
-
-        setUserinfo({
-          name: data.user,
-          hospital: data.appointment[0]?.client_my_clinic || "숙명 한의원",
-          reservation: data.appointment[0]?.date.split("T")[1] || "17:30",
-        });
-
-        setFriendinfo({
-          name: data.user,
-          reservation: data.appointment[1]?.date.split("T")[1] || "17:30",
-          hospital: data.appointment[1]?.client_my_clinic || "숙명 한의원",
-        });
-
-        setFoodinfo({
-          result: data.nickname || "건강이 염려되는걸요?",
-        });
-
-        setFeelinginfo({
-          result: data.condition.condition_cate || "소화불량, 고혈압",
-        });
-
-        setTime(data.appointment[0]?.date.split("T")[1] || "17:30");
-      } catch (error) {
-        console.error("세부 정보를 가져오는 중 오류 발생:", error);
-      }
-    };
-
-    if (selectedDate) {
-      fetchDetails();
-    }
-  }, [selectedDate]);
-
-  if (!isOpen) return null;
-
   return (
     <div>
       <ModalOverlay style={{ display: isOpen ? "flex" : "none" }}>
         <Container>
           {fix ? (
             <>
-              {userinfo?.hospital ? (
+              {userinfo.hospital ? (
                 <>
                   <Purple>
                     <MyFixTitle>
@@ -139,10 +108,10 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
               </SubTitle>
               <OurWrapper>
                 <OurBox>
-                  <h3>{userinfo?.name}</h3>
+                  <h3>{userinfo.name}</h3>
                   <Myimg src="/images/mycareimg.png"></Myimg>
                   <img src="images/whitebar.png"></img>
-                  {userinfo?.reservation ? (
+                  {userinfo.reservation ? (
                     <>
                       <h3>{userinfo.hospital}</h3>
                       <p>{userinfo.reservation}</p>
@@ -158,10 +127,29 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
                   ></Fiximg>
                 </OurBox>
                 <OurBox>
-                  <h3>{friendinfo?.name}</h3>
+                  <h3>{friendinfo.name}</h3>
                   <Myimg src="/images/ourcareimg.png"></Myimg>
                   <img src="images/whitebar.png"></img>
-                  {friendinfo?.reservation ? (
+                  {friendinfo.reservation ? (
+                    <>
+                      <h3>{friendinfo.hospital}</h3>
+                      <p>{friendinfo.reservation}</p>
+                    </>
+                  ) : (
+                    <>
+                      <h3>아직 예약이 없어요!</h3>
+                    </>
+                  )}
+                  <Fiximg
+                    src="/images/fixreservation.png"
+                    onClick={handleFixbtnClick}
+                  ></Fiximg>
+                </OurBox>
+                <OurBox>
+                  <h3>{userinfo.name}</h3>
+                  <Myimg src="/images/ourcareimg.png"></Myimg>
+                  <img src="images/whitebar.png"></img>
+                  {friendinfo.reservation ? (
                     <>
                       <h3>{friendinfo.hospital}</h3>
                       <p>{friendinfo.reservation}</p>
@@ -184,7 +172,7 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
                     <img src="/images/purplespot.png" alt="purplespot"></img>
                     <h2>식습관</h2>
                   </SubTitle>
-                  <p>{foodinfo?.result}</p>
+                  <p>{foodinfo.result}</p>
                   <DetailWrapper>
                     <p>자세히 보기</p>
                     <img src="/images/seedetail.png"></img>
@@ -195,7 +183,7 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
                     <img src="/images/purplespot.png" alt="purplespot"></img>
                     <h2>몸상태 및 기분</h2>
                   </SubTitle>
-                  <p>{feelinginfo?.result}</p>
+                  <p>{feelinginfo.result}</p>
                   <DetailWrapper>
                     <p>자세히 보기</p>
                     <img src="/images/seedetail.png"></img>
