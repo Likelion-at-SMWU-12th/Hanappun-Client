@@ -66,7 +66,7 @@ const MapMain = () => {
   useEffect(() => {
     if (mapcontainer.current) {
       const options = {
-        center: new kakao.maps.LatLng(37.54445537179708, 126.9712695039339),
+        center: new kakao.maps.LatLng(37.484709, 127.034013),
         level: 3,
       };
       const kakaomap = new kakao.maps.Map(mapcontainer.current, options);

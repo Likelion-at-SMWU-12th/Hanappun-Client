@@ -64,7 +64,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/mainpage/:username" element={<Mainpage />} />
         <Route path="/calendar/:username" element={<CalendarMain />} />
-        <Route path="/ourcare/" element={<OurCareStart />} />
+        <Route path="/ourcare/:username" element={<OurCareStart />} />
         {/*마이페이지*/}
         <Route path="/profile/:username" element={<Profile />} />
         <Route path="/cancel/:username" element={<Cancel />} />
