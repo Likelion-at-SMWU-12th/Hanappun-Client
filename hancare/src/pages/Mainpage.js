@@ -15,14 +15,30 @@ const Mainpage = () => {
   const params = useParams();
   const [param2, setParam2] = useState(params.username);
 
-  //테스트용 데이터
-  const userdata = {
-    name: "홍길동",
-    todayMeal: "good",
-    breakfast: ["오렌지주스"],
-    lunch: ["탕수육, 보리차", "짬뽕"],
-    dinner: ["돈가츠", "레몬에이드"],
-    snack: ["커피"],
+  // 내 정보 불러오기
+  const [user, setUser] = useState([]);
+
+  useEffect(() => {
+    const getInfo = () => {
+      axios
+        .get(`${baseURL}/calendars/event/today/test1`)
+        .then((response) => {
+          setUser(response.data.result);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    getInfo();
+    dispatch(setUsername(param2));
+  }, []);
+
+  const formatReservationDate = (reservationDate) => {
+    if (!reservationDate) return ""; // reservationDate가 없으면 빈 문자열 반환
+    const [datePart, timePart] = reservationDate.split("T");
+    if (!timePart) return datePart; // timePart가 없으면 datePart만 반환
+    const [hours, minutes] = timePart.split(":");
+    return `${datePart} ${hours}:${minutes}`;
   };
 
   // todayMeal에 따른 메시지와 이미지 설정
@@ -51,7 +67,7 @@ const Mainpage = () => {
     }
   };
 
-  const mealFeedback = getMealFeedback(userdata.todayMeal);
+  const mealFeedback = getMealFeedback(user.overall_status);
 
   const today = new Date();
   const week = ["일", "월", "화", "수", "목", "금", "토"];
@@ -61,32 +77,6 @@ const Mainpage = () => {
   }월 ${today.getDate()}일 ${dayOfWeek}요일`;
   const formatDate = (date) => {
     return format(date, "yyyy-MM-dd", { locale: ko });
-  };
-
-  // 내 정보 불러오기
-  const [user, setUser] = useState([]);
-
-  useEffect(() => {
-    const getInfo = () => {
-      axios
-        .get(`${baseURL}/calendars/event/today/${param2}`)
-        .then((response) => {
-          setUser(response.data.result);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };
-    getInfo();
-    dispatch(setUsername(param2));
-  }, []);
-
-  const formatReservationDate = (reservationDate) => {
-    if (!reservationDate) return ""; // reservationDate가 없으면 빈 문자열 반환
-    const [datePart, timePart] = reservationDate.split("T");
-    if (!timePart) return datePart; // timePart가 없으면 datePart만 반환
-    const [hours, minutes] = timePart.split(":");
-    return `${datePart} ${hours}:${minutes}`;
   };
 
   return (
@@ -103,7 +93,7 @@ const Mainpage = () => {
       <Box1Wrapper>
         <Box1>
           <List>
-            <ListItem onClick={() => navigate(`/map/${param2}`)}>
+            <ListItem onClick={() => navigate(`/map/test1`)}>
               <Box1Img src="/images/hospital.png" alt="map"></Box1Img>
               {user.my_clinic ? (
                 <Box1Text>{user.my_clinic}</Box1Text>
@@ -132,11 +122,11 @@ const Mainpage = () => {
               <Box1Img src="/images/test.png" alt="test"></Box1Img>
               {user.my_constitution_8 &&
               user.my_constitution_8.length !== "" ? (
-                <Box1Text onClick={() => navigate(`/myCon/${param2}`)}>
+                <Box1Text onClick={() => navigate(`/myCon/test1`)}>
                   {user.my_constitution_8}체질
                 </Box1Text>
               ) : (
-                <Box1Text onClick={() => navigate(`/q_myCON/${param2}`)}>
+                <Box1Text onClick={() => navigate(`/q_myCON/test1`)}>
                   나의 체질은?
                 </Box1Text>
               )}
@@ -166,10 +156,10 @@ const Mainpage = () => {
                 <TitleText>{mealFeedback.message}</TitleText>
               </ListItem>
               <ListItem
-                onClick={() => navigate(`/meal/${param2}/${formatDate(today)}`)}
+                onClick={() => navigate(`/meal/test1/${formatDate(today)}`)}
               >
                 {/* 리스트 아이템 이모지는 렌더링방식으로 각각 처리 */}
-                {userdata.breakfast ? (
+                {user.morning ? (
                   <>
                     <PlusImg src="/images/check.png"></PlusImg>
                     <EatBtn>아침</EatBtn>
@@ -182,9 +172,9 @@ const Mainpage = () => {
                 )}
               </ListItem>
               <ListItem
-                onClick={() => navigate(`/meal/${param2}/${formatDate(today)}`)}
+                onClick={() => navigate(`/meal/test1/${formatDate(today)}`)}
               >
-                {userdata.lunch ? (
+                {user.lunch ? (
                   <>
                     <PlusImg src="/images/check.png"></PlusImg>
                     <EatBtn>점심</EatBtn>
@@ -197,9 +187,9 @@ const Mainpage = () => {
                 )}
               </ListItem>
               <ListItem
-                onClick={() => navigate(`/meal/${param2}/${formatDate(today)}`)}
+                onClick={() => navigate(`/meal/test1/${formatDate(today)}`)}
               >
-                {userdata.dinner ? (
+                {user.dinner ? (
                   <>
                     <PlusImg src="/images/check.png"></PlusImg>
                     <EatBtn>저녁</EatBtn>
@@ -213,7 +203,7 @@ const Mainpage = () => {
               </ListItem>
             </List>
           </Box2>
-          <Box2>
+          <OurCareBox2 onClick={() => navigate(`/ourcare/test1`)}>
             <FaceImg src="/images/family.png" alt="family"></FaceImg>
             <List>
               <ListItem>
@@ -232,13 +222,13 @@ const Mainpage = () => {
                 </>
               ) : (
                 <>
-                  <OurCareStart onClick={() => navigate(`/ourcare/${param2}`)}>
+                  <OurCareStart onClick={() => navigate(`/ourcare/test1`)}>
                     시작하기
                   </OurCareStart>
                 </>
               )}
             </List>
-          </Box2>
+          </OurCareBox2>
         </Box1Wrapper>
         <Box3>
           <Leftbox>
@@ -246,64 +236,62 @@ const Mainpage = () => {
             <LeftboxBar src="/images/bar.png"></LeftboxBar>
           </Leftbox>
           <RightBox>
-            {userdata.breakfast || userdata.lunch || userdata.dinner ? (
+            {user.morning || user.lunch || user.dinner || user.snack ? (
               <>
                 <EatRecordWrapper
-                  onClick={() => navigate(`/meal/${param2}/${user.date}`)}
+                  onClick={() => navigate(`/meal/test1/${user.date}`)}
                 >
                   <h3>아침</h3>
                   <FoodListWrapper>
-                    {userdata.breakfast &&
-                      userdata.breakfast.slice(0, 2).map((food, index) => (
+                    {user.morning &&
+                      user.morning.slice(0, 2).map((food, index) => (
                         <div key={index}>
-                          <p>{food}</p>
+                          <p>{food.menu_name}</p>
                         </div>
                       ))}
-                    {userdata.breakfast && userdata.breakfast.length > 2 && (
-                      <p>..</p>
-                    )}
+                    {user.morning && user.morning.length > 2 && <p>..</p>}
                   </FoodListWrapper>
                 </EatRecordWrapper>
                 <EatRecordWrapper
-                  onClick={() => navigate(`/meal/${param2}/${user.date}`)}
+                  onClick={() => navigate(`/meal/test1/${user.date}`)}
                 >
                   <h3>점심</h3>
                   <FoodListWrapper>
-                    {userdata.lunch &&
-                      userdata.lunch.slice(0, 2).map((food, index) => (
+                    {user.lunch &&
+                      user.lunch.slice(0, 2).map((food, index) => (
                         <div key={index}>
-                          <p>{food}</p>
+                          <p>{food.menu_name}</p>
                         </div>
                       ))}
-                    {userdata.lunch && userdata.lunch.length > 2 && <p>..</p>}
+                    {user.lunch && user.lunch.length > 2 && <p>..</p>}
                   </FoodListWrapper>
                 </EatRecordWrapper>
                 <EatRecordWrapper
-                  onClick={() => navigate(`/meal/${param2}/${user.date}`)}
+                  onClick={() => navigate(`/meal/test1/${user.date}`)}
                 >
                   <h3>저녁</h3>
                   <FoodListWrapper>
-                    {userdata.dinner &&
-                      userdata.dinner.slice(0, 2).map((food, index) => (
+                    {user.dinner &&
+                      user.dinner.slice(0, 2).map((food, index) => (
                         <div key={index}>
-                          <p>{food}</p>
+                          <p>{food.menu_name}</p>
                         </div>
                       ))}
-                    {userdata.dinner && userdata.dinner.length > 2 && <p>..</p>}
+                    {user.dinner && user.dinner.length > 2 && <p>..</p>}
                   </FoodListWrapper>
                 </EatRecordWrapper>
                 <EatRecordWrapper
-                  onClick={() => navigate(`/meal/${param2}/${user.date}`)}
+                  onClick={() => navigate(`/meal/test1/${user.date}`)}
                 >
                   <h3>간식</h3>
                   <FoodListWrapper>
-                    {userdata.snack &&
-                      userdata.snack.slice(0, 2).map((food, index) => (
+                    {user.snack &&
+                      user.snack.slice(0, 2).map((food, index) => (
                         <div key={index}>
-                          <p>{food}</p>
+                          <p>{food.menu_name}</p>
                         </div>
                       ))}
-                    {userdata.snack && userdata.snack.length > 2 && <p>..</p>}
+                    {user.snack && user.snack.length > 2 && <p>..</p>}
                   </FoodListWrapper>
                 </EatRecordWrapper>
               </>
@@ -314,9 +302,7 @@ const Mainpage = () => {
                   src="/images/potato.png"
                   alt="potato"
                 ></RightBoxImg>
-                <WriteBtn
-                  onClick={() => navigate(`/meal/${param2}/${user.date}`)}
-                >
+                <WriteBtn onClick={() => navigate(`/meal/test1/${user.date}`)}>
                   기록하기
                 </WriteBtn>
               </>
@@ -332,7 +318,7 @@ const Mainpage = () => {
             {user.condition ? (
               <>
                 <EatRecordWrapper
-                  onClick={() => navigate(`/condition/${param2}/${user.date}`)}
+                  onClick={() => navigate(`/condition/test1/${user.date}`)}
                 >
                   <h3>몸상태</h3>
                   <FoodListWrapper>
@@ -348,7 +334,7 @@ const Mainpage = () => {
                   </FoodListWrapper>
                 </EatRecordWrapper>
                 <EatRecordWrapper
-                  onClick={() => navigate(`/condition/${param2}/${user.date}`)}
+                  onClick={() => navigate(`/condition/test1/${user.date}`)}
                 >
                   <h3>기분</h3>
                   <FoodListWrapper>
@@ -362,7 +348,7 @@ const Mainpage = () => {
                   </FoodListWrapper>
                 </EatRecordWrapper>
                 <EatRecordWrapper
-                  onClick={() => navigate(`/condition/${param2}/${user.date}`)}
+                  onClick={() => navigate(`/condition/test1/${user.date}`)}
                 >
                   <h3>메모</h3>
                   <FoodListWrapper>
@@ -378,7 +364,7 @@ const Mainpage = () => {
                   alt="condition"
                 ></RightBoxImg>
                 <WriteBtn
-                  onClick={() => navigate(`/condition/${param2}/${user.date}`)}
+                  onClick={() => navigate(`/condition/test1/${user.date}`)}
                 >
                   기록하기
                 </WriteBtn>
@@ -395,7 +381,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   background-color: black;
-  height: 100%;
+  height: 100vh;
 `;
 
 const CalendarImg = styled.img`
@@ -476,10 +462,10 @@ const RoundedBox = styled.div`
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
   margin-top: 18px;
-  padding-bottom: max(50px, calc(100vh - 600px));
+  padding-bottom: 50px;
   min-height: fit-content;
   overflow-y: auto;
-  height: inherit;
+  height: 100vh;
 `;
 const When = styled.div`
   text-align: center;
@@ -503,6 +489,10 @@ const Box2 = styled.div`
   align-items: flex-start;
   flex-direction: column;
   border-radius: 12px;
+`;
+
+const OurCareBox2 = styled(Box2)`
+  cursor: pointer;
 `;
 const DetailText = styled.span`
   color: #9f9f9f;
@@ -647,7 +637,7 @@ const EatRecordWrapper = styled.div`
   margin-top: -1px;
   cursor: pointer;
   &:first-child {
-    margin-top: 15px;
+    margin-top: 12px;
   }
 
   h3 {
