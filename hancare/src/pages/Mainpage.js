@@ -159,7 +159,7 @@ const Mainpage = () => {
                 onClick={() => navigate(`/meal/test1/${formatDate(today)}`)}
               >
                 {/* 리스트 아이템 이모지는 렌더링방식으로 각각 처리 */}
-                {user.morning ? (
+                {user.meal && user.meal.morning ? (
                   <>
                     <PlusImg src="/images/check.png"></PlusImg>
                     <EatBtn>아침</EatBtn>
@@ -174,7 +174,7 @@ const Mainpage = () => {
               <ListItem
                 onClick={() => navigate(`/meal/test1/${formatDate(today)}`)}
               >
-                {user.lunch ? (
+                {user.meal && user.meal.lunch ? (
                   <>
                     <PlusImg src="/images/check.png"></PlusImg>
                     <EatBtn>점심</EatBtn>
@@ -189,7 +189,7 @@ const Mainpage = () => {
               <ListItem
                 onClick={() => navigate(`/meal/test1/${formatDate(today)}`)}
               >
-                {user.dinner ? (
+                {user.meal && user.meal.dinner ? (
                   <>
                     <PlusImg src="/images/check.png"></PlusImg>
                     <EatBtn>저녁</EatBtn>
@@ -236,20 +236,23 @@ const Mainpage = () => {
             <LeftboxBar src="/images/bar.png"></LeftboxBar>
           </Leftbox>
           <RightBox>
-            {user.morning || user.lunch || user.dinner || user.snack ? (
+            {user.meal ? (
               <>
                 <EatRecordWrapper
                   onClick={() => navigate(`/meal/test1/${user.date}`)}
                 >
                   <h3>아침</h3>
                   <FoodListWrapper>
-                    {user.morning &&
-                      user.morning.slice(0, 2).map((food, index) => (
+                    {user.meal &&
+                      user.meal.morning &&
+                      user.meal.morning.slice(0, 2).map((food, index) => (
                         <div key={index}>
                           <p>{food.menu_name}</p>
                         </div>
                       ))}
-                    {user.morning && user.morning.length > 2 && <p>..</p>}
+                    {user.meal &&
+                      user.meal.morning &&
+                      user.meal.morning.length > 2 && <p>..</p>}
                   </FoodListWrapper>
                 </EatRecordWrapper>
                 <EatRecordWrapper
@@ -257,13 +260,16 @@ const Mainpage = () => {
                 >
                   <h3>점심</h3>
                   <FoodListWrapper>
-                    {user.lunch &&
-                      user.lunch.slice(0, 2).map((food, index) => (
+                    {user.meal &&
+                      user.meal.lunch &&
+                      user.meal.lunch.slice(0, 2).map((food, index) => (
                         <div key={index}>
                           <p>{food.menu_name}</p>
                         </div>
                       ))}
-                    {user.lunch && user.lunch.length > 2 && <p>..</p>}
+                    {user.meal &&
+                      user.meal.lunch &&
+                      user.meal.lunch.length > 2 && <p>..</p>}
                   </FoodListWrapper>
                 </EatRecordWrapper>
                 <EatRecordWrapper
@@ -271,13 +277,16 @@ const Mainpage = () => {
                 >
                   <h3>저녁</h3>
                   <FoodListWrapper>
-                    {user.dinner &&
-                      user.dinner.slice(0, 2).map((food, index) => (
+                    {user.meal &&
+                      user.meal.dinner &&
+                      user.meal.dinner.slice(0, 2).map((food, index) => (
                         <div key={index}>
                           <p>{food.menu_name}</p>
                         </div>
                       ))}
-                    {user.dinner && user.dinner.length > 2 && <p>..</p>}
+                    {user.meal &&
+                      user.meal.dinner &&
+                      user.meal.dinner.length > 2 && <p>..</p>}
                   </FoodListWrapper>
                 </EatRecordWrapper>
                 <EatRecordWrapper
@@ -285,13 +294,16 @@ const Mainpage = () => {
                 >
                   <h3>간식</h3>
                   <FoodListWrapper>
-                    {user.snack &&
-                      user.snack.slice(0, 2).map((food, index) => (
+                    {user.meal &&
+                      user.meal.snack &&
+                      user.meal.snack.slice(0, 2).map((food, index) => (
                         <div key={index}>
                           <p>{food.menu_name}</p>
                         </div>
                       ))}
-                    {user.snack && user.snack.length > 2 && <p>..</p>}
+                    {user.meal &&
+                      user.meal.snack &&
+                      user.meal.snack.length > 2 && <p>..</p>}
                   </FoodListWrapper>
                 </EatRecordWrapper>
               </>
@@ -322,15 +334,21 @@ const Mainpage = () => {
                 >
                   <h3>몸상태</h3>
                   <FoodListWrapper>
-                    {user.condition_cate &&
-                      user.condition_cate.slice(0, 2).map((food, index) => (
-                        <div key={index}>
-                          <p>{food}</p>
-                        </div>
-                      ))}
-                    {user.condition_cate && user.condition_cate.length > 2 && (
-                      <p>..</p>
-                    )}
+                    {user.condition &&
+                      user.condition.condition_cate &&
+                      user.condition.condition_cate
+                        .split(",")
+                        .slice(0, 1)
+                        .map((food, index) => (
+                          <div key={index}>
+                            <p>{food}</p>
+                          </div>
+                        ))}
+                    {user.condition &&
+                      user.condition.condition_cate &&
+                      user.condition.condition_cate.split(",").length > 1 && (
+                        <p>..</p>
+                      )}
                   </FoodListWrapper>
                 </EatRecordWrapper>
                 <EatRecordWrapper
@@ -338,13 +356,21 @@ const Mainpage = () => {
                 >
                   <h3>기분</h3>
                   <FoodListWrapper>
-                    {user.mood_cate &&
-                      user.mood_cate.slice(0, 2).map((food, index) => (
-                        <div key={index}>
-                          <p>{food}</p>
-                        </div>
-                      ))}
-                    {user.mood_cate && user.mood_cate.length > 2 && <p>..</p>}
+                    {user.condition &&
+                      user.condition.mood_cate &&
+                      user.condition.mood_cate
+                        .split(",")
+                        .slice(0, 1)
+                        .map((food, index) => (
+                          <div key={index}>
+                            <p>{food}</p>
+                          </div>
+                        ))}
+                    {user.condition &&
+                      user.condition.mood_cate &&
+                      user.condition.mood_cate.split(",").length > 1 && (
+                        <p>..</p>
+                      )}
                   </FoodListWrapper>
                 </EatRecordWrapper>
                 <EatRecordWrapper
