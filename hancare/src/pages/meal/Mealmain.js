@@ -16,10 +16,8 @@ const Mealmain = () => {
     if (result.status == 200) {
       setUserNickname(result.data.result.nickname);
       if (result.data.result.constitution_8 == "") {
-        alert(
-          "아직 체질이 설정되지 않았네요! 홈에서 나의 체질을 선택해주세요!"
-        );
-        navigate(-1);
+        alert("아직 체질이 설정되지 않았네요! 체질을 선택해주세요!");
+        navigate(`/mainpage/test1`);
       }
     } else {
     }

@@ -67,6 +67,7 @@ export const Container = styled.div`
   width: 100%;
   white-space: pre-line;
   position: relative;
+  overflow-y: auto;
 `;
 
 export const Title = styled.div`

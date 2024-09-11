@@ -44,7 +44,8 @@ import BottomNav from "./components/BottomNav";
 
 const Wrapper = styled.div`
   width: 400px;
-  height: 100%;
+  height: 100vh;
+  min-height: 100vh;
   margin: 0 auto;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3),
     0 8px 10px -6px rgba(0, 0, 0, 0.3);
