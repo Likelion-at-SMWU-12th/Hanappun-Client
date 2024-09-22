@@ -408,6 +408,7 @@ const Container = styled.div`
   flex-direction: column;
   background-color: black;
   height: 100vh;
+  overflow-y: auto;
 `;
 
 const CalendarImg = styled.img`

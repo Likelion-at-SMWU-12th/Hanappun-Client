@@ -20,7 +20,9 @@ const MapMain = () => {
   useEffect(() => {
     const getHospital = async () => {
       try {
-        const response = await axios.get(`${baseURL}/clinic/info/`);
+        const response = await axios.get(
+          `http://localhost:8000/all_hospital_list`
+        );
         setHospital(response.data);
       } catch (e) {
         console.error(e);
@@ -66,7 +68,7 @@ const MapMain = () => {
   useEffect(() => {
     if (mapcontainer.current) {
       const options = {
-        center: new kakao.maps.LatLng(37.484709, 127.034013),
+        center: new kakao.maps.LatLng(37.496575, 126.957179),
         level: 3,
       };
       const kakaomap = new kakao.maps.Map(mapcontainer.current, options);
