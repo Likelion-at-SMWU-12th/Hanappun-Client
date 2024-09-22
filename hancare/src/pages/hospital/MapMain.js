@@ -14,8 +14,23 @@ const MapMain = () => {
   const [filteredHospital, setFilteredHospital] = useState([]);
   const [isSearched, setIsSearched] = useState(false);
   const [selectedHospital, setSelectedHospital] = useState(null);
+  const [user, setUser] = useState([]);
   const mapcontainer = useRef(null);
 
+  // 내 정보 불러오기
+  useEffect(() => {
+    const getInfo = () => {
+      axios
+        .get(`${baseURL}/calendars/event/today/test1`)
+        .then((response) => {
+          setUser(response.data.result);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    getInfo();
+  }, []);
   // 검색 기능
   useEffect(() => {
     const getHospital = async () => {
@@ -116,7 +131,11 @@ const MapMain = () => {
         <>
           <MyHospitalBox>
             <h2>나의 한의원</h2>
-            <MyHospital>아직 없어요!</MyHospital>
+            {user.my_clinic ? (
+              <MyHospital>{user.my_clinic}</MyHospital>
+            ) : (
+              <MyHospital>아직 없어요!</MyHospital>
+            )}
           </MyHospitalBox>
           {filteredHospital.length > 0 ? (
             <HospitalList>
