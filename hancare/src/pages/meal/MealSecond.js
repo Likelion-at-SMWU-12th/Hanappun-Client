@@ -18,16 +18,18 @@ const MealSecond = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const { mealItems } = location.state || {};
+  // location.state로부터 필요한 데이터 가져오기
+  const { newMeal, mealItem } = location.state || {};
+  // newMeal은 새로 생성할 메뉴 이름, mealItem은 DB에서 불러온 기존 메뉴 정보
+
+  // 메뉴와 선택된 요소 상태 관리
   const [selectedMealItem, setSelectedMealItem] = useState(
-    mealItems?.[0]?.id || null
+    mealItem?.id || Date.now() // 기존 메뉴가 있으면 그 ID를 사용, 없으면 새로운 ID 생성
   );
+  const [mealName, setMealName] = useState(newMeal || mealItem?.name || "");
   const [mealElements, setMealElements] = useState(() => {
-    const initialState = {};
-    mealItems.forEach((item) => {
-      initialState[item.id] = [];
-    });
-    return initialState;
+    const initialState = mealItem?.selectedElements || [];
+    return { [selectedMealItem]: initialState };
   });
 
   // 카테고리별 요소들
@@ -99,14 +101,10 @@ const MealSecond = () => {
     ],
   };
 
-  const handleClickMeal = (id) => {
-    setSelectedMealItem(id);
-  };
-
   const handleElementClick = (element) => {
     setMealElements((prevElements) => {
       const updatedElements = { ...prevElements };
-      const currentElements = updatedElements[selectedMealItem];
+      const currentElements = updatedElements[selectedMealItem] || [];
 
       if (currentElements.includes(element)) {
         // 이미 선택된 요소라면 제거
@@ -122,53 +120,38 @@ const MealSecond = () => {
     });
   };
 
-  const handleNext = () => {
-    const allMealItemsSelected = mealItems.every(
-      (item) => mealElements[item.id] && mealElements[item.id].length > 0
-    );
+  const handleSave = async () => {
+    const currentMealElements = mealElements[selectedMealItem];
 
-    if (!allMealItemsSelected) {
-      alert("아직 선택을 완료하지 않은 음식이 있어요!");
+    if (!currentMealElements || currentMealElements.length === 0) {
+      alert("한 개 이상의 요소를 선택해주세요");
       return;
     }
 
-    navigate(`/meal/result/${params.username}/${params.date}`, {
-      state: { mealItems, mealElements },
-    });
-  };
+    // 저장할 데이터 구조
+    const dataToSave = {
+      id: selectedMealItem,
+      name: mealName,
+      selectedElements: currentMealElements,
+      date: params.date,
+    };
 
-  const renderMealButtons = () => {
-    return mealItems.map((item) => (
-      <button
-        key={item.id}
-        onClick={() => handleClickMeal(item.id)}
-        className={selectedMealItem === item.id ? "MSselected" : ""}
-      >
-        {item.name}
-      </button>
-    ));
-  };
+    try {
+      const response = await fetch("/api/save-meal", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dataToSave),
+      });
 
-  const renderMealElements = () => {
-    return Object.keys(elementCategories).map((category) => (
-      <div key={category} className="meal_category">
-        <h3>{category}</h3>
-        <hr />
-        {elementCategories[category].map((element) => (
-          <button
-            key={element}
-            onClick={() => handleElementClick(element)}
-            className={
-              mealElements[selectedMealItem]?.includes(element)
-                ? "MSselected"
-                : ""
-            }
-          >
-            {element}
-          </button>
-        ))}
-      </div>
-    ));
+      if (response.ok) {
+        navigate(`/meal/first/${params.username}/${params.date}`);
+      } else {
+        alert("저장하는데 실패했습니다.");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("저장 중 오류가 발생했습니다.");
+    }
   };
 
   return (
@@ -180,7 +163,7 @@ const MealSecond = () => {
       <div className="MSdate">{formattedDate}</div>
       <main className="MSmain">
         <div className="MSmenu">
-          {renderMealButtons()}
+          <button className="MSselected">{mealName}</button>
           <hr />
         </div>
 
@@ -190,11 +173,28 @@ const MealSecond = () => {
             <br /> 높은 비중을 차지한 순으로{" "}
             <span className="MSbold">최대 4개</span>를 선택할 수 있어요
           </p>
-          <p>+ 추후 데이터를 바탕으로 자동 입력 서비스를 준비중이에요</p>
-          {renderMealElements()}
+          {Object.keys(elementCategories).map((category) => (
+            <div key={category} className="meal_category">
+              <h3>{category}</h3>
+              <hr />
+              {elementCategories[category].map((element) => (
+                <button
+                  key={element}
+                  onClick={() => handleElementClick(element)}
+                  className={
+                    mealElements[selectedMealItem]?.includes(element)
+                      ? "MSselected"
+                      : ""
+                  }
+                >
+                  {element}
+                </button>
+              ))}
+            </div>
+          ))}
         </div>
         <div className="MSbtns">
-          <button className="MSpurpleBtn" onClick={handleNext}>
+          <button className="MSpurpleBtn" onClick={handleSave}>
             저장하기
           </button>
         </div>
