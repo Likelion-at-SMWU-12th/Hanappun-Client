@@ -1,56 +1,90 @@
 {
-  "hospital": [
+  "all_hospital_list": [
     {
-      "id": "1",
-      "name": "다인 한의원",
-      "hashtag1": "건강 관리",
-      "hashtag2": "8체질",
-      "hashtag3": "한약 처방",
-      "address": "서울특별시 용산구 청파로 47길 100",
-      "call": "02-xxxx-xxxx",
-      "reviewnum": 165,
-      "reviewtext": "의료진, 직원이 친절해요",
-      "Lat": 37.5454,
-      "Lng": 126.966754
+      "id": 1,
+      "image_list": [
+        {
+          "image": "http://127.0.0.1:8000/media/1/clinic/AppDev_course-hero.png"
+        },
+        {
+          "image": "http://127.0.0.1:8000/media/1/clinic/AppDev_course-hero_GIKrFRk.png"
+        }
+      ],
+      "doctor_list": [
+        {
+          "id": 2,
+          "name": "김숙명",
+          "image": "http://127.0.0.1:8000/media/1/doctor/AppDev_course-hero_IKWLpay.png",
+          "profile": {
+            "1": "숙명여대 한의과대학 졸업",
+            "2": "숙명의료원 일반수련의 수료",
+            "3": "숙명여대 경락의과학과 졸업(한의학 석박사)",
+            "4": "전 숙명여대 한의학융합연구정보센터 연구원",
+            "5": "현 대한한의학회 정회원",
+            "6": "현 숙명 한의원 새힘관실 원장"
+          },
+          "clinic": 1
+        },
+        {
+          "id": 3,
+          "name": "김숙명",
+          "image": "http://127.0.0.1:8000/media/1/doctor/AppDev_course-hero_FazPlhR.png",
+          "profile": {
+            "1": "숙명여대 한의과대학 졸업",
+            "2": "숙명의료원 일반수련의 수료",
+            "3": "숙명여대 경락의과학과 졸업(한의학 석박사)",
+            "4": "전 숙명여대 한의학융합연구정보센터 연구원",
+            "5": "현 대한한의학회 정회원",
+            "6": "현 숙명 한의원 새힘관실 원장"
+          },
+          "clinic": 1
+        }
+      ],
+      "name": "1",
+      "detail": "2",
+      "location": "3",
+      "lat": 37.49612,
+      "lon": 126.953425,
+      "call": "6",
+      "clinic_cate_1": "HealthCare",
+      "clinic_cate_2": "Constitution_8",
+      "clinic_cate_3": "Sasang_constitution"
     },
     {
-      "id": "2",
-      "name": "대한민국365 한의원",
-      "hashtag1": "건강 관리",
-      "hashtag2": "8체질",
-      "hashtag3": "광고",
-      "address": "서울특별시 용산구 청파로 47길 100",
-      "call": "02-xxxx-xxxx",
-      "reviewnum": 165,
-      "reviewtext": "의료진, 직원이 친절해요",
-      "Lat": 37.545035,
-      "Lng": 126.969851
-    },
-    {
-      "id": "3",
-      "name": "고려 한의원",
-      "hashtag1": "교통사고",
-      "hashtag2": "사상의학",
-      "hashtag3": "한약 처방",
-      "address": "서울특별시 용산구 @@로 @@길 xxx",
-      "call": "02-xxxx-xxxx",
-      "reviewnum": 132,
-      "reviewtext": "시설이 쾌적해요",
-      "Lat": 37.542426,
-      "Lng": 126.971852
-    },
-    {
-      "id": "4",
-      "name": "숨 한의원",
-      "hashtag1": "교통사고",
-      "hashtag2": "사상의학",
-      "hashtag3": "한약 처방",
-      "address": "서울특별시 용산구 @@로 @@길 xxx",
-      "call": "02-xxxx-xxxx",
-      "reviewnum": 132,
-      "reviewtext": "시설이 쾌적해요",
-      "Lat": 37.541819,
-      "Lng": 126.972699
+      "id": 2,
+      "image_list": [
+        {
+          "image": "http://127.0.0.1:8000/media/2/clinic/AppDev_course-hero.png"
+        },
+        {
+          "image": "http://127.0.0.1:8000/media/2/clinic/AppDev_course-hero_BiNCAZb.png"
+        }
+      ],
+      "doctor_list": [
+        {
+          "id": 4,
+          "name": "김숙명",
+          "image": "http://127.0.0.1:8000/media/2/doctor/AppDev_course-hero_egMEzIN.png",
+          "profile": {
+            "1": "숙명여대 한의과대학 졸업",
+            "2": "숙명의료원 일반수련의 수료",
+            "3": "숙명여대 경락의과학과 졸업(한의학 석박사)",
+            "4": "전 숙명여대 한의학융합연구정보센터 연구원",
+            "5": "현 대한한의학회 정회원",
+            "6": "현 숙명 한의원 새힘관실 원장"
+          },
+          "clinic": 2
+        }
+      ],
+      "name": "1",
+      "detail": "2",
+      "location": "3",
+      "lat": 37.495445,
+      "lon": 126.956331,
+      "call": "6",
+      "clinic_cate_1": "HealthCare",
+      "clinic_cate_2": "Constitution_8",
+      "clinic_cate_3": "Sasang_constitution"
     }
   ]
 }

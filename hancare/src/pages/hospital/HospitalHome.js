@@ -36,7 +36,7 @@ const HospitalHome = () => {
 
   const getmyInfo = () => {
     axios
-      .get(`${baseURL}/users/profile?username=${username}`)
+      .get(`${baseURL}/users/profile?username=test1`)
       .then((response) => {
         setUser(response.data.result);
       })
@@ -130,7 +130,7 @@ const HospitalHome = () => {
   const WriteReview = () => {
     axios
       .post(`${baseURL}/review/`, {
-        reviewer: username,
+        reviewer: "test1",
         content: comment,
         clinic: id,
         rate: 3,
@@ -151,7 +151,7 @@ const HospitalHome = () => {
         });
         getReview();
         getReviewDetail();
-        navigate(`/map/${username}/${id}`);
+        navigate(`/map/test1/${id}`);
       })
       .catch((error) => {
         console.log(error);
@@ -200,15 +200,19 @@ const HospitalHome = () => {
             : "나의 한의원"}
         </MyHospital>
       </Wrapper>
-      <Info>
-        <Bold>위치</Bold>
-        {pickhospital.location}
-      </Info>
-      <Info>
-        <Bold>전화번호</Bold>
-        {pickhospital.call}
-      </Info>
-      <ReservateBtn onClick={openReservateModal}>예약</ReservateBtn>
+      <InfonReservWrapper>
+        <InfoWrapper>
+          <Info>
+            <Bold>위치</Bold>
+            {pickhospital.location}
+          </Info>
+          <Info>
+            <Bold>전화번호</Bold>
+            {pickhospital.call}
+          </Info>
+        </InfoWrapper>
+        <ReservateBtn onClick={openReservateModal}>예약</ReservateBtn>
+      </InfonReservWrapper>
       <Detail>
         <DetailMenu>
           <TabButton
@@ -473,13 +477,15 @@ export const Title = styled.div`
 `;
 
 const Name = styled.h2`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: white;
   font-size: 18px;
   background-color: #7350ff;
   padding: 10px;
   width: 290px;
   margin: 3px auto 13px auto;
-  text-align: center;
   border-radius: 20px;
 `;
 const Wrapper = styled.div`
@@ -514,6 +520,8 @@ const MyHospital = styled.button`
   top: 0px;
   right: 5px;
 `;
+
+const InfoWrapper = styled.div``;
 const Info = styled.p`
   color: white;
   margin: 1px 60px;
@@ -525,9 +533,9 @@ const Bold = styled.span`
 `;
 
 const ReservateBtn = styled.button`
-  position: absolute;
+  /* position: absolute;
   top: 192px;
-  right: 55px;
+  right: 55px; */
   background-color: white;
   color: black;
   border: none;
@@ -537,7 +545,15 @@ const ReservateBtn = styled.button`
   text-align: center;
   font-size: 13px;
   font-weight: bolder;
+  margin-top: 1px;
+  margin-right: 60px;
   cursor: pointer;
+`;
+
+const InfonReservWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 const Detail = styled.div`

@@ -11,25 +11,25 @@ const Container = styled.div`
 
 const Title = styled.div`
   h2 {
-    font-size: 17px;
-    margin-top: 120px;
+    font-size: 14px;
+    margin-top: 125px;
     text-align: center;
     font-weight: 900 !important; /* bolder 대신 구체적인 값 사용 */
   }
 
   img {
-    width: 60%;
+    width: 30%;
     display: block;
-    margin-top: 40px;
+    margin-top: 70px;
     margin-left: auto;
     margin-right: auto;
   }
 
   h1 {
-    font-size: 35px;
-    margin-top: 35px;
+    font-size: 25px;
+    margin-top: 5px;
     text-align: center;
-    font-weight: 900 !important;
+    font-weight: 800 !important;
     margin-bottom: 50px;
   }
 `;
@@ -53,21 +53,24 @@ const ButtonBox = styled.button`
 
 const Startpage = () => {
   const navigate = useNavigate();
+  setTimeout(function () {
+    navigate("/mainpage/test1");
+  }, 0);
   return (
     <Container>
       <Title>
         <h2>한의학 기반 맞춤형 건강관리 서비스</h2>
-        <img src="/images/logo.png" alt="logo" />
         <h1>한케어</h1>
+        <img src="/images/logo.png" alt="logo" />
       </Title>
-      <div>
+      {/* <div>
         <ButtonBox bgColor="#7350FF" onClick={() => navigate("/signup")}>
           회원가입
         </ButtonBox>
         <ButtonBox bgColor="black" onClick={() => navigate("/login")}>
           로그인
         </ButtonBox>
-      </div>
+      </div> */}
     </Container>
   );
 };

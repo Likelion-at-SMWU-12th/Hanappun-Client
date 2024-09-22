@@ -14,13 +14,28 @@ const MapMain = () => {
   const [filteredHospital, setFilteredHospital] = useState([]);
   const [isSearched, setIsSearched] = useState(false);
   const [selectedHospital, setSelectedHospital] = useState(null);
+  const [user, setUser] = useState([]);
   const mapcontainer = useRef(null);
 
+  // 내 정보 불러오기
+  useEffect(() => {
+    const getInfo = () => {
+      axios
+        .get(`${baseURL}/calendars/event/today/test1`)
+        .then((response) => {
+          setUser(response.data.result);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    getInfo();
+  }, []);
   // 검색 기능
   useEffect(() => {
     const getHospital = async () => {
       try {
-        const response = await axios.get(`${baseURL}/clinic/info/`);
+        const response = await axios.get(`${baseURL}/clinic/info`);
         setHospital(response.data);
       } catch (e) {
         console.error(e);
@@ -66,7 +81,7 @@ const MapMain = () => {
   useEffect(() => {
     if (mapcontainer.current) {
       const options = {
-        center: new kakao.maps.LatLng(37.484709, 127.034013),
+        center: new kakao.maps.LatLng(37.496575, 126.957179),
         level: 3,
       };
       const kakaomap = new kakao.maps.Map(mapcontainer.current, options);
@@ -116,7 +131,11 @@ const MapMain = () => {
         <>
           <MyHospitalBox>
             <h2>나의 한의원</h2>
-            <MyHospital>아직 없어요!</MyHospital>
+            {user.my_clinic ? (
+              <MyHospital>{user.my_clinic}</MyHospital>
+            ) : (
+              <MyHospital>아직 없어요!</MyHospital>
+            )}
           </MyHospitalBox>
           {filteredHospital.length > 0 ? (
             <HospitalList>

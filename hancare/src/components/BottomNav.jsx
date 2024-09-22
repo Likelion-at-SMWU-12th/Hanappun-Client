@@ -44,7 +44,7 @@ const BottomNav = () => {
   ) {
     return (
       <nav className="wrapper">
-        <Link to={`/mainpage/${username}`} className="nav-link">
+        <Link to={`/mainpage/test1`} className="nav-link">
           <div>
             <FontAwesomeIcon
               icon={faShieldHeart}
@@ -53,7 +53,7 @@ const BottomNav = () => {
             />
           </div>
         </Link>
-        <Link to={`/ourcare/${username}`} className="nav-link">
+        <Link to={`/ourcare/test1`} className="nav-link">
           <div>
             <FontAwesomeIcon
               icon={faHandHoldingHeart}
@@ -62,7 +62,7 @@ const BottomNav = () => {
             />
           </div>
         </Link>
-        <Link to={`/map/${username}`} className="nav-link">
+        <Link to={`/map/test1`} className="nav-link">
           <div>
             <FontAwesomeIcon
               icon={faLocationDot}
@@ -71,7 +71,7 @@ const BottomNav = () => {
             />
           </div>
         </Link>
-        <Link to={`/calendar/${username}`} className="nav-link">
+        <Link to={`/calendar/test1`} className="nav-link">
           <div>
             <FontAwesomeIcon
               icon={faCalendar}
@@ -80,7 +80,7 @@ const BottomNav = () => {
             />
           </div>
         </Link>
-        <Link to={`/profile/${username}`} className="nav-link">
+        <Link to={`/profile/test1`} className="nav-link">
           <div>
             <FontAwesomeIcon
               icon={faUser}
