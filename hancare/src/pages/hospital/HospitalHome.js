@@ -36,7 +36,7 @@ const HospitalHome = () => {
 
   const getmyInfo = () => {
     axios
-      .get(`${baseURL}/users/profile?username=${username}`)
+      .get(`${baseURL}/users/profile?username=test1`)
       .then((response) => {
         setUser(response.data.result);
       })
@@ -151,7 +151,7 @@ const HospitalHome = () => {
         });
         getReview();
         getReviewDetail();
-        navigate(`/map/${username}/${id}`);
+        navigate(`/map/test1/${id}`);
       })
       .catch((error) => {
         console.log(error);

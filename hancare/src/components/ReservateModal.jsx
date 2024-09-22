@@ -62,9 +62,9 @@ function ReservateModal({ isReservateOpen, closeReservateModal, cliniccall }) {
                   {/* 수정된 부분 */}
                   뒤로가기
                 </CloseButton>
-                <a href={`/calendar/${username}`}>
-                  <SetButton>예약 기록하기</SetButton>
-                </a>
+                <SetButton onClick={() => navigate(`/calendar/test1`)}>
+                  예약 기록하기
+                </SetButton>
               </BtnWrapper>
             </>
           )}

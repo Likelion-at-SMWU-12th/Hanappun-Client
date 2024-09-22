@@ -9,7 +9,7 @@ const HospitalItem = ({ item }) => {
   const username = useSelector((state) => state.username);
 
   const handleClick = () => {
-    navigate(`/map/${username}/${item.id}`);
+    navigate(`/map/test1/${item.id}`);
   };
 
   return (

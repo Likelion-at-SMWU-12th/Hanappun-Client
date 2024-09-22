@@ -20,9 +20,7 @@ const MapMain = () => {
   useEffect(() => {
     const getHospital = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/all_hospital_list`
-        );
+        const response = await axios.get(`${baseURL}/clinic/info`);
         setHospital(response.data);
       } catch (e) {
         console.error(e);
