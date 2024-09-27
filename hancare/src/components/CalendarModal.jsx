@@ -217,11 +217,29 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
         };
       default:
         return {
-          message: "맞춤형 분석",
+          message: "",
           image: "/images/analysis_person.png",
         };
     }
   };
+
+  // meal 객체에서 첫 번째로 존재하는 리스트의 score_evaluation 가져오는 함수
+  const getFirstScoreEvaluation = (meal) => {
+    // meal 내에서 값이 존재하는 첫 번째 리스트를 찾기
+    const firstMealList =
+      meal.morning_list?.[0] ||
+      meal.lunch_list?.[0] ||
+      meal.dinner_list?.[0] ||
+      meal.snack_list?.[0];
+
+    // 해당 리스트의 첫 번째 항목의 score_evaluation 반환
+    return firstMealList ? firstMealList.score_evaluation : null;
+  };
+
+  // meal 데이터에서 score_evaluation을 가져오는 코드
+  const mealFeedback = userinfo.meal
+    ? getMealFeedback(getFirstScoreEvaluation(userinfo.meal))
+    : getMealFeedback(null);
 
   return (
     <div>
@@ -402,11 +420,9 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
                     <img src="/images/purplespot.png" alt="purplespot"></img>
                     <h2>식습관</h2>
                   </SubTitle>
-                  <p>
-                    {userinfo.meal && userinfo.meal.overall_status
-                      ? userinfo.meal.overall_status
-                      : null}
-                  </p>
+                  <EatComment>
+                    {userinfo.meal ? mealFeedback.message : null}
+                  </EatComment>
                   <DetailWrapper>
                     <p
                       onClick={() =>
@@ -423,11 +439,11 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
                     <img src="/images/purplespot.png" alt="purplespot"></img>
                     <h2>몸상태 및 기분</h2>
                   </SubTitle>
-                  <p>
+                  <EatComment>
                     {userinfo.condition && userinfo.condition.condition_cate
                       ? userinfo.condition.condition_cate.split(",")[0]
                       : null}
-                  </p>
+                  </EatComment>
                   <DetailWrapper>
                     <p
                       onClick={() =>
@@ -719,34 +735,31 @@ const BigBar = styled.img`
 const ConditionWrapper = styled.div`
   display: flex;
   align-items: flex-start;
+  justify-content: flex-start;
   margin-left: 0;
-  gap: 40px;
+  gap: 25px;
 `;
 
-const ConditionBox = styled.div`
-  p {
-    margin-left: -15px;
-    margin-top: -10px;
-    font-size: 13px;
-  }
+const ConditionBox = styled.div``;
 
-  &:last-child {
-    p {
-      margin-left: -40px;
-    }
-  }
+const EatComment = styled.div`
+  margin-top: -5px;
+  font-size: 13px;
+  margin-left: 30px;
 `;
 
 const DetailWrapper = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   cursor: pointer;
   p {
     color: #7350ff;
+    margin-top: 5px;
+    font-size: 13px;
   }
   img {
     width: 9px !important;
-    margin-top: -20px;
+    margin-top: 9px;
     margin-left: 4px;
   }
 

@@ -53,12 +53,12 @@ const Profile = () => {
     }
   };
   const myclinicisnull = () => {
-    if (userData && userData.my_clinic === null) {
+    if (userData && userData.my_clinic_name === null) {
       return <p>나의 한의원을 아직 설정하지 않았어요</p>;
-    } else if (userData && userData.my_clinic !== null) {
+    } else if (userData && userData.my_clinic_name !== null) {
       return (
         <p>
-          <span>{userData.my_clinic}</span> 에 다니고 있어요
+          <span>{userData.my_clinic_name}</span> 에 다니고 있어요
         </p>
       );
     } else {
