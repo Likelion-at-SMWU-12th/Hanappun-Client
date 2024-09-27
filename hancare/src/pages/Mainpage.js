@@ -261,14 +261,14 @@ const Mainpage = () => {
                   <FoodListWrapper>
                     {user.meal &&
                       user.meal.morning_list &&
-                      user.meal.morning_list.slice(0, 2).map((food, index) => (
+                      user.meal.morning_list.map((food, index) => (
                         <div key={index}>
                           <p>{food.name}</p>
                         </div>
                       ))}
-                    {user.meal &&
+                    {/* {user.meal &&
                       user.meal.morning_list &&
-                      user.meal.morning_list.length > 2 && <p>..</p>}
+                      user.meal.morning_list.length > 2 && <p>..</p>} */}
                   </FoodListWrapper>
                 </EatRecordWrapper>
                 <EatRecordWrapper
@@ -278,14 +278,14 @@ const Mainpage = () => {
                   <FoodListWrapper>
                     {user.meal &&
                       user.meal.lunch_list &&
-                      user.meal.lunch_list.slice(0, 2).map((food, index) => (
+                      user.meal.lunch_list.map((food, index) => (
                         <div key={index}>
                           <p>{food.name}</p>
                         </div>
                       ))}
-                    {user.meal &&
+                    {/* {user.meal &&
                       user.meal.lunch_list &&
-                      user.meal.lunch_list.length > 2 && <p>..</p>}
+                      user.meal.lunch_list.length > 2 && <p>..</p>} */}
                   </FoodListWrapper>
                 </EatRecordWrapper>
                 <EatRecordWrapper
@@ -295,14 +295,14 @@ const Mainpage = () => {
                   <FoodListWrapper>
                     {user.meal &&
                       user.meal.dinner_list &&
-                      user.meal.dinner_list.slice(0, 2).map((food, index) => (
+                      user.meal.dinner_list.map((food, index) => (
                         <div key={index}>
                           <p>{food.name}</p>
                         </div>
                       ))}
-                    {user.meal &&
+                    {/* {user.meal &&
                       user.meal.dinner_list &&
-                      user.meal.dinner_list.length > 2 && <p>..</p>}
+                      user.meal.dinner_list.length > 2 && <p>..</p>} */}
                   </FoodListWrapper>
                 </EatRecordWrapper>
                 <EatRecordWrapper
@@ -312,14 +312,14 @@ const Mainpage = () => {
                   <FoodListWrapper>
                     {user.meal &&
                       user.meal.snack_list &&
-                      user.meal.snack_list.slice(0, 2).map((food, index) => (
+                      user.meal.snack_list.map((food, index) => (
                         <div key={index}>
                           <p>{food.name}</p>
                         </div>
                       ))}
-                    {user.meal &&
+                    {/* {user.meal &&
                       user.meal.snack_list &&
-                      user.meal.snack_list.length > 2 && <p>..</p>}
+                      user.meal.snack_list.length > 2 && <p>..</p>} */}
                   </FoodListWrapper>
                 </EatRecordWrapper>
               </>
@@ -354,17 +354,16 @@ const Mainpage = () => {
                       user.condition.condition_cate &&
                       user.condition.condition_cate
                         .split(",")
-                        .slice(0, 1)
                         .map((food, index) => (
                           <div key={index}>
                             <p>{food}</p>
                           </div>
                         ))}
-                    {user.condition &&
+                    {/* {user.condition &&
                       user.condition.condition_cate &&
                       user.condition.condition_cate.split(",").length > 1 && (
                         <p>..</p>
-                      )}
+                      )} */}
                   </FoodListWrapper>
                 </EatRecordWrapper>
                 <EatRecordWrapper
@@ -374,19 +373,16 @@ const Mainpage = () => {
                   <FoodListWrapper>
                     {user.condition &&
                       user.condition.mood_cate &&
-                      user.condition.mood_cate
-                        .split(",")
-                        .slice(0, 1)
-                        .map((food, index) => (
-                          <div key={index}>
-                            <p>{food}</p>
-                          </div>
-                        ))}
-                    {user.condition &&
+                      user.condition.mood_cate.split(",").map((food, index) => (
+                        <div key={index}>
+                          <p>{food}</p>
+                        </div>
+                      ))}
+                    {/* {user.condition &&
                       user.condition.mood_cate &&
                       user.condition.mood_cate.split(",").length > 1 && (
                         <p>..</p>
-                      )}
+                      )} */}
                   </FoodListWrapper>
                 </EatRecordWrapper>
                 <EatRecordWrapper
@@ -676,7 +672,6 @@ const WriteBtn = styled.button`
 const EatRecordWrapper = styled.div`
   display: flex;
   align-items: flex-start;
-  flex-wrap: wrap;
   margin-top: -1px;
   cursor: pointer;
   &:first-child {
@@ -686,12 +681,17 @@ const EatRecordWrapper = styled.div`
   h3 {
     margin-top: auto;
     font-size: 13px;
-    color: #737373;
+    color: black;
     margin-right: 8px;
+    white-space: nowrap; /* h3 요소도 줄바꿈 없이 가로로 */
   }
 `;
 const FoodListWrapper = styled.div`
   display: flex;
+  overflow-x: scroll; /* 'scroll' 대신 'auto' 사용도 가능 */
+  white-space: nowrap; /* 줄바꿈 없이 가로로 표시되도록 설정 */
+  align-items: center;
+  width: 110px;
 
   p {
     font-size: 10px;
@@ -701,6 +701,7 @@ const FoodListWrapper = styled.div`
     border-radius: 10px;
     padding: 1px 5px;
     color: #9f9f9f;
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
   }
 `;
 
