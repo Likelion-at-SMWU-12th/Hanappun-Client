@@ -19,7 +19,7 @@ const SelfTestResult = () => {
 
   // 테스트용 데이터
   const userData = {
-    name: "홍길동",
+    name: "설문자",
     results: results,
   };
 
@@ -48,8 +48,7 @@ const SelfTestResult = () => {
     return (
       <div className="STRbackground">
         <header className="blackHeader">
-          <img alt="back" onClick={BackButton} src="/images/back.png" />
-          <h2 className="STh2">나의 체질</h2>
+          <h2 className="STh2_con">나의 체질</h2>
         </header>
         <main className="STRmain">
           <div className="STRresult">
@@ -81,15 +80,18 @@ const SelfTestResult = () => {
             </p>
           </div>
           <div className="STRbtns">
-            <button className="STRwhiteBtn" onClick={() => navigate("/map")}>
-              한의원 찾아보기
-            </button>
             <button
+              className="STRwhiteBtn"
+              onClick={() => navigate("/myCON/selfTest/test1")}
+            >
+              다시 검사하기
+            </button>
+            {/* <button
               className="STRpurpleBtn"
-              onClick={() => navigate("/myCON/ChooseMyCON")}
+              onClick={() => navigate("/myCON/ChooseMyCON/test1")}
             >
               체질 선택하기
-            </button>
+            </button> */}
           </div>
         </main>
       </div>

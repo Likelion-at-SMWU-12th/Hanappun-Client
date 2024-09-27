@@ -118,7 +118,7 @@ const SelfTest = () => {
     const scores = calculateScores();
     const result = getResult(scores);
 
-    navigate("/myCON/SelfTestResult", { state: { results: result } });
+    navigate("/myCON/SelfTestResult/test1", { state: { results: result } });
   };
 
   // 현재 페이지의 질문들을 렌더링하는 함수
@@ -217,8 +217,7 @@ const SelfTest = () => {
   return (
     <div className="STbackground">
       <header className="blackHeader">
-        <img alt="back" onClick={BackButton} src="/images/back.png" />
-        <h2 className="STh2">나의 체질</h2>
+        <h2 className="STh2_con">나의 체질</h2>
         <div className="progressBack">
           <div className="progress-bar">
             <div
