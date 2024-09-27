@@ -36,7 +36,7 @@ const MealFirst = () => {
         const response = await axios.get(
           `${baseURL}/meal/${params.username}/${params.date}`
         );
-        setMealdata(response.data);
+        setMealData(response.data);
       } catch (error) {
         console.error("식사 기록 조회 중 오류 발생: ", error);
       } finally {
@@ -46,6 +46,80 @@ const MealFirst = () => {
 
     fetchMealData();
   }, [params.date]);
+
+  function
+    // 예시 데이터 mymealData
+    const mymealData = {
+      1: {
+        meal: "아침",
+        foods: [
+          {
+            name: "쌀국수",
+            good_ingredients: ["소고기", "쌀(백미)"],
+            bad_ingredients: ["돼지고기"],
+            soso_ingredients: ["그냥그래"],
+          },
+          
+          mealData.morningList(foods, index) {
+                name: "쌀국수",
+                good_ingredients: ["소고기", "쌀(백미)"],
+                bad_ingredients: ["돼지고기"],
+                soso_ingredients: ["그냥그래"],
+          }
+        ],
+      },
+      2: {
+        meal: "점심",
+        foods: [
+          {
+            name: "치킨샐러드",
+            good_ingredients: ["닭가슴살", "야채"],
+            bad_ingredients: ["드레싱"],
+            soso_ingredients: ["그냥그래"],
+          },
+          {
+            name: "스테이크",
+            good_ingredients: ["소고기"],
+            bad_ingredients: ["버터", "소금"],
+            soso_ingredients: ["그냥그래"],
+          },
+        ],
+      },
+      3: {
+        meal: "저녁",
+        foods: [
+          {
+            name: "파스타",
+            good_ingredients: ["토마토"],
+            bad_ingredients: ["밀가루", "크림"],
+            soso_ingredients: ["그냥그래"],
+          },
+          {
+            name: "피자",
+            good_ingredients: ["치즈"],
+            bad_ingredients: ["밀가루", "기름"],
+            soso_ingredients: ["그냥그래"],
+          },
+        ],
+      },
+      4: {
+        meal: "간식",
+        foods: [
+          {
+            name: "과일 샐러드",
+            good_ingredients: ["과일", "요거트"],
+            bad_ingredients: [],
+            soso_ingredients: ["그냥그래", "soso"],
+          },
+          {
+            name: "아이스크림",
+            good_ingredients: ["우유"],
+            bad_ingredients: ["설탕", "크림"],
+            soso_ingredients: ["그냥그래"],
+          },
+        ],
+      },
+    };
 
   // 음식 삭제 API 호출
   const deleteMealFromDB = async (mealId) => {
@@ -181,84 +255,6 @@ const MealFirst = () => {
         confirm="다음"
       />
     );
-
-  // 예시 데이터 mymealData
-  const mymealData = {
-    1: {
-      meal: "아침",
-      foods: [
-        {
-          name: "쌀국수",
-          good_ingredients: ["소고기", "쌀(백미)"],
-          bad_ingredients: ["돼지고기"],
-          soso_ingredients: ["그냥그래"],
-        },
-        {
-          name: "돈가츠",
-          good_ingredients: ["쌀", "채소"],
-          bad_ingredients: ["밀가루", "튀김옷"],
-          soso_ingredients: [],
-        },
-        {
-          name: "레몬에이드",
-          good_ingredients: ["레몬"],
-          bad_ingredients: ["설탕"],
-          soso_ingredients: ["그냥그래"],
-        },
-      ],
-    },
-    2: {
-      meal: "점심",
-      foods: [
-        {
-          name: "치킨샐러드",
-          good_ingredients: ["닭가슴살", "야채"],
-          bad_ingredients: ["드레싱"],
-          soso_ingredients: ["그냥그래"],
-        },
-        {
-          name: "스테이크",
-          good_ingredients: ["소고기"],
-          bad_ingredients: ["버터", "소금"],
-          soso_ingredients: ["그냥그래"],
-        },
-      ],
-    },
-    3: {
-      meal: "저녁",
-      foods: [
-        {
-          name: "파스타",
-          good_ingredients: ["토마토"],
-          bad_ingredients: ["밀가루", "크림"],
-          soso_ingredients: ["그냥그래"],
-        },
-        {
-          name: "피자",
-          good_ingredients: ["치즈"],
-          bad_ingredients: ["밀가루", "기름"],
-          soso_ingredients: ["그냥그래"],
-        },
-      ],
-    },
-    4: {
-      meal: "간식",
-      foods: [
-        {
-          name: "과일 샐러드",
-          good_ingredients: ["과일", "요거트"],
-          bad_ingredients: [],
-          soso_ingredients: ["그냥그래", "soso"],
-        },
-        {
-          name: "아이스크림",
-          good_ingredients: ["우유"],
-          bad_ingredients: ["설탕", "크림"],
-          soso_ingredients: ["그냥그래"],
-        },
-      ],
-    },
-  };
 
   const selectedMeal = mymealData[mealType];
 
