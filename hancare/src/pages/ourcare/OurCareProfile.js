@@ -78,8 +78,8 @@ const OurCareProfile = () => {
       axios
         .delete(`${baseURL}/users/ourcare/`, {
           data: {
-            my_username: username,
-            friend_username: friendInfo.username,
+            my_username: "test1",
+            friend_username: `${params.id}`,
           },
         })
         .then((response) => {
@@ -110,10 +110,14 @@ const OurCareProfile = () => {
     if (window.Kakao) {
       window.Kakao.Share.sendDefault({
         objectType: "text",
-        text: "한의원 예약 정보",
+        text: `${
+          friendInfo.nickname
+        }님의 ${friendhospital} 예약일은 ${formatReservationDate(
+          friendDetail.reservation_datetime
+        )}입니다!`,
         link: {
-          mobileWebUrl: "http://localhost:3000",
-          webUrl: "http://localhost:3000",
+          mobileWebUrl: "http://3.35.205.191:3000",
+          webUrl: "http://3.35.205.191:3000",
         },
       });
     }

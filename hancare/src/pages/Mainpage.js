@@ -67,7 +67,23 @@ const Mainpage = () => {
     }
   };
 
-  const mealFeedback = getMealFeedback(user.overall_status);
+  // meal 객체에서 첫 번째로 존재하는 리스트의 score_evaluation 가져오는 함수
+  const getFirstScoreEvaluation = (meal) => {
+    // meal 내에서 값이 존재하는 첫 번째 리스트를 찾기
+    const firstMealList =
+      meal.morning_list?.[0] ||
+      meal.lunch_list?.[0] ||
+      meal.dinner_list?.[0] ||
+      meal.snack_list?.[0];
+
+    // 해당 리스트의 첫 번째 항목의 score_evaluation 반환
+    return firstMealList ? firstMealList.score_evaluation : null;
+  };
+
+  // meal 데이터에서 score_evaluation을 가져오는 코드
+  const mealFeedback = user.meal
+    ? getMealFeedback(getFirstScoreEvaluation(user.meal))
+    : getMealFeedback(null);
 
   const today = new Date();
   const week = ["일", "월", "화", "수", "목", "금", "토"];
@@ -159,7 +175,7 @@ const Mainpage = () => {
                 onClick={() => navigate(`/meal/test1/${formatDate(today)}`)}
               >
                 {/* 리스트 아이템 이모지는 렌더링방식으로 각각 처리 */}
-                {user.meal && user.meal.morning ? (
+                {user.meal && user.meal.morning_list ? (
                   <>
                     <PlusImg src="/images/check.png"></PlusImg>
                     <EatBtn>아침</EatBtn>
@@ -174,7 +190,7 @@ const Mainpage = () => {
               <ListItem
                 onClick={() => navigate(`/meal/test1/${formatDate(today)}`)}
               >
-                {user.meal && user.meal.lunch ? (
+                {user.meal && user.meal.lunch_list ? (
                   <>
                     <PlusImg src="/images/check.png"></PlusImg>
                     <EatBtn>점심</EatBtn>
@@ -189,7 +205,7 @@ const Mainpage = () => {
               <ListItem
                 onClick={() => navigate(`/meal/test1/${formatDate(today)}`)}
               >
-                {user.meal && user.meal.dinner ? (
+                {user.meal && user.meal.dinner_list ? (
                   <>
                     <PlusImg src="/images/check.png"></PlusImg>
                     <EatBtn>저녁</EatBtn>
@@ -244,15 +260,15 @@ const Mainpage = () => {
                   <h3>아침</h3>
                   <FoodListWrapper>
                     {user.meal &&
-                      user.meal.morning &&
-                      user.meal.morning.slice(0, 2).map((food, index) => (
+                      user.meal.morning_list &&
+                      user.meal.morning_list.slice(0, 2).map((food, index) => (
                         <div key={index}>
-                          <p>{food.menu_name}</p>
+                          <p>{food.name}</p>
                         </div>
                       ))}
                     {user.meal &&
-                      user.meal.morning &&
-                      user.meal.morning.length > 2 && <p>..</p>}
+                      user.meal.morning_list &&
+                      user.meal.morning_list.length > 2 && <p>..</p>}
                   </FoodListWrapper>
                 </EatRecordWrapper>
                 <EatRecordWrapper
@@ -261,15 +277,15 @@ const Mainpage = () => {
                   <h3>점심</h3>
                   <FoodListWrapper>
                     {user.meal &&
-                      user.meal.lunch &&
-                      user.meal.lunch.slice(0, 2).map((food, index) => (
+                      user.meal.lunch_list &&
+                      user.meal.lunch_list.slice(0, 2).map((food, index) => (
                         <div key={index}>
-                          <p>{food.menu_name}</p>
+                          <p>{food.name}</p>
                         </div>
                       ))}
                     {user.meal &&
-                      user.meal.lunch &&
-                      user.meal.lunch.length > 2 && <p>..</p>}
+                      user.meal.lunch_list &&
+                      user.meal.lunch_list.length > 2 && <p>..</p>}
                   </FoodListWrapper>
                 </EatRecordWrapper>
                 <EatRecordWrapper
@@ -278,15 +294,15 @@ const Mainpage = () => {
                   <h3>저녁</h3>
                   <FoodListWrapper>
                     {user.meal &&
-                      user.meal.dinner &&
-                      user.meal.dinner.slice(0, 2).map((food, index) => (
+                      user.meal.dinner_list &&
+                      user.meal.dinner_list.slice(0, 2).map((food, index) => (
                         <div key={index}>
-                          <p>{food.menu_name}</p>
+                          <p>{food.name}</p>
                         </div>
                       ))}
                     {user.meal &&
-                      user.meal.dinner &&
-                      user.meal.dinner.length > 2 && <p>..</p>}
+                      user.meal.dinner_list &&
+                      user.meal.dinner_list.length > 2 && <p>..</p>}
                   </FoodListWrapper>
                 </EatRecordWrapper>
                 <EatRecordWrapper
@@ -295,15 +311,15 @@ const Mainpage = () => {
                   <h3>간식</h3>
                   <FoodListWrapper>
                     {user.meal &&
-                      user.meal.snack &&
-                      user.meal.snack.slice(0, 2).map((food, index) => (
+                      user.meal.snack_list &&
+                      user.meal.snack_list.slice(0, 2).map((food, index) => (
                         <div key={index}>
-                          <p>{food.menu_name}</p>
+                          <p>{food.name}</p>
                         </div>
                       ))}
                     {user.meal &&
-                      user.meal.snack &&
-                      user.meal.snack.length > 2 && <p>..</p>}
+                      user.meal.snack_list &&
+                      user.meal.snack_list.length > 2 && <p>..</p>}
                   </FoodListWrapper>
                 </EatRecordWrapper>
               </>
@@ -683,7 +699,7 @@ const FoodListWrapper = styled.div`
     margin-top: auto;
     border: 1px solid #9f9f9f;
     border-radius: 10px;
-    padding: 1px 2px;
+    padding: 1px 5px;
     color: #9f9f9f;
   }
 `;
