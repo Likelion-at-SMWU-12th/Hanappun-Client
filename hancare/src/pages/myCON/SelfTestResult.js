@@ -47,7 +47,7 @@ const SelfTestResult = () => {
   const renderResults = () => {
     return (
       <div className="STRbackground">
-        <header className="blackHeader">
+        <header className="blackHeader_con">
           <h2 className="STh2_con">나의 체질</h2>
         </header>
         <main className="STRmain">

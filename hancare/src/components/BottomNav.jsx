@@ -40,7 +40,8 @@ const BottomNav = () => {
     location.pathname !== "/" &&
     location.pathname !== "/signup" &&
     location.pathname !== "/login" &&
-    location.pathname !== "/myCON/selfTest"
+    location.pathname.startsWith("/myCON/selfTest") && // 수정된 부분
+    location.pathname.startsWith("/myCON/selfTestResult") // 수정된 부분
   ) {
     return (
       <nav className="wrapper">

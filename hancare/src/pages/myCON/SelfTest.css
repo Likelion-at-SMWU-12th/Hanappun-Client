@@ -6,7 +6,7 @@
   overflow-y: auto;
 }
 
-.blackHeader {
+.blackHeader_con {
   padding-top: 30px;
   display: flex;
   align-items: center;
@@ -14,7 +14,7 @@
 }
 
 /* 이전페이지로 가기 버튼 */
-.blackHeader img {
+.blackHeader_con img {
   width: 13px;
   margin: auto 30px;
 }
