@@ -27,7 +27,7 @@ const CalendarMain = () => {
         const month = format(date, "yyyy-MM");
 
         const response = await axios.get(
-          `${baseURL}/calendars/event/month/${params.username}/${month}/`
+          `${baseURL}/calendars/event/month/test1/${month}/`
         );
         const data = response.data.result;
 

@@ -26,7 +26,7 @@ const OurCareProfile = () => {
   // 나의 친구 리스트 정보
   const getFriendInfo = () => {
     axios
-      .get(`${baseURL}/users/profile?username=${params.id}`)
+      .get(`${baseURL}/users/profile?username=test1`)
       .then((response) => {
         console.log(response);
         setFriendInfo(response.data.result);
