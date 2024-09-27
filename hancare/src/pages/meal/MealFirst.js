@@ -212,9 +212,24 @@ const MealFirst = () => {
   };
 
   const handleAddMealNext = () => {
+    let mealTypeToString;
+    switch (mealType) {
+      case 1:
+        mealTypeToString = "morning";
+        break;
+      case 2:
+        mealTypeToString = "lunch";
+        break;
+      case 3:
+        mealTypeToString = "dinner";
+        break;
+      case 4:
+        mealTypeToString = "snack";
+        break;
+    }
     if (newMealName.trim()) {
       navigate(`/meal/second_new/${params.username}/${params.date}`, {
-        state: { newMeal: newMealName },
+        state: { newMeal: newMealName, mealType: mealTypeToString },
       });
       setShowAddModal(false);
     } else {

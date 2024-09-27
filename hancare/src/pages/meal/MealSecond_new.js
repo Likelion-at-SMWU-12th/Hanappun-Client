@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import "./MealSecond.css";
 import { baseURL } from "../../api/baseURL";
+import axios from "axios";
 
 const MealSecond = () => {
   const navigate = useNavigate();
@@ -19,11 +20,10 @@ const MealSecond = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const { newMeal, mealId, foodId } = location.state || {}; // foodId 추가
+  const { newMeal, mealType } = location.state || {}; // foodId 추가
 
   const [mealName, setMealName] = useState(newMeal || "");
-  const [mealElements, setMealElements] = useState({});
-  const [selectedMealItem, setSelectedMealItem] = useState(mealId || foodId); // mealId 또는 foodId로 선택된 아이템 설정
+  const [mealElements, setMealElements] = useState([]);
   const [mealItem, setMealItem] = useState(null);
 
   // 카테고리별 요소들
@@ -95,91 +95,102 @@ const MealSecond = () => {
     ],
   };
 
-  useEffect(() => {
-    const fetchMealItem = async () => {
-      try {
-        const response = await fetch(
-          `${baseURL}/meal/${params.username}/${selectedMealItem}` // mealId 또는 foodId에 따라 fetch
-        );
-        if (response.ok) {
-          const data = response.data[foodId];
-          setMealItem(data);
-          setMealElements((prevElements) => ({
-            ...prevElements,
-            [selectedMealItem]: data.ingredients.map(
-              (ingredient) => ingredient.name
-            ),
-          }));
-          setMealName(data.name);
-          alert(data.name);
-        } else {
-          console.error("Error fetching meal item:", response.status);
-          alert("식사 정보를 가져오는 데 실패했습니다.");
-        }
-      } catch (error) {
-        console.error("Network error:", error);
-        alert("식사 정보를 가져오는 중 오류가 발생했습니다.");
-      }
-    };
+  // // 식사 기록 조회 API -----------------------------------------------------------
+  // useEffect(() => {
+  //   const fetchMealItem = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `${baseURL}/meal/${params.username}/date` // mealId 또는 foodId에 따라 fetch
+  //       );
+  //       if (response.status === 200) {
+  //         const data = response.data;
+  //         setMealItem(data);
+  //         setMealElements((prevElements) => ({
+  //           ...prevElements,
+  //           [foodId]: data.ingredients.map((ingredient) => ingredient.name),
+  //         }));
+  //         setMealName(data.name);
+  //       } else {
+  //         console.error("Error fetching meal item:", response.status);
+  //         alert("식사 정보를 가져오는 데 실패했습니다.");
+  //       }
+  //     } catch (error) {
+  //       console.error("Network error:", error);
+  //       alert("식사 정보를 가져오는 중 오류가 발생했습니다.");
+  //     }
+  //   };
 
-    if (selectedMealItem) {
-      fetchMealItem();
-    }
-  }, [params.username, selectedMealItem]); // username과 selectedMealItem이 변경될 때마다 호출
+  //   if (foodId) {
+  //     fetchMealItem();
+  //   }
+  // }, [params.username, foodId]); // username과 foodId가 변경될 때마다 호출
 
   const handleElementClick = (element) => {
     setMealElements((prevElements) => {
-      const updatedElements = { ...prevElements };
-      const currentElements = updatedElements[selectedMealItem] || [];
+      let updatedElements = [...prevElements]; // 배열 복사
 
-      if (currentElements.includes(element)) {
-        updatedElements[selectedMealItem] = currentElements.filter(
-          (e) => e !== element
-        );
-      } else if (currentElements.length < 4) {
-        updatedElements[selectedMealItem] = [...currentElements, element];
+      if (updatedElements.includes(element)) {
+        // 이미 선택된 요소일 경우 제거
+        updatedElements = updatedElements.filter((e) => e !== element);
+      } else if (updatedElements.length < 4) {
+        // 아직 4개 이하일 때만 요소 추가
+        updatedElements = [...updatedElements, element];
       }
 
-      return updatedElements;
+      return updatedElements; // 수정된 배열 반환
     });
   };
 
+  // 식사 생성 API -----------------------------------------------------------
+  const postMealItem = async (name, mealType, ingredients) => {
+    try {
+      const response = await axios.post(`${baseURL}/meal/${params.username}/`, {
+        name: name,
+        date: params.date,
+        timing: mealType,
+        ingredients: ingredients,
+      });
+      let mealTypeToKor;
+      switch (mealType) {
+        case "morning":
+          mealTypeToKor = "아침";
+          break;
+        case "lunch":
+          mealTypeToKor = "점심";
+          break;
+        case "dinner":
+          mealTypeToKor = "저녁";
+          break;
+        case "snack":
+          mealTypeToKor = "간식";
+          break;
+      }
+      alert(`${name}가 ${mealTypeToKor}으로 저장되었습니다. ⭐️`);
+      navigate(-1);
+    } catch (error) {
+      console.error("Network error:", error);
+      alert("식사 정보를 저장하는 중 오류가 발생했습니다.");
+    }
+  };
+
   const handleSave = async () => {
-    const currentMealElements = mealElements[selectedMealItem];
+    const currentMealElements = mealElements;
 
     if (!currentMealElements || currentMealElements.length === 0) {
       alert("한 개 이상의 요소를 선택해주세요");
       return;
-    }
+    } else {
+      const dataToSave = {
+        name: mealName,
+        timing: mealType,
+        ingredients: currentMealElements.map((element) => ({ name: element })),
+      };
 
-    const dataToSave = {
-      name: mealName,
-      timing: mealItem?.timing, // 기존 식사의 timing 사용
-      ingredients: currentMealElements.map((element) => ({ name: element })),
-    };
-
-    try {
-      const response = await fetch(
-        `${baseURL}/meal/date/?date=${params.date}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(dataToSave),
-        }
+      await postMealItem(
+        dataToSave.name,
+        dataToSave.timing,
+        dataToSave.ingredients
       );
-
-      if (response.ok) {
-        navigate(`/meal/first/${params.username}/${params.date}`);
-      } else {
-        const errorData = await response.json();
-        console.error("Error response:", errorData);
-        alert(
-          `저장하는데 실패했습니다: ${errorData.message || "알 수 없는 오류"}`
-        );
-      }
-    } catch (error) {
-      console.error("Network error:", error);
-      alert("저장 중 오류가 발생했습니다.");
     }
   };
 
@@ -211,9 +222,7 @@ const MealSecond = () => {
                   key={element}
                   onClick={() => handleElementClick(element)}
                   className={
-                    mealElements[selectedMealItem]?.includes(element)
-                      ? "MSselected"
-                      : ""
+                    mealElements?.includes(element) ? "MSselected" : ""
                   }
                 >
                   {element}
