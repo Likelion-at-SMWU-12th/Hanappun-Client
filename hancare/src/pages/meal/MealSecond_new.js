@@ -19,16 +19,12 @@ const MealSecond = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const { newMeal, mealItem, mealType } = location.state || {};
+  const { newMeal, mealId, foodId } = location.state || {}; // foodId 추가
 
-  const [selectedMealItem, setSelectedMealItem] = useState(
-    mealItem?.id || Date.now()
-  );
-  const [mealName, setMealName] = useState(newMeal || mealItem?.name || "");
-  const [mealElements, setMealElements] = useState(() => {
-    const initialState = mealItem?.selectedElements || [];
-    return { [selectedMealItem]: initialState };
-  });
+  const [mealName, setMealName] = useState(newMeal || "");
+  const [mealElements, setMealElements] = useState({});
+  const [selectedMealItem, setSelectedMealItem] = useState(mealId || foodId); // mealId 또는 foodId로 선택된 아이템 설정
+  const [mealItem, setMealItem] = useState(null);
 
   // 카테고리별 요소들
   const elementCategories = {
@@ -99,6 +95,38 @@ const MealSecond = () => {
     ],
   };
 
+  useEffect(() => {
+    const fetchMealItem = async () => {
+      try {
+        const response = await fetch(
+          `${baseURL}/meal/${params.username}/${selectedMealItem}` // mealId 또는 foodId에 따라 fetch
+        );
+        if (response.ok) {
+          const data = response.data[foodId];
+          setMealItem(data);
+          setMealElements((prevElements) => ({
+            ...prevElements,
+            [selectedMealItem]: data.ingredients.map(
+              (ingredient) => ingredient.name
+            ),
+          }));
+          setMealName(data.name);
+          alert(data.name);
+        } else {
+          console.error("Error fetching meal item:", response.status);
+          alert("식사 정보를 가져오는 데 실패했습니다.");
+        }
+      } catch (error) {
+        console.error("Network error:", error);
+        alert("식사 정보를 가져오는 중 오류가 발생했습니다.");
+      }
+    };
+
+    if (selectedMealItem) {
+      fetchMealItem();
+    }
+  }, [params.username, selectedMealItem]); // username과 selectedMealItem이 변경될 때마다 호출
+
   const handleElementClick = (element) => {
     setMealElements((prevElements) => {
       const updatedElements = { ...prevElements };
@@ -126,7 +154,7 @@ const MealSecond = () => {
 
     const dataToSave = {
       name: mealName,
-      timing: mealType, // MealFirst에서 전달된 mealType 사용
+      timing: mealItem?.timing, // 기존 식사의 timing 사용
       ingredients: currentMealElements.map((element) => ({ name: element })),
     };
 
