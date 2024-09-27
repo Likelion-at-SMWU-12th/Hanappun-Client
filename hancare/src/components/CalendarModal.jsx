@@ -426,7 +426,9 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
                   <DetailWrapper>
                     <p
                       onClick={() =>
-                        navigate(`/meal/test1/${formatDate(selectedDate)}`)
+                        navigate(
+                          `/meal/first/test1/${formatDate(selectedDate)}`
+                        )
                       }
                     >
                       자세히 보기
