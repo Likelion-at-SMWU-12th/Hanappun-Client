@@ -23,27 +23,24 @@ const MealFirst = () => {
 
   const [mealType, setMealType] = useState(1); // 기본값: 아침
   const [mealItems, setMealItems] = useState([]);
-  // const [inputValue, setInputValue] = useState("");
-
-  //연동하려고 추가 !
   const [mealData, setMealData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // 특정 날짜 식사 기록 조회 API
-  useEffect(() => {
-    const fetchMealData = async () => {
-      try {
-        const response = await axios.get(
-          `${baseURL}meal/${params.username}/date/?date=${params.date}`
-        );
-        setMealData(response.data);
-      } catch (error) {
-        console.error("식사 기록 조회 중 오류 발생: ", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  // 특정 날짜 식사 기록 조회 API ---------------------------------------
+  const fetchMealData = async () => {
+    try {
+      const response = await axios.get(
+        `${baseURL}meal/${params.username}/date/?date=${params.date}`
+      );
+      setMealData(response.data);
+    } catch (error) {
+      console.error("식사 기록 조회 중 오류 발생: ", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchMealData();
   }, []);
 
@@ -81,8 +78,8 @@ const MealFirst = () => {
           if (result[key] != null) {
             result[key].push({
               name: meal.name,
-              good_ingredients: meal.ingredient_details?.likes || [], // Check if likes exists
-              bad_ingredients: meal.ingredient_details?.dislikes || [], // Check if dislikes exists
+              good_ingredients: meal.ingredient_details?.likes || [],
+              bad_ingredients: meal.ingredient_details?.dislikes || [],
               soso_ingredients: meal.ingredient_details?.soso || [],
               foodId: meal.id,
             });
@@ -101,27 +98,26 @@ const MealFirst = () => {
 
   const mealInfo = extractMealInfo(mealData);
 
-  // Fill myMealData with extracted data
   myMealData[1].foods = mealInfo.morning; // 1 is breakfast
   myMealData[2].foods = mealInfo.lunch; // 2 is lunch
   myMealData[3].foods = mealInfo.dinner; // 3 is dinner
   myMealData[4].foods = mealInfo.snack; // 4 is snack
 
-  console.log(myMealData);
-
   const selectedMeal = myMealData[mealType];
 
-  // 음식 삭제 API 호출
-  const deleteMealFromDB = async (mealId) => {
+  // 특정 날짜 식사 기록 삭제 API -----------------------------------------
+  const deleteMealFromDB = async (name, id) => {
     try {
-      const response = await fetch(`/api/meals/${mealId}`, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) {
+      const response = await axios.delete(
+        `${baseURL}/meal/${params.username}/${id}`
+      );
+      if (response.status !== 200 && response.status !== 204) {
         throw new Error("음식을 삭제하는데 실패했습니다.");
       }
-      console.log("삭제 완료");
+      alert(`${name} 을/를 삭제되었습니다. 🧹🧹`);
+
+      // 상태에서 식사 삭제
+      handleRemoveMeal(name);
     } catch (error) {
       console.error(error.message);
     }
@@ -133,31 +129,16 @@ const MealFirst = () => {
     setMealType(Number(value)); // 클릭된 버튼의 값을 상태에 저장
   };
 
-  // const handleInputChange = (e) => {
-  //   setInputValue(e.target.value);
-  // };
-
-  // const handleAddMeal = (e) => {
-  //   e.preventDefault();
-  //   if (inputValue.trim()) {
-  //     setMealItems((prevItems) => [
-  //       ...prevItems,
-  //       { id: Date.now(), name: inputValue.trim() },
-  //     ]);
-  //     setInputValue(""); // 입력 필드 초기화
-  //   }
-  // };
-
-  const handleRemoveMeal = (id) => {
-    setMealItems((prevItems) => prevItems.filter((item) => item.id !== id));
+  const handleRemoveMeal = (name) => {
+    setMealItems((prevItems) => prevItems.filter((item) => item.name !== name));
   };
 
-  //수정하기 버튼 함수
+  // 수정하기 버튼 함수
   const handleEditMeal = (id) => {
     const selectedFood = selectedMeal.foods[id];
     navigate(`/meal/second_edit/${params.username}/${params.date}`, {
       state: {
-        foodId: id, // 선택한 음식 이름
+        foodId: id,
       },
     });
   };
@@ -165,25 +146,30 @@ const MealFirst = () => {
   // 삭제 modal ---------------------------------------------
   const [showModal, setShowModal] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
+  const [foodId, setFoodId] = useState(null);
 
-  const handleRemoveMealButton = (id) => {
-    setItemToDelete(id);
+  const handleRemoveMealButton = (name, id) => {
+    setItemToDelete(name);
+    setFoodId(id);
     setShowModal(true); // 모달창 띄움
   };
 
   const handleCancel = () => {
     setShowModal(false);
     setItemToDelete(null);
+    setFoodId(null);
   };
 
   const handleConfirm = async () => {
     if (itemToDelete !== null) {
       // DB에서 삭제
-      await deleteMealFromDB(itemToDelete);
+      await deleteMealFromDB(itemToDelete, foodId);
 
-      // 상태에서 삭제
-      handleRemoveMeal(itemToDelete);
-      setShowModal(false); // 모달 닫기
+      // 모달 닫기
+      setShowModal(false);
+      setItemToDelete(null);
+      setFoodId(null);
+      fetchMealData();
     }
   };
 
@@ -191,7 +177,7 @@ const MealFirst = () => {
     showModal && (
       <MealModal
         title="알림"
-        message={<>{selectedMeal.food}를 삭제하시겠습니까?</>}
+        message={`${itemToDelete} 을/를 삭제하시겠습니까?`}
         onCancel={handleCancel}
         onConfirm={handleConfirm}
         confirm="삭제"
@@ -249,7 +235,7 @@ const MealFirst = () => {
                 type="text"
                 placeholder="메뉴를 5자 이내로 입력해주세요"
                 value={newMealName}
-                maxlength="5"
+                maxLength="5"
                 onChange={(e) => setNewMealName(e.target.value)}
               />
             </div>
@@ -346,7 +332,9 @@ const MealFirst = () => {
                     </button>
                     <button
                       className="MFremove-button"
-                      onClick={() => handleRemoveMealButton(food.name)}
+                      onClick={() =>
+                        handleRemoveMealButton(food.name, food.foodId)
+                      }
                     >
                       <img alt="remove" src="/images/remove.png" />
                     </button>
