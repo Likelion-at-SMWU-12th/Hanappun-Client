@@ -216,7 +216,7 @@ const SelfTest = () => {
 
   return (
     <div className="STbackground">
-      <header className="blackHeader">
+      <header className="blackHeader_con">
         <h2 className="STh2_con">나의 체질</h2>
         <div className="progressBack">
           <div className="progress-bar">
