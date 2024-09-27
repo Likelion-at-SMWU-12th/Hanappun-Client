@@ -44,9 +44,10 @@ const Profile = () => {
       return <p>나의 체질을 아직 설정하지 않았어요</p>;
     } else if (userData && userData.constitution_8 !== "") {
       return (
-        <p>
-          <span>{userData.constitution_8}체질</span> 이에요
-        </p>
+        <div>
+          <span className="purplespan">{userData.constitution_8}체질</span>
+          <span className="blackspan">이에요</span>
+        </div>
       );
     } else {
       return null;
@@ -57,9 +58,14 @@ const Profile = () => {
       return <p>나의 한의원을 아직 설정하지 않았어요</p>;
     } else if (userData && userData.my_clinic_name !== null) {
       return (
-        <p>
-          <span>{userData.my_clinic_name}</span> 에 다니고 있어요
-        </p>
+        <div>
+          <span className="purplespan">{userData.my_clinic_name}</span>
+          <span className="blackspan">에</span>
+          <br />
+          <span className="blackspan" style={{ marginLeft: "8px" }}>
+            다니고 있어요
+          </span>
+        </div>
       );
     } else {
       return null; // userData가 아직 로딩되지 않은 경우

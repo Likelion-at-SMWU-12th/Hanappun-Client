@@ -57,19 +57,28 @@
   color: #7350ff;
 }
 
-.profileText p {
-  font-weight: 550;
-  font-size: 12px;
-  padding-bottom: 5px;
+.profileText div {
+  margin-bottom: 10px;
 }
 
-.profileText span {
+.purplespan {
   margin-top: 60px;
   padding: 5px 15px;
   border: none;
   border-radius: 20px;
   background-color: #7350ff;
   color: white;
+  margin-right: 5px;
+  font-weight: 550;
+  font-size: 12px;
+  padding-bottom: 5px;
+}
+
+.blackspan {
+  margin-top: 30px;
+  font-weight: 550;
+  font-size: 12px;
+  padding-bottom: 5px;
 }
 
 /* 체질을 잘못 선택했나요? */
