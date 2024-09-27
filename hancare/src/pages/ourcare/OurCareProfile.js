@@ -23,6 +23,7 @@ const OurCareProfile = () => {
   const [friendInfo, setFriendInfo] = useState([]); // 초기 상태를 null로 설정
   const [friendDetail, setFriendDetail] = useState([]);
   const [friendhospital, setFriendhospital] = useState([]);
+  const [friendhospitalId, setFriendhospitalId] = useState([]);
 
   // 나의 친구 리스트 정보
   const getFriendInfo = () => {
@@ -55,6 +56,7 @@ const OurCareProfile = () => {
       .get(`${baseURL}/users/profile?username=${params.id}`)
       .then((response) => {
         setFriendhospital(response.data.result.my_clinic_name);
+        setFriendhospitalId(response.data.result.my_clinic);
         console.log(friendhospital);
       })
       .catch((error) => {
@@ -116,8 +118,8 @@ const OurCareProfile = () => {
           friendDetail.reservation_datetime
         )}입니다!`,
         link: {
-          mobileWebUrl: "http://3.35.205.191:3000",
-          webUrl: "http://3.35.205.191:3000",
+          mobileWebUrl: `http://3.35.205.191:3000/map/test1/${friendhospitalId}`,
+          webUrl: `http://3.35.205.191:3000/map/test1/${friendhospitalId}`,
         },
       });
     }

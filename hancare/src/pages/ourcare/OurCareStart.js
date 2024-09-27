@@ -41,8 +41,8 @@ const OurCareStart = () => {
         <Box>
           <img src="/images/talk.png" alt="talk"></img>
           <p>
-            이 내용은 상대에게 <Bold>카카오톡</Bold>으로 <Bold>공유</Bold>해서
-            알려줄 수 있어요
+            이 내용은 상대에게 <Bold>카카오톡</Bold>으로 <br />
+            <Bold>공유</Bold>해서 알려줄 수 있어요
           </p>
         </Box>
       </BoxContainer>
