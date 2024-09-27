@@ -9,7 +9,7 @@ const MealSecond = () => {
   const location = useLocation();
   const params = useParams();
 
-  const today = new Date();
+  const today = new Date(params.date);
   const week = ["일", "월", "화", "수", "목", "금", "토"];
   const dayOfWeek = week[today.getDay()];
   const formattedDate = `${
@@ -165,7 +165,7 @@ const MealSecond = () => {
           mealTypeToKor = "간식";
           break;
       }
-      alert(`${name}가 ${mealTypeToKor}으로 저장되었습니다. ⭐️`);
+      alert(`${name} 메뉴가 ${mealTypeToKor}으로 저장되었습니다. ⭐️`);
       navigate(-1);
     } catch (error) {
       console.error("Network error:", error);
