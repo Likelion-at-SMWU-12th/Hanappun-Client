@@ -3,6 +3,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import "./MealFirst.css";
 import MealModal from "../../components/MealModal";
 
+import axios from "axios";
+import { baseURL } from "../../api/baseURL";
+
 const MealFirst = () => {
   const navigate = useNavigate();
   const params = useParams();
@@ -17,6 +20,32 @@ const MealFirst = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const [mealType, setMealType] = useState(1); // 기본값: 아침
+  const [mealItems, setMealItems] = useState([]);
+  const [inputValue, setInputValue] = useState("");
+
+  //연동하려고 추가 !
+  const [mealData, setMealData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // 특정 날짜 식사 기록 조회 API
+  useEffect(() => {
+    const fetchMealData = async () => {
+      try {
+        const response = await axios.get(
+          `${baseURL}/meal/${params.username}/${params.date}`
+        );
+        setMealdata(response.data);
+      } catch (error) {
+        console.error("식사 기록 조회 중 오류 발생: ", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchMealData();
+  }, [params.date]);
 
   // 음식 삭제 API 호출
   const deleteMealFromDB = async (mealId) => {
@@ -33,10 +62,6 @@ const MealFirst = () => {
       console.error(error.message);
     }
   };
-
-  const [mealType, setMealType] = useState(1); // 기본값: 아침
-  const [mealItems, setMealItems] = useState([]);
-  const [inputValue, setInputValue] = useState("");
 
   // 끼니 클릭 함수
   const handleClickMeal = (e) => {
@@ -157,8 +182,8 @@ const MealFirst = () => {
       />
     );
 
-  // 예시 데이터 mealData
-  const mealData = {
+  // 예시 데이터 mymealData
+  const mymealData = {
     1: {
       meal: "아침",
       foods: [
@@ -235,7 +260,7 @@ const MealFirst = () => {
     },
   };
 
-  const selectedMeal = mealData[mealType];
+  const selectedMeal = mymealData[mealType];
 
   return (
     <div className="MFbackground">
@@ -291,7 +316,6 @@ const MealFirst = () => {
                       </span>
                     ))}
                   </li>
-
                   <li className="MFbadIngredients">
                     {food.bad_ingredients.map((ingredient, i) => (
                       <span key={i}>
