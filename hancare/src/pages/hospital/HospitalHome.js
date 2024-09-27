@@ -449,7 +449,7 @@ const HospitalHome = () => {
 
 export const Container = styled.div`
   background-color: black;
-  height: 100%;
+  height: 100vh;
   width: 100%;
   position: relative;
   display: flex;

@@ -22,11 +22,12 @@ const OurCareProfile = () => {
   const username = useSelector((state) => state.username);
   const [friendInfo, setFriendInfo] = useState([]); // 초기 상태를 null로 설정
   const [friendDetail, setFriendDetail] = useState([]);
+  const [friendhospital, setFriendhospital] = useState([]);
 
   // 나의 친구 리스트 정보
   const getFriendInfo = () => {
     axios
-      .get(`${baseURL}/users/profile?username=${params.id}`)
+      .get(`${baseURL}/users/profile?username=test1`)
       .then((response) => {
         console.log(response);
         setFriendInfo(response.data.result);
@@ -49,6 +50,18 @@ const OurCareProfile = () => {
       });
   };
 
+  const getFriendHospitalInfo = () => {
+    axios
+      .get(`${baseURL}/users/profile?username=${params.id}`)
+      .then((response) => {
+        setFriendhospital(response.data.result.my_clinic_name);
+        console.log(friendhospital);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   useEffect(() => {
     if (window.Kakao) {
       if (!window.Kakao.isInitialized()) {
@@ -57,6 +70,7 @@ const OurCareProfile = () => {
     }
     getFriendInfo();
     getFriendDetail();
+    getFriendHospitalInfo();
   }, []);
 
   const onBtnDel = () => {
@@ -166,9 +180,8 @@ const OurCareProfile = () => {
                 <List>
                   <ListItem>
                     <Box1Img src="/images/hospital.png" alt="map"></Box1Img>
-                    {friendDetail.reservation_clinic &&
-                    friendDetail.reservation_clinic !== "" ? (
-                      <Box1Text>{friendDetail.reservation_clinic}</Box1Text>
+                    {friendhospital ? (
+                      <Box1Text>{friendhospital}</Box1Text>
                     ) : (
                       <Box1Text>한의원을 알아볼까요?</Box1Text>
                     )}

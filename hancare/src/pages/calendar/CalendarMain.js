@@ -18,45 +18,46 @@ const CalendarMain = () => {
   const [events, setEvents] = useState([]);
   const [reservations, setReservations] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
+  const [refreshCalendar, setRefreshCalendar] = useState(false);
 
   const params = useParams();
 
+  const fetchEventsAndReservations = async () => {
+    try {
+      const month = format(date, "yyyy-MM");
+
+      const response = await axios.get(
+        `${baseURL}/calendars/event/month/test1/${month}/`
+      );
+      const data = response.data.result;
+
+      const fetchedEvents = data.filter((item) => item.is_condition_or_meal);
+      const fetchedReservations = data.filter((item) => item.is_reservation);
+
+      setEvents(
+        fetchedEvents.map((event) => ({
+          date: new Date(event.date),
+          event: "이벤트",
+          image: "/images/grayspot.png",
+        }))
+      );
+
+      setReservations(
+        fetchedReservations.map((reservation) => ({
+          date: new Date(reservation.date),
+          event: "예약",
+          image: "/images/purplespot.png",
+        }))
+      );
+    } catch (error) {
+      alert("이벤트 및 예약을 가져오는 중 오류 발생:", error);
+    }
+  };
+
+  // 달력이 변경될 때마다 이벤트 및 예약 정보를 다시 가져옴
   useEffect(() => {
-    const fetchEventsAndReservations = async () => {
-      try {
-        const month = format(date, "yyyy-MM");
-
-        const response = await axios.get(
-          `${baseURL}/calendars/event/month/${params.username}/${month}/`
-        );
-        const data = response.data.result;
-
-        const fetchedEvents = data.filter((item) => item.is_condition_or_meal);
-        const fetchedReservations = data.filter((item) => item.is_reservation);
-
-        setEvents(
-          fetchedEvents.map((event) => ({
-            date: new Date(event.date),
-            event: "이벤트",
-            image: "/images/grayspot.png",
-          }))
-        );
-
-        setReservations(
-          fetchedReservations.map((reservation) => ({
-            date: new Date(reservation.date),
-            event: "예약",
-            image: "/images/purplespot.png",
-          }))
-        );
-      } catch (error) {
-        alert("이벤트 및 예약을 가져오는 중 오류 발생:", error);
-      }
-    };
-
     fetchEventsAndReservations();
-  }, [date]);
-
+  }, [date, refreshCalendar]); // 추가: refreshCalendar가 변경될 때도 다시 fetch
   const BackButton = () => {
     navigate(-1);
   };
@@ -96,6 +97,11 @@ const CalendarMain = () => {
     return format(date, "M월 d일 EEEE", { locale: ko });
   };
 
+  const handleModalCloseAndRefresh = () => {
+    closeModal();
+    setRefreshCalendar(!refreshCalendar); // 상태 변경을 통해 달력을 새로 고침
+  };
+
   return (
     <div>
       <Container>
@@ -133,7 +139,7 @@ const CalendarMain = () => {
         {modalOpen && (
           <CalendarModal
             isOpen={modalOpen}
-            closeModal={closeModal}
+            closeModal={handleModalCloseAndRefresh}
             selectedDate={selectedDate ? date : null}
           />
         )}

@@ -9,13 +9,17 @@ import { ko } from "date-fns/locale";
 
 function CalendarModal({ isOpen, closeModal, selectedDate }) {
   const navigate = useNavigate();
-  const username = useSelector((state) => state.username);
   const [userinfo, setUserinfo] = useState([]);
   const [fix, setFix] = useState(false);
   const [time, setTime] = useState("");
   const [timeNewReservation, setTimeNewReservation] = useState("");
   const [selectfix, setSelectfix] = useState(false);
+  const [friend, setFriend] = useState([]);
+  const [hospitals, setHospitals] = useState({});
+  const [username, setUsernmae] = useState([]);
+  const [userid, setUserid] = useState([]);
 
+  // 식사 페이지 연결을 위한 코드. (날짜 함수)
   const formatDate = (date) => {
     return format(date, "yyyy-MM-dd", { locale: ko });
   };
@@ -32,9 +36,7 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
   const getReservinfo = () => {
     axios
       .get(
-        `${baseURL}/calendars/event/detail/${username}/${formatDate(
-          selectedDate
-        )}/`
+        `${baseURL}/calendars/event/detail/test1/${formatDate(selectedDate)}/`
       )
       .then((response) => {
         setUserinfo(response.data.result); // 수정된 부분
@@ -51,38 +53,119 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
   }, [selectedDate]);
 
   useEffect(() => {
-    if (userinfo.appointment && userinfo.appointment.length > 0) {
-      const initialTime = ReservationTime(userinfo.appointment[0].date);
+    if (selectfix && userinfo.appointment && userinfo.appointment.length > 0) {
+      // selectfix가 설정된 경우에만 time을 업데이트
+      const initialTime = ReservationTime(selectfix.date);
       setTime(initialTime);
+    } else {
+      // selectfix가 없거나 null일 경우, time을 빈 값으로 초기화
+      setTime("");
     }
-  }, [userinfo]);
+  }, [selectfix, userinfo]);
 
-  // 예약 생성하기
-  const formatDateNewReservation = (date) => {
-    return format(date, "yyyyMMdd", { locale: ko });
-  };
-
-  const WriteBtnClick = () => {
-    formatDateNewReservation(selectedDate);
+  const getmyHospitalInfo = (userId) => {
     axios
-      .post(`${baseURL}/reservation/`, {
-        client: username,
-        date: `${formatDateNewReservation(selectedDate)} ${timeNewReservation}`,
-      })
+      .get(`${baseURL}/users/profile?username=${userId}`)
       .then((response) => {
-        console.log(response.data); // 수정된 부분
+        setHospitals((prevHospitals) => ({
+          ...prevHospitals,
+          [userId]: response.data.result.my_clinic_name,
+        }));
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  const handleFixbtnClick = (appointment) => {
-    console.log("appointment", appointment);
+  // 친구 목록 불러오는 api
+  const getFriendInfo = () => {
+    axios
+      .get(`${baseURL}/users/ourcare?username=test1`, {
+        username: "test1",
+      })
+      .then((response) => {
+        setFriend(response.data.result);
+        getmyHospitalInfo("test1");
+        response.data.result.forEach((friend) => {
+          const friendId = Object.keys(friend)[0];
+          getmyHospitalInfo(friendId); // 친구 ID에 따라 병원 정보 가져오기
+        });
+      })
+      .catch((error) => {
+        alert("사용자를 찾을 수 없습니다.");
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    getFriendInfo();
+  }, []);
+
+  // 예약 생성하기
+  const formatDateNewReservation = (date, time) => {
+    const formattedDate = format(date, "yyyyMMdd", { locale: ko });
+    return `${formattedDate} ${time}`;
+  };
+
+  const createReservation = (userId, formattedDate) => {
+    axios
+      .post(`${baseURL}/reservation/detail/`, {
+        client: userId,
+        date: formattedDate,
+      })
+      .then((response) => {
+        console.log(response.data);
+        getReservinfo(); // 예약 정보를 업데이트
+        closeModal(); // 모달 닫기
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const updateReservation = (userId, reservationId, formattedDate) => {
+    axios
+      .patch(`${baseURL}/reservation/${reservationId}/`, {
+        client: userId,
+        date: formattedDate,
+      })
+      .then((response) => {
+        console.log(response.data);
+        getReservinfo(); // 예약 정보를 업데이트
+        closeModal(); // 모달 닫기
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const deleteReservation = (reservationId) => {
+    if (reservationId) {
+      if (window.confirm("삭제하시겠습니까?")) {
+        axios
+          .delete(`${baseURL}/reservation/${reservationId}/`)
+          .then((response) => {
+            console.log(response);
+            getReservinfo();
+            closeModal();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        alert("취소");
+      }
+    } else {
+      alert("삭제할 예약이 없습니다.");
+    }
+  };
+
+  // 수정 버튼을 눌렀을 경우 함수들
+  const handleFixbtnClick = (userid, username, appointment) => {
     setSelectfix(appointment);
-    console.log("selectfix", selectfix);
+    setUsernmae(username);
+    setUserid(userid);
     setFix(true);
-    console.log("fix", fix);
   };
 
   const ReservationTime = (dateTimeString) => {
@@ -91,53 +174,102 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
     return reservatetime;
   };
 
-  const handleChange = (e) => {
-    setTime(e.target.value);
-  };
-
   //예약 생성 시 시간 변경
   const handleTimeChange = (e) => {
+    setTime(e.target.value);
     setTimeNewReservation(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e, userid, reservationId = null) => {
     e.preventDefault();
-    // 여기서 시간 업데이트 등의 작업을 수행
+
+    const formattedDate = formatDateNewReservation(
+      selectedDate,
+      timeNewReservation
+    );
+
+    if (reservationId) {
+      updateReservation(userid, reservationId, formattedDate);
+    } else {
+      createReservation(userid, formattedDate);
+    }
   };
 
   if (!isOpen) return null;
+
+  // 식사 멘트
+  const getMealFeedback = (todayMeal) => {
+    switch (todayMeal) {
+      case "bad":
+        return {
+          message: "건강이 염려되어요",
+          image: "/images/bad.png",
+        };
+      case "soso":
+        return {
+          message: "대체로 괜찮아요!",
+          image: "/images/soso.png",
+        };
+      case "good":
+        return {
+          message: "건강을 잘 챙겼어요!",
+          image: "/images/good.png",
+        };
+      default:
+        return {
+          message: "맞춤형 분석",
+          image: "/images/analysis_person.png",
+        };
+    }
+  };
 
   return (
     <div>
       <ModalOverlay style={{ display: isOpen ? "flex" : "none" }}>
         <Container>
-          {fix && selectfix ? (
+          {fix ? (
             <>
-              {selectfix.client_my_clinic ? (
+              {hospitals[userid] ? (
                 <>
                   <Purple>
                     <MyFixTitle>
                       <h2>{formatDate(selectedDate)}</h2>
-                      <MyFix>{selectfix.client_username}의 예약</MyFix>
+                      <MyFix>{username}의 예약</MyFix>
                     </MyFixTitle>
                   </Purple>
                   <SubTitle>
-                    <img src="/images/purplespot.png" alt="purplespot"></img>
+                    <img src="/images/purplespot.png" alt="purplespot" />
                     <h2>예약 일정</h2>
                   </SubTitle>
                   <HospitalWrapper>
-                    <form onSubmit={handleSubmit}>
+                    <form
+                      onSubmit={(e) =>
+                        handleSubmit(
+                          e,
+                          userid,
+                          selectfix ? selectfix.reservation_id : null
+                        )
+                      }
+                    >
                       <HospitalBox>
-                        <Hospitalimg src="/images/marker.png"></Hospitalimg>
-                        <HospitalName>
-                          {selectfix.client_my_clinic}
-                        </HospitalName>
+                        <Hospitalimg src="/images/marker.png" />
+                        <HospitalName>{hospitals[userid]}</HospitalName>{" "}
+                        {/* 예약된 병원 정보 */}
                         <input
                           type="time"
                           value={time}
-                          onChange={handleChange}
+                          onChange={handleTimeChange}
                         />
-                        <button>예약 삭제</button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            deleteReservation(
+                              selectfix ? selectfix.reservation_id : null
+                            );
+                          }}
+                        >
+                          예약 삭제
+                        </button>
                       </HospitalBox>
                       <BtnWrapper>
                         <SetButton onClick={closeModal}>뒤로가기</SetButton>
@@ -160,7 +292,7 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
                       <br />
                       설정 후 다시 이용해 주세요
                     </h3>
-                    <CloseButton onClick={() => navigate(`/map/${username}`)}>
+                    <CloseButton onClick={() => navigate("/map/test1")}>
                       나의 한의원 찾기
                     </CloseButton>
                   </NotWrapper>
@@ -177,36 +309,91 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
                 <h2>예약 일정</h2>
               </SubTitle>
               <OurWrapper>
+                {/* "test1" 유저와 친구 목록을 함께 처리하기 위해 배열로 합침 */}
                 {userinfo.appointment && userinfo.appointment.length > 0 ? (
-                  <>
-                    {userinfo.appointment.map((item, index) => (
-                      <OurBox key={index}>
-                        <h3>{item.client_username}</h3>
-                        <Myimg src="/images/mycareimg.png"></Myimg>
-                        <h3>{item.client_my_clinic}</h3>
-                        <p>{ReservationTime(item.date)}</p>
-                        <Fiximg
-                          src="/images/fixreservation.png"
-                          onClick={() => handleFixbtnClick(item)}
-                        ></Fiximg>
+                  [{ test1: "김멋사" }, ...friend].map((user, key) => {
+                    const userKey = Object.keys(user)[0]; // 유저 ID (test1 또는 친구 ID)
+                    const userName = user[userKey]; // 유저 이름 (test1 또는 친구 이름)
+
+                    // 해당 유저가 예약 정보에 포함되어 있는지 확인
+                    const appointmentForUser = userinfo.appointment.find(
+                      (appointment) => appointment.client_username === userKey
+                    );
+
+                    // map() 함수 내에서 JSX를 return
+                    return (
+                      <OurBox key={key}>
+                        <h3>{userName}</h3> {/* 유저 이름 출력 */}
+                        {userName === "김멋사" ? (
+                          <Myimg src="/images/mycareimg.png"></Myimg>
+                        ) : (
+                          <Myimg src="/images/calendar_friend.png"></Myimg>
+                        )}
+                        {appointmentForUser ? (
+                          <>
+                            <h3>{hospitals[userKey]}</h3> {/* 예약된 병원 */}
+                            <p>
+                              {ReservationTime(appointmentForUser.date)}
+                            </p>{" "}
+                            {/* 예약 시간 */}
+                            <Fiximg
+                              src="/images/fixreservation.png"
+                              onClick={() =>
+                                handleFixbtnClick(
+                                  userKey,
+                                  userName,
+                                  appointmentForUser
+                                )
+                              }
+                            ></Fiximg>
+                          </>
+                        ) : (
+                          <>
+                            <h3>아직 예약이 없어요!</h3>{" "}
+                            {/* 예약이 없을 경우 */}
+                            <Fiximg
+                              src="/images/fixreservation.png"
+                              onClick={() =>
+                                handleFixbtnClick(userKey, userName, null)
+                              }
+                            ></Fiximg>
+                          </>
+                        )}
                       </OurBox>
-                    ))}
-                  </>
+                    );
+                  })
                 ) : (
-                  <form onSubmit={handleSubmit}>
-                    <WriteWrapper>
-                      <WriteBox>
-                        <input
-                          type="time"
-                          value={timeNewReservation}
-                          onChange={handleTimeChange}
-                        />
-                        <Writebtn onClick={() => WriteBtnClick()}>
-                          기록하기
-                        </Writebtn>
-                      </WriteBox>
-                    </WriteWrapper>
-                  </form>
+                  <>
+                    <OurBox>
+                      <h3>김멋사</h3>
+                      <Myimg src="/images/mycareimg.png"></Myimg>
+                      <h3>아직 예약이 없어요!</h3>
+                      <Fiximg
+                        src="/images/fixreservation.png"
+                        onClick={() =>
+                          handleFixbtnClick("test1", "김멋사", null)
+                        }
+                      ></Fiximg>
+                    </OurBox>
+                    {friend &&
+                      friend.map((frienditem, key) => (
+                        <OurBox key={key}>
+                          <h3>{frienditem[Object.keys(frienditem)[0]]}</h3>
+                          <Myimg src="/images/calendar_friend.png"></Myimg>
+                          <h3>아직 예약이 없어요!</h3>
+                          <Fiximg
+                            src="/images/fixreservation.png"
+                            onClick={() =>
+                              handleFixbtnClick(
+                                Object.keys(frienditem)[0],
+                                frienditem[Object.keys(frienditem)[0]],
+                                null
+                              )
+                            }
+                          ></Fiximg>
+                        </OurBox>
+                      ))}
+                  </>
                 )}
               </OurWrapper>
               <ConditionWrapper>
@@ -221,7 +408,13 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
                       : null}
                   </p>
                   <DetailWrapper>
-                    <p>자세히 보기</p>
+                    <p
+                      onClick={() =>
+                        navigate(`/meal/test1/${formatDate(selectedDate)}`)
+                      }
+                    >
+                      자세히 보기
+                    </p>
                     <img src="/images/seedetail.png"></img>
                   </DetailWrapper>
                 </ConditionBox>
@@ -236,7 +429,13 @@ function CalendarModal({ isOpen, closeModal, selectedDate }) {
                       : null}
                   </p>
                   <DetailWrapper>
-                    <p>자세히 보기</p>
+                    <p
+                      onClick={() =>
+                        navigate(`/condition/test1/${formatDate(selectedDate)}`)
+                      }
+                    >
+                      자세히 보기
+                    </p>
                     <img src="/images/seedetail.png"></img>
                   </DetailWrapper>
                 </ConditionBox>
@@ -384,7 +583,7 @@ const OurBox = styled.div`
   }
   p {
     font-size: 12px;
-    margin-top: -15px;
+    margin-top: -10px;
     text-align: left;
   }
 `;
@@ -519,7 +718,7 @@ const BigBar = styled.img`
 
 const ConditionWrapper = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   margin-left: 0;
   gap: 40px;
 `;

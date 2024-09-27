@@ -35,7 +35,7 @@ const OurCareFamily = () => {
   //  정보 불러오기
   const getInfo = () => {
     axios
-      .get(`${baseURL}/users/ourcare?username=${username}`, {
+      .get(`${baseURL}/users/ourcare?username=test1`, {
         username: username,
       })
       .then((response) => {
@@ -50,7 +50,7 @@ const OurCareFamily = () => {
   useEffect(() => {
     const getInfo = () => {
       axios
-        .get(`${baseURL}/users/ourcare?username=${username}`, {
+        .get(`${baseURL}/users/ourcare?username=test1`, {
           username: username,
         })
         .then((response) => {
@@ -86,7 +86,7 @@ const OurCareFamily = () => {
       </Title>
       <ProfileContainer>
         <ProfileWrapper>
-          <Profilebox onClick={() => navigate(`/profile/${username}`)}>
+          <Profilebox onClick={() => navigate(`/profile/test1`)}>
             <img src={profileImages[0]} alt="profile" />
           </Profilebox>
           <h2>나</h2>
