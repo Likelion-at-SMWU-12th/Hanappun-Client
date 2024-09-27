@@ -1,77 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./Meal.css";
-
-import axios from "axios";
 import { baseURL } from "../../api/baseURL";
-import { getuserData } from "../../api/getuserData";
 
 const MealAnalysis = () => {
   const navigate = useNavigate();
   const params = useParams();
-  const [mealData, setMealData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const [userNickname, setUserNickname] = useState("");
-
-  const getUserNickname = async () => {
-    const result = await getuserData(params.username);
-
-    if (result.status == 200) {
-      setUserNickname(result.data.result.nickname);
-    } else {
-    }
-  };
-
-  useEffect(() => {
-    getUserNickname();
-  }, [params.username]);
-
-  const today = new Date(params.date);
+  const today = new Date(params.data);
   const week = ["일", "월", "화", "수", "목", "금", "토"];
   let dayOfWeek = week[today.getDay()];
   const formattedDate = `${
     today.getMonth() + 1
   }월 ${today.getDate()}일 ${dayOfWeek}요일`;
-
   // 페이지 로드 시 맨 위로 스크롤
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
   // 이전 페이지로 이동 버튼
   const BackButton = () => {
     navigate(-1);
   };
 
-  // 식사 기록 조회
-  useEffect(() => {
-    const fetchMealData = async () => {
-      try {
-        const response = await axios.get(
-          `${baseURL}/date/meal/${params.username}/${params.date}`
-        );
-        setMealData(response.data.data[0]);
-      } catch (error) {
-        console.error("식사 기록 조회 중 오류 발생:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchMealData();
-  }, [params.date]);
-
   //테스트용 데이터
   const user = {
-    name: userNickname,
-    todayMeal: mealData.overall_status,
-    breakfast: [mealData.morning_good_foods, mealData.morning_bad_foods],
-    lunch: [mealData.lunch_good_foods, mealData.lunch_bad_foods],
-    dinner: [mealData.dinner_good_foods, mealData.dinner_bad_foods],
-    snack: [mealData.snack_good_foods, mealData.snack_bad_foods],
+    name: params.username,
+    todayMeal: "good",
+    breakfast: ["", "오렌지주스"],
+    lunch: ["탕수육, 보리차", "짬뽕"],
+    dinner: ["돈가츠", "레몬에이드"],
+    snack: ["", "커피"],
   };
-
   // todayMeal에 따른 메시지와 이미지 설정
   const getMealFeedback = (todayMeal) => {
     switch (todayMeal) {
@@ -97,9 +56,7 @@ const MealAnalysis = () => {
         };
     }
   };
-
   const mealFeedback = getMealFeedback(user.todayMeal);
-
   return (
     <div className="Mbackground">
       <header className="blackHeader">
@@ -122,25 +79,28 @@ const MealAnalysis = () => {
             />
           </div>
           <div className="Mback_white2">
-            <div className="Mmeal_one">
-              <ul className="MA_ulblue">
-                {Array.isArray(user.breakfast[0]) &&
-                  user.breakfast[0].length > 0 &&
-                  (user.breakfast[0] + "").split(",").map((item, index) => (
-                    <li key={`breakfast-good-${index}`} className="Mblue">
-                      {item.trim()}
-                    </li>
-                  ))}
-              </ul>
-              <div className="vertical-divider"></div>
+            <div className="MAmeal_name">
+              <span className="MApurpleDiv">아침</span>
+              <span className="MApurpleDiv">점심</span>
+              <span className="MApurpleDiv">저녁</span>
+              <span className="MApurpleDiv">간식</span>
+            </div>
+            <div className="MAmeal_one">
               <ul>
-                {Array.isArray(user.breakfast[1]) &&
-                  user.breakfast[1].length > 0 &&
-                  (user.breakfast[1] + "").split(",").map((item, index) => (
-                    <li key={`breakfast-bad-${index}`} className="Mred">
-                      {item.trim()}
-                    </li>
-                  ))}
+                <li className="MAblue">{user.breakfast[0]}</li>
+                <li className="MAred">{user.breakfast[1]}</li>
+              </ul>
+              <ul>
+                <li className="MAblue">{user.lunch[0]}</li>
+                <li className="MAred">{user.lunch[1]}</li>
+              </ul>
+              <ul>
+                <li className="MAblue">{user.dinner[0]}</li>
+                <li className="MAred">{user.dinner[1]}</li>
+              </ul>
+              <ul>
+                <li className="MAblue">{user.snack[0]}</li>
+                <li className="MAred">{user.snack[1]}</li>
               </ul>
             </div>
           </div>
@@ -152,7 +112,7 @@ const MealAnalysis = () => {
               navigate(`/meal/first/${params.username}/${params.date}`)
             }
           >
-            수정
+            식사 다시보기
           </button>
           <button
             className="MpurpleBtn2"
@@ -165,5 +125,4 @@ const MealAnalysis = () => {
     </div>
   );
 };
-
 export default MealAnalysis;

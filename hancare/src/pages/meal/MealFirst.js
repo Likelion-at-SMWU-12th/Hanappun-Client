@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./MealFirst.css";
 import MealModal from "../../components/MealModal";
+import axios from "axios";
+import { baseURL } from "../../api/baseURL";
 
 const MealFirst = () => {
   const navigate = useNavigate();
@@ -18,67 +20,110 @@ const MealFirst = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  // 음식 삭제 API 호출
+  // State variables
+  const [mealData, setMealData] = useState({
+    1: { meal: "아침", foods: [] },
+    2: { meal: "점심", foods: [] },
+    3: { meal: "저녁", foods: [] },
+    4: { meal: "간식", foods: [] },
+  });
+
+  const [mealType, setMealType] = useState(1); // Default: Breakfast
+
+  // Delete modal state
+  const [showModal, setShowModal] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
+
+  // Add modal state
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newMealName, setNewMealName] = useState("");
+
+  // Fetch meal data from the backend
+  useEffect(() => {
+    const fetchMealData = async () => {
+      try {
+        const response = await axios.fetch(
+          `${baseURL}/meal/?date=${params.date}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch meal data");
+        }
+        const data = await response.json();
+        // Transform data into mealData structure
+        const newMealData = {
+          1: { meal: "아침", foods: [] },
+          2: { meal: "점심", foods: [] },
+          3: { meal: "저녁", foods: [] },
+          4: { meal: "간식", foods: [] },
+        };
+
+        data.forEach((meal) => {
+          let timing = meal.timing; // e.g., 'morning'
+          let mealType;
+          switch (timing) {
+            case "morning":
+              mealType = 1;
+              break;
+            case "lunch":
+              mealType = 2;
+              break;
+            case "dinner":
+              mealType = 3;
+              break;
+            case "snack":
+              mealType = 4;
+              break;
+            default:
+              mealType = 0;
+          }
+
+          if (mealType && newMealData[mealType]) {
+            const good_ingredients = meal.ingredient_details.likes;
+            const bad_ingredients = meal.ingredient_details.dislikes;
+            newMealData[mealType].foods.push({
+              id: meal.id,
+              name: meal.name,
+              good_ingredients: good_ingredients,
+              bad_ingredients: bad_ingredients,
+            });
+          }
+        });
+
+        setMealData(newMealData);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchMealData();
+  }, [params.date]);
+
+  // Delete meal from DB
   const deleteMealFromDB = async (mealId) => {
     try {
-      const response = await fetch(`/api/meals/${mealId}`, {
+      const response = await fetch(`/meal/${mealId}/`, {
         method: "DELETE",
       });
 
       if (!response.ok) {
-        throw new Error("음식을 삭제하는데 실패했습니다.");
+        throw new Error("Failed to delete meal");
       }
-      console.log("삭제 완료");
+      console.log("Meal deleted");
     } catch (error) {
       console.error(error.message);
     }
   };
 
-  const [mealType, setMealType] = useState(1); // 기본값: 아침
-  const [mealItems, setMealItems] = useState([]);
-  const [inputValue, setInputValue] = useState("");
-
-  // 끼니 클릭 함수
+  // Meal type selection handler
   const handleClickMeal = (e) => {
     const { value } = e.target;
-    setMealType(Number(value)); // 클릭된 버튼의 값을 상태에 저장
+    setMealType(Number(value));
   };
 
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-  };
-
-  const handleAddMeal = (e) => {
-    e.preventDefault();
-    if (inputValue.trim()) {
-      setMealItems((prevItems) => [
-        ...prevItems,
-        { id: Date.now(), name: inputValue.trim() },
-      ]);
-      setInputValue(""); // 입력 필드 초기화
-    }
-  };
-
-  const handleRemoveMeal = (id) => {
-    setMealItems((prevItems) => prevItems.filter((item) => item.id !== id));
-  };
-
-  const handleEditMeal = (id) => {
-    // 수정하기 버튼 클릭 시 동작
-    alert(`수정하기 기능을 구현할 파일을 열겠습니다. 아이디: ${id}`);
-    const mealToEdit = mealItems.find((item) => item.id === id);
-    navigate(`/meal/second/${params.username}/${params.date}`, {
-      state: { mealToEdit },
-    });
-  };
-
-  // 삭제 modal
-  const [showModal, setShowModal] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState(null);
-
+  // Delete modal handlers
   const handleRemoveMealButton = (id) => {
     setItemToDelete(id);
-    setShowModal(true); // 모달창 띄움
+    setShowModal(true);
   };
 
   const handleCancel = () => {
@@ -86,33 +131,38 @@ const MealFirst = () => {
     setItemToDelete(null);
   };
 
+  const handleRemoveMeal = (mealId) => {
+    setMealData((prevData) => {
+      const newData = { ...prevData };
+      Object.keys(newData).forEach((mealType) => {
+        newData[mealType].foods = newData[mealType].foods.filter(
+          (meal) => meal.id !== mealId
+        );
+      });
+      return newData;
+    });
+  };
+
   const handleConfirm = async () => {
     if (itemToDelete !== null) {
-      // DB에서 삭제
       await deleteMealFromDB(itemToDelete);
-
-      // 상태에서 삭제
       handleRemoveMeal(itemToDelete);
-      setShowModal(false); // 모달 닫기
+      setShowModal(false);
     }
   };
 
-  // JSX에서 조건부 렌더링 수정
   const renderDeleteModal = () =>
     showModal && (
       <MealModal
         title="알림"
-        message={<>{selectedMeal.food}를 삭제하시겠습니까?</>}
+        message={`삭제하시겠습니까?`}
         onCancel={handleCancel}
         onConfirm={handleConfirm}
         confirm="삭제"
       />
     );
 
-  // 추가 modal
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [newMealName, setNewMealName] = useState("");
-
+  // Add modal handlers
   const handleAddMealButton = () => {
     setShowAddModal(true);
   };
@@ -125,7 +175,7 @@ const MealFirst = () => {
   const handleAddMealNext = () => {
     if (newMealName.trim()) {
       navigate(`/meal/second/${params.username}/${params.date}`, {
-        state: { newMeal: newMealName },
+        state: { newMeal: newMealName, mealType: mealType },
       });
       setShowAddModal(false);
     } else {
@@ -139,13 +189,13 @@ const MealFirst = () => {
         title="식사 입력하기"
         message={
           <>
-            {selectedMeal.meal}
+            {mealData[mealType].meal}
             <div className="MFinput">
               <input
                 type="text"
                 placeholder="메뉴를 5자 이내로 입력해주세요"
                 value={newMealName}
-                maxlength="5"
+                maxLength="5"
                 onChange={(e) => setNewMealName(e.target.value)}
               />
             </div>
@@ -157,75 +207,29 @@ const MealFirst = () => {
       />
     );
 
-  // 예시 데이터 mealData
-  const mealData = {
-    1: {
-      meal: "아침",
-      foods: [
-        {
-          name: "쌀국수",
-          good_ingredients: ["소고기", "쌀(백미)"],
-          bad_ingredients: ["돼지고기"],
-        },
-        {
-          name: "돈가츠",
-          good_ingredients: ["쌀", "채소"],
-          bad_ingredients: ["밀가루", "튀김옷"],
-        },
-        {
-          name: "레몬에이드",
-          good_ingredients: ["레몬"],
-          bad_ingredients: ["설탕"],
-        },
-      ],
-    },
-    2: {
-      meal: "점심",
-      foods: [
-        {
-          name: "치킨샐러드",
-          good_ingredients: ["닭가슴살", "야채"],
-          bad_ingredients: ["드레싱"],
-        },
-        {
-          name: "스테이크",
-          good_ingredients: ["소고기"],
-          bad_ingredients: ["버터", "소금"],
-        },
-      ],
-    },
-    3: {
-      meal: "저녁",
-      foods: [
-        {
-          name: "파스타",
-          good_ingredients: ["토마토"],
-          bad_ingredients: ["밀가루", "크림"],
-        },
-        {
-          name: "피자",
-          good_ingredients: ["치즈"],
-          bad_ingredients: ["밀가루", "기름"],
-        },
-      ],
-    },
-    4: {
-      meal: "간식",
-      foods: [
-        {
-          name: "과일 샐러드",
-          good_ingredients: ["과일", "요거트"],
-          bad_ingredients: [],
-        },
-        {
-          name: "아이스크림",
-          good_ingredients: ["우유"],
-          bad_ingredients: ["설탕", "크림"],
-        },
-      ],
-    },
+  // Edit meal handler
+  const handleEditMeal = (mealId) => {
+    const mealToEdit = getMealById(mealId);
+    navigate(`/meal/second/${params.username}/${params.date}`, {
+      state: { mealItem: mealToEdit },
+    });
   };
 
+  const getMealById = (mealId) => {
+    for (const mealTypeKey in mealData) {
+      const mealType = mealData[mealTypeKey];
+      const meal = mealType.foods.find((m) => m.id === mealId);
+      if (meal) {
+        return {
+          ...meal,
+          timing: mealTypeKey,
+        };
+      }
+    }
+    return null;
+  };
+
+  // Selected meal
   const selectedMeal = mealData[mealType];
 
   return (
@@ -270,8 +274,8 @@ const MealFirst = () => {
         <hr />
         <div className="MFcontents">
           <ul className="MFmealList">
-            {selectedMeal.foods.map((food, index) => (
-              <div key={index} className="MFmealOne">
+            {selectedMeal.foods.map((food) => (
+              <div key={food.id} className="MFmealOne">
                 <span className="MFmealDiv">{food.name}</span>
                 <div className="MFingredients">
                   <li className="MFgoodIngredients">
@@ -294,13 +298,13 @@ const MealFirst = () => {
                 <div className="MFmealbtns">
                   <button
                     className="MFedit-button"
-                    onClick={() => handleEditMeal(index)}
+                    onClick={() => handleEditMeal(food.id)}
                   >
                     <img alt="edit" src="/images/edit.png" />
                   </button>
                   <button
                     className="MFremove-button"
-                    onClick={() => handleRemoveMealButton(index)}
+                    onClick={() => handleRemoveMealButton(food.id)}
                   >
                     <img alt="remove" src="/images/remove.png" />
                   </button>
@@ -310,7 +314,7 @@ const MealFirst = () => {
           </ul>
         </div>
 
-        {/* 모달 렌더링 */}
+        {/* Modal Rendering */}
         {renderDeleteModal()}
         {renderAddModal()}
 
