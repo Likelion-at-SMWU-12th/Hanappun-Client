@@ -175,7 +175,7 @@ const Mainpage = () => {
                 onClick={() => navigate(`/meal/test1/${formatDate(today)}`)}
               >
                 {/* 리스트 아이템 이모지는 렌더링방식으로 각각 처리 */}
-                {user.meal && user.meal.morning_list ? (
+                {user.meal && user.meal.morning_list.length > 0 ? (
                   <>
                     <PlusImg src="/images/check.png"></PlusImg>
                     <EatBtn>아침</EatBtn>
@@ -190,7 +190,7 @@ const Mainpage = () => {
               <ListItem
                 onClick={() => navigate(`/meal/test1/${formatDate(today)}`)}
               >
-                {user.meal && user.meal.lunch_list ? (
+                {user.meal && user.meal.lunch_list.length > 0 ? (
                   <>
                     <PlusImg src="/images/check.png"></PlusImg>
                     <EatBtn>점심</EatBtn>
@@ -205,7 +205,7 @@ const Mainpage = () => {
               <ListItem
                 onClick={() => navigate(`/meal/test1/${formatDate(today)}`)}
               >
-                {user.meal && user.meal.dinner_list ? (
+                {user.meal && user.meal.dinner_list.length > 0 ? (
                   <>
                     <PlusImg src="/images/check.png"></PlusImg>
                     <EatBtn>저녁</EatBtn>
