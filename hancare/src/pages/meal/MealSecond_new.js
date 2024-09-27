@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import "./MealSecond.css";
+import { baseURL } from "../../api/baseURL";
 
 const MealSecond = () => {
   const navigate = useNavigate();
@@ -18,19 +19,12 @@ const MealSecond = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  // location.state로부터 필요한 데이터 가져오기
-  const { newMeal, mealItem } = location.state || {};
-  // newMeal은 새로 생성할 메뉴 이름, mealItem은 DB에서 불러온 기존 메뉴 정보
+  const { newMeal, mealId, foodId } = location.state || {}; // foodId 추가
 
-  // 메뉴와 선택된 요소 상태 관리
-  const [selectedMealItem, setSelectedMealItem] = useState(
-    mealItem?.id || Date.now() // 기존 메뉴가 있으면 그 ID를 사용, 없으면 새로운 ID 생성
-  );
-  const [mealName, setMealName] = useState(newMeal || mealItem?.name || "");
-  const [mealElements, setMealElements] = useState(() => {
-    const initialState = mealItem?.selectedElements || [];
-    return { [selectedMealItem]: initialState };
-  });
+  const [mealName, setMealName] = useState(newMeal || "");
+  const [mealElements, setMealElements] = useState({});
+  const [selectedMealItem, setSelectedMealItem] = useState(mealId || foodId); // mealId 또는 foodId로 선택된 아이템 설정
+  const [mealItem, setMealItem] = useState(null);
 
   // 카테고리별 요소들
   const elementCategories = {
@@ -101,18 +95,48 @@ const MealSecond = () => {
     ],
   };
 
+  useEffect(() => {
+    const fetchMealItem = async () => {
+      try {
+        const response = await fetch(
+          `${baseURL}/meal/${params.username}/${selectedMealItem}` // mealId 또는 foodId에 따라 fetch
+        );
+        if (response.ok) {
+          const data = response.data[foodId];
+          setMealItem(data);
+          setMealElements((prevElements) => ({
+            ...prevElements,
+            [selectedMealItem]: data.ingredients.map(
+              (ingredient) => ingredient.name
+            ),
+          }));
+          setMealName(data.name);
+          alert(data.name);
+        } else {
+          console.error("Error fetching meal item:", response.status);
+          alert("식사 정보를 가져오는 데 실패했습니다.");
+        }
+      } catch (error) {
+        console.error("Network error:", error);
+        alert("식사 정보를 가져오는 중 오류가 발생했습니다.");
+      }
+    };
+
+    if (selectedMealItem) {
+      fetchMealItem();
+    }
+  }, [params.username, selectedMealItem]); // username과 selectedMealItem이 변경될 때마다 호출
+
   const handleElementClick = (element) => {
     setMealElements((prevElements) => {
       const updatedElements = { ...prevElements };
       const currentElements = updatedElements[selectedMealItem] || [];
 
       if (currentElements.includes(element)) {
-        // 이미 선택된 요소라면 제거
         updatedElements[selectedMealItem] = currentElements.filter(
           (e) => e !== element
         );
       } else if (currentElements.length < 4) {
-        // 선택되지 않은 요소이고, 현재 선택된 요소가 4개 미만이라면 추가
         updatedElements[selectedMealItem] = [...currentElements, element];
       }
 
@@ -128,28 +152,33 @@ const MealSecond = () => {
       return;
     }
 
-    // 저장할 데이터 구조
     const dataToSave = {
-      id: selectedMealItem,
       name: mealName,
-      selectedElements: currentMealElements,
-      date: params.date,
+      timing: mealItem?.timing, // 기존 식사의 timing 사용
+      ingredients: currentMealElements.map((element) => ({ name: element })),
     };
 
     try {
-      const response = await fetch("/api/save-meal", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(dataToSave),
-      });
+      const response = await fetch(
+        `${baseURL}/meal/date/?date=${params.date}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(dataToSave),
+        }
+      );
 
       if (response.ok) {
         navigate(`/meal/first/${params.username}/${params.date}`);
       } else {
-        alert("저장하는데 실패했습니다.");
+        const errorData = await response.json();
+        console.error("Error response:", errorData);
+        alert(
+          `저장하는데 실패했습니다: ${errorData.message || "알 수 없는 오류"}`
+        );
       }
     } catch (error) {
-      console.error(error);
+      console.error("Network error:", error);
       alert("저장 중 오류가 발생했습니다.");
     }
   };

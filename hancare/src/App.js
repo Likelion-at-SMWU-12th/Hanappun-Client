@@ -35,7 +35,8 @@ import HospitalHome from "./pages/hospital/HospitalHome";
 import MealMain from "./pages/meal/Mealmain";
 import MealAnalysis from "./pages/meal/MealAnalysis";
 import MealFirst from "./pages/meal/MealFirst";
-import MealSecond from "./pages/meal/MealSecond";
+import MealSecond_new from "./pages/meal/MealSecond_new";
+import MealSecond_edit from "./pages/meal/MealSecond_edit";
 import MealResult from "./pages/meal/MealResult";
 import MealREResult from "./pages/meal/MealREResult";
 import Condition from "./pages/condition/Condition";
@@ -111,7 +112,14 @@ function App() {
           element={<MealAnalysis />}
         />
         <Route path="/meal/first/:username/:date" element={<MealFirst />} />
-        <Route path="/meal/second/:username/:date" element={<MealSecond />} />
+        <Route
+          path="/meal/second_new/:username/:date"
+          element={<MealSecond_new />}
+        />
+        <Route
+          path="/meal/second_edit/:username/:date"
+          element={<MealSecond_edit />}
+        />
         <Route path="/meal/result/:username/:date" element={<MealResult />} />
         <Route
           path="/meal/re_result/:username/:date"

@@ -3,6 +3,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import "./MealFirst.css";
 import MealModal from "../../components/MealModal";
 
+import axios from "axios";
+import { baseURL } from "../../api/baseURL";
+
 const MealFirst = () => {
   const navigate = useNavigate();
   const params = useParams();
@@ -17,6 +20,96 @@ const MealFirst = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const [mealType, setMealType] = useState(1); // 기본값: 아침
+  const [mealItems, setMealItems] = useState([]);
+  // const [inputValue, setInputValue] = useState("");
+
+  //연동하려고 추가 !
+  const [mealData, setMealData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // 특정 날짜 식사 기록 조회 API
+  useEffect(() => {
+    const fetchMealData = async () => {
+      try {
+        const response = await axios.get(
+          `${baseURL}meal/${params.username}/date/?date=${params.date}`
+        );
+        setMealData(response.data);
+      } catch (error) {
+        console.error("식사 기록 조회 중 오류 발생: ", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchMealData();
+  }, []);
+
+  // 예시 데이터 mymealData
+  const myMealData = {
+    1: {
+      meal: "아침",
+      foods: [],
+    },
+    2: {
+      meal: "점심",
+      foods: [],
+    },
+    3: {
+      meal: "저녁",
+      foods: [],
+    },
+    4: {
+      meal: "간식",
+      foods: [],
+    },
+  };
+
+  const extractMealInfo = (mealData) => {
+    const result = {
+      morning: [],
+      lunch: [],
+      dinner: [],
+      snack: [],
+    };
+
+    const extractFromList = (list, key) => {
+      if (list && Array.isArray(list)) {
+        list.forEach((meal) => {
+          if (result[key] != null) {
+            result[key].push({
+              name: meal.name,
+              good_ingredients: meal.ingredient_details?.likes || [], // Check if likes exists
+              bad_ingredients: meal.ingredient_details?.dislikes || [], // Check if dislikes exists
+              soso_ingredients: meal.ingredient_details?.soso || [],
+              foodId: meal.id,
+            });
+          }
+        });
+      }
+    };
+
+    extractFromList(mealData?.morning_list, "morning");
+    extractFromList(mealData?.lunch_list, "lunch");
+    extractFromList(mealData?.dinner_list, "dinner");
+    extractFromList(mealData?.snack_list, "snack");
+
+    return result;
+  };
+
+  const mealInfo = extractMealInfo(mealData);
+
+  // Fill myMealData with extracted data
+  myMealData[1].foods = mealInfo.morning; // 1 is breakfast
+  myMealData[2].foods = mealInfo.lunch; // 2 is lunch
+  myMealData[3].foods = mealInfo.dinner; // 3 is dinner
+  myMealData[4].foods = mealInfo.snack; // 4 is snack
+
+  console.log(myMealData);
+
+  const selectedMeal = myMealData[mealType];
 
   // 음식 삭제 API 호출
   const deleteMealFromDB = async (mealId) => {
@@ -34,45 +127,42 @@ const MealFirst = () => {
     }
   };
 
-  const [mealType, setMealType] = useState(1); // 기본값: 아침
-  const [mealItems, setMealItems] = useState([]);
-  const [inputValue, setInputValue] = useState("");
-
   // 끼니 클릭 함수
   const handleClickMeal = (e) => {
     const { value } = e.target;
     setMealType(Number(value)); // 클릭된 버튼의 값을 상태에 저장
   };
 
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-  };
+  // const handleInputChange = (e) => {
+  //   setInputValue(e.target.value);
+  // };
 
-  const handleAddMeal = (e) => {
-    e.preventDefault();
-    if (inputValue.trim()) {
-      setMealItems((prevItems) => [
-        ...prevItems,
-        { id: Date.now(), name: inputValue.trim() },
-      ]);
-      setInputValue(""); // 입력 필드 초기화
-    }
-  };
+  // const handleAddMeal = (e) => {
+  //   e.preventDefault();
+  //   if (inputValue.trim()) {
+  //     setMealItems((prevItems) => [
+  //       ...prevItems,
+  //       { id: Date.now(), name: inputValue.trim() },
+  //     ]);
+  //     setInputValue(""); // 입력 필드 초기화
+  //   }
+  // };
 
   const handleRemoveMeal = (id) => {
     setMealItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
+  //수정하기 버튼 함수
   const handleEditMeal = (id) => {
-    // 수정하기 버튼 클릭 시 동작
-    alert(`수정하기 기능을 구현할 파일을 열겠습니다. 아이디: ${id}`);
-    const mealToEdit = mealItems.find((item) => item.id === id);
-    navigate(`/meal/second/${params.username}/${params.date}`, {
-      state: { mealToEdit },
+    const selectedFood = selectedMeal.foods[id];
+    navigate(`/meal/second_edit/${params.username}/${params.date}`, {
+      state: {
+        foodId: id, // 선택한 음식 이름
+      },
     });
   };
 
-  // 삭제 modal
+  // 삭제 modal ---------------------------------------------
   const [showModal, setShowModal] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
 
@@ -97,7 +187,6 @@ const MealFirst = () => {
     }
   };
 
-  // JSX에서 조건부 렌더링 수정
   const renderDeleteModal = () =>
     showModal && (
       <MealModal
@@ -109,7 +198,7 @@ const MealFirst = () => {
       />
     );
 
-  // 추가 modal
+  // 추가 modal ---------------------------------------------
   const [showAddModal, setShowAddModal] = useState(false);
   const [newMealName, setNewMealName] = useState("");
 
@@ -124,7 +213,7 @@ const MealFirst = () => {
 
   const handleAddMealNext = () => {
     if (newMealName.trim()) {
-      navigate(`/meal/second/${params.username}/${params.date}`, {
+      navigate(`/meal/second_new/${params.username}/${params.date}`, {
         state: { newMeal: newMealName },
       });
       setShowAddModal(false);
@@ -156,77 +245,6 @@ const MealFirst = () => {
         confirm="다음"
       />
     );
-
-  // 예시 데이터 mealData
-  const mealData = {
-    1: {
-      meal: "아침",
-      foods: [
-        {
-          name: "쌀국수",
-          good_ingredients: ["소고기", "쌀(백미)"],
-          bad_ingredients: ["돼지고기"],
-        },
-        {
-          name: "돈가츠",
-          good_ingredients: ["쌀", "채소"],
-          bad_ingredients: ["밀가루", "튀김옷"],
-        },
-        {
-          name: "레몬에이드",
-          good_ingredients: ["레몬"],
-          bad_ingredients: ["설탕"],
-        },
-      ],
-    },
-    2: {
-      meal: "점심",
-      foods: [
-        {
-          name: "치킨샐러드",
-          good_ingredients: ["닭가슴살", "야채"],
-          bad_ingredients: ["드레싱"],
-        },
-        {
-          name: "스테이크",
-          good_ingredients: ["소고기"],
-          bad_ingredients: ["버터", "소금"],
-        },
-      ],
-    },
-    3: {
-      meal: "저녁",
-      foods: [
-        {
-          name: "파스타",
-          good_ingredients: ["토마토"],
-          bad_ingredients: ["밀가루", "크림"],
-        },
-        {
-          name: "피자",
-          good_ingredients: ["치즈"],
-          bad_ingredients: ["밀가루", "기름"],
-        },
-      ],
-    },
-    4: {
-      meal: "간식",
-      foods: [
-        {
-          name: "과일 샐러드",
-          good_ingredients: ["과일", "요거트"],
-          bad_ingredients: [],
-        },
-        {
-          name: "아이스크림",
-          good_ingredients: ["우유"],
-          bad_ingredients: ["설탕", "크림"],
-        },
-      ],
-    },
-  };
-
-  const selectedMeal = mealData[mealType];
 
   return (
     <div className="MFbackground">
@@ -269,45 +287,61 @@ const MealFirst = () => {
         </div>
         <hr />
         <div className="MFcontents">
-          <ul className="MFmealList">
-            {selectedMeal.foods.map((food, index) => (
-              <div key={index} className="MFmealOne">
-                <span className="MFmealDiv">{food.name}</span>
-                <div className="MFingredients">
-                  <li className="MFgoodIngredients">
-                    {food.good_ingredients.map((ingredient, i) => (
-                      <span key={i}>
-                        {ingredient}
-                        {"  "}
-                      </span>
-                    ))}
-                  </li>
-                  <li className="MFbadIngredients">
-                    {food.bad_ingredients.map((ingredient, i) => (
-                      <span key={i}>
-                        {ingredient}
-                        {"  "}
-                      </span>
-                    ))}
-                  </li>
+          <div className="MFmealList">
+            {selectedMeal &&
+            selectedMeal.foods &&
+            selectedMeal.foods.length > 0 ? (
+              selectedMeal.foods.map((food, index) => (
+                <div key={index} className="MFmealOne">
+                  <div className="MFmealDiv" value={food.name}>
+                    {food.name}
+                  </div>
+                  <ul className="MFingredients">
+                    <li className="MFgoodIngredients">
+                      {food.good_ingredients.map((ingredient, i) => (
+                        <span key={i}>
+                          {ingredient}
+                          {"  "}
+                        </span>
+                      ))}
+                    </li>
+                    <li className="MFbadIngredients">
+                      {food.bad_ingredients.map((ingredient, i) => (
+                        <span key={i}>
+                          {ingredient}
+                          {"  "}
+                        </span>
+                      ))}
+                    </li>
+                    <li className="MFsosoIngredients">
+                      {food.soso_ingredients.map((ingredient, i) => (
+                        <span key={i}>
+                          {ingredient}
+                          {"  "}
+                        </span>
+                      ))}
+                    </li>
+                  </ul>
+                  <div className="MFmealbtns">
+                    <button
+                      className="MFedit-button"
+                      onClick={() => handleEditMeal(food.foodId)}
+                    >
+                      <img alt="edit" src="/images/edit.png" />
+                    </button>
+                    <button
+                      className="MFremove-button"
+                      onClick={() => handleRemoveMealButton(food.name)}
+                    >
+                      <img alt="remove" src="/images/remove.png" />
+                    </button>
+                  </div>
                 </div>
-                <div className="MFmealbtns">
-                  <button
-                    className="MFedit-button"
-                    onClick={() => handleEditMeal(index)}
-                  >
-                    <img alt="edit" src="/images/edit.png" />
-                  </button>
-                  <button
-                    className="MFremove-button"
-                    onClick={() => handleRemoveMealButton(index)}
-                  >
-                    <img alt="remove" src="/images/remove.png" />
-                  </button>
-                </div>
-              </div>
-            ))}
-          </ul>
+              ))
+            ) : (
+              <span></span>
+            )}
+          </div>
         </div>
 
         {/* 모달 렌더링 */}
