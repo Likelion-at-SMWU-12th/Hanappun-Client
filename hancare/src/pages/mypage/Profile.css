@@ -4,6 +4,7 @@
   width: 100%;
   height: 100vh;
   position: relative;
+  overflow-y: auto;
 }
 
 .MPblackHeader {
@@ -28,9 +29,8 @@
   margin: 10px auto;
   background-color: #f7f7f7;
   width: 90%;
-  height: 75vh;
+  height: 90vh;
   border-radius: 10px;
-  overflow-y: scroll;
 }
 
 .MPblackMain hr {
