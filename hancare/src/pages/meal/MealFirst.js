@@ -114,7 +114,7 @@ const MealFirst = () => {
       if (response.status !== 200 && response.status !== 204) {
         throw new Error("음식을 삭제하는데 실패했습니다.");
       }
-      alert(`${name} 을/를 삭제되었습니다. 🧹🧹`);
+      alert(`${name} 메뉴가 삭제되었습니다. 🧹🧹`);
 
       // 상태에서 식사 삭제
       handleRemoveMeal(name);
@@ -177,7 +177,7 @@ const MealFirst = () => {
     showModal && (
       <MealModal
         title="알림"
-        message={`${itemToDelete} 을/를 삭제하시겠습니까?`}
+        message={`${itemToDelete} 메뉴를 삭제하시겠습니까?`}
         onCancel={handleCancel}
         onConfirm={handleConfirm}
         confirm="삭제"

@@ -9,7 +9,7 @@ const MealSecond = () => {
   const location = useLocation();
   const params = useParams();
 
-  const today = new Date();
+  const today = new Date(params.date);
   const week = ["일", "월", "화", "수", "목", "금", "토"];
   const dayOfWeek = week[today.getDay()];
   const formattedDate = `${
@@ -107,14 +107,14 @@ const MealSecond = () => {
           ingredients: ingredients,
         }
       );
-      console.log("저장되었습니다.");
+      alert(`${name} 메뉴가 수정되었습니다. ✅`);
       navigate(`/meal/first/${params.username}/${params.date}`);
     } catch (error) {
-      console.error("식사 정보를 저장하는 중 오류가 발생했습니다.", error);
+      console.error("식사 정보를 수정하는 중 오류가 발생했습니다.", error);
     }
   };
 
-  // 특정 날짜 식사 기록 조회 API
+  // id로 식사 기록 조회 API
   useEffect(() => {
     const fetchMealItem = async () => {
       try {
