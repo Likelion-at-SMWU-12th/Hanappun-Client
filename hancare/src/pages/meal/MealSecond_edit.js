@@ -97,25 +97,21 @@ const MealSecond = () => {
 
   // 특정 날짜 식사 기록 수정 API
   const putMealItem = async (name, timing, ingredients) => {
-    alert(
-      JSON.stringify({
-        name: name,
-        date: params.date,
-        timing: timing,
-        ingredients: ingredients,
-      })
-    );
-
-    axios.put(
-      `${baseURL}/meal/${params.username}/date/?date=${params.date}/`,
-      JSON.stringify({
-        name: name,
-        date: params.date,
-        timing: timing,
-        ingredients: ingredients,
-        //
-      })
-    );
+    try {
+      const response = await axios.put(
+        `${baseURL}/meal/${params.username}/date/?date=${params.date}`,
+        {
+          name: name,
+          date: params.date,
+          timing: timing,
+          ingredients: ingredients,
+        }
+      );
+      console.log("저장되었습니다.");
+      navigate(`/meal/first/${params.username}/${params.date}`);
+    } catch (error) {
+      console.error("식사 정보를 저장하는 중 오류가 발생했습니다.", error);
+    }
   };
 
   // 특정 날짜 식사 기록 조회 API
@@ -125,11 +121,9 @@ const MealSecond = () => {
         const response = await axios.get(
           `${baseURL}/meal/${params.username}/${foodId}`
         );
-
         const data = response.data;
 
-        // 데이터가 유효한지 체크
-        if (data != null) {
+        if (data) {
           setMealItem(data);
           setMealElements((prevElements) => ({
             ...prevElements,
@@ -146,10 +140,10 @@ const MealSecond = () => {
     };
 
     if (foodId) {
-      // foodId가 유효한 경우에만 호출
       fetchMealItem();
     }
-  }, [params.username, foodId]); // username과 foodId 변경될 때마다 호출
+  }, [params.username, foodId]);
+
   const handleElementClick = (element) => {
     setMealElements((prevElements) => {
       const updatedElements = { ...prevElements };
@@ -171,16 +165,20 @@ const MealSecond = () => {
     if (!currentMealElements || currentMealElements.length === 0) {
       alert("한 개 이상의 요소를 선택해주세요");
       return;
-    } else {
-      const dataToSave = {
-        name: mealName,
-        date: params.date,
-        timing: mealItem?.timing, // 기존 식사의 timing 사용
-        ingredients: currentMealElements.map((element) => ({ name: element })),
-      };
-
-      putMealItem(dataToSave.name, dataToSave.timing, dataToSave.ingredients);
     }
+
+    const dataToSave = {
+      name: mealName,
+      date: params.date,
+      timing: mealItem?.timing,
+      ingredients: currentMealElements.map((element) => ({ name: element })),
+    };
+
+    await putMealItem(
+      dataToSave.name,
+      dataToSave.timing,
+      dataToSave.ingredients
+    );
   };
 
   return (
